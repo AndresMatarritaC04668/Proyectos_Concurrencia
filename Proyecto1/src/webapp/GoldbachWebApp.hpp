@@ -4,6 +4,7 @@
 #define GOLDBACHWEBAPP_HPP
 
 #include "HttpApp.hpp"
+#include "SumGoldbachSolver.hpp"
 
 /**
 @brief A web application that calculates prime factors
