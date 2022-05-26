@@ -5,15 +5,18 @@
 
 #include "HttpServer.hpp"
 #include "FactWebApp.hpp"
+#include "GoldbachWebApp.hpp"
 
 /// Start the web server
 int main(int argc, char* argv[]) {
   // Create the web server
   HttpServer httpServer;
   // Create a factorization web application, and other apps if you want
-  FactWebApp factWebApp;
+  // FactWebApp factWebApp;
+  GoldbachWebApp goldbachWebApp;
   // Register the web application(s) with the web server
-  httpServer.chainWebApp(&factWebApp);
+  // httpServer.chainWebApp(&factWebApp);
+  httpServer.chainWebApp(&goldbachWebApp);
   // Start the web server
   return httpServer.start(argc, argv);
 }
