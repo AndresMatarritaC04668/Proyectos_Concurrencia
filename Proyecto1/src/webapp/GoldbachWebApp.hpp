@@ -36,7 +36,7 @@ class GoldbachWebApp : public HttpApp {
   /// Handle a HTTP request that starts with "/fact"
   /// @return true if the factorization was handled, false if it must be
   /// handled by another application
-  bool serveFactorization(HttpRequest& httpRequest, HttpResponse& httpResponse);
+  bool serveGoldbach(HttpRequest& httpRequest, HttpResponse& httpResponse);
 };
 
 #endif  // GoldbachWebApp_HPP
