@@ -4,7 +4,8 @@
 #define HTTPSERVER_H
 
 #include <vector>
-
+#include <unistd.h> //  para encontrar los nucleos de la maquina
+#include "Queue.hpp"  //  agregado temporalmente para la cola
 #include "TcpServer.hpp"
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
@@ -32,16 +33,27 @@ class HttpServer : public TcpServer {
  public:
   /// Constructor
   HttpServer();
+
   /// Destructor
   ~HttpServer();
+
+  /// cantidad maxima de conexiones de clientes permitida 
+  uint64_t max_connections = sysconf(_SC_NPROCESSORS_ONLN);
+
+  ///cola que contiene los sockets del Server
+  Queue<Socket> sockets_server;
+
   /// Registers a web application to the chain
   void chainWebApp(HttpApp* application);
+
   /// Start the web server for listening client connections and HTTP requests
   int start(int argc, char* argv[]);
+
   /// Stop the web server. The server may stop not immediately. It will stop
   /// for listening further connection requests at once, but pending HTTP
   /// requests that are enqueued will be allowed to finish
   void stop();
+
   /// Infinetelly listen for client connection requests and accept all of them.
   /// For each accepted connection request, the virtual onConnectionAccepted()
   /// will be called. Inherited classes must override that method
@@ -53,6 +65,7 @@ class HttpServer : public TcpServer {
   bool analyzeArguments(int argc, char* argv[]);
   /// This method is called each time a client connection request is accepted.
   void handleClientConnection(Socket& client) override;
+
   /// Called each time an HTTP request is received. Web server should analyze
   /// the request object and assemble a response with the response object.
   /// Finally send the response calling the httpResponse.send() method.
@@ -61,9 +74,11 @@ class HttpServer : public TcpServer {
   /// this client (e.g: HTTP/1.0)
   virtual bool handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse);
+
   /// Route, that provide an answer according to the URI value
   /// For example, home page is handled different than a number
   bool route(HttpRequest& httpRequest, HttpResponse& httpResponse);
+
   /// Sends a page for a non found resouce in this server. This method is called
   /// if none of the registered web applications handled the request.
   /// If you want to override this method, create a web app, e.g NotFoundWebApp

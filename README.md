@@ -1,6 +1,10 @@
 # Proyectos
 
-
+Repositorio utilizado para almacenar los proyectos y sus respectivos avances  
+Estudiantes:  
+Gabriel Chacon  
+Andres Matarrita  
+Esteban Mora
 
 ## Getting started
 
