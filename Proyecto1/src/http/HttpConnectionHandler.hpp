@@ -26,6 +26,7 @@ class HttpConnectionHandler : public Assembler<Socket, std::pair<HttpRequest*, H
     explicit HttpConnectionHandler (Queue<Socket>* colaDSockets, 
       Queue<std::pair<HttpRequest*, HttpResponse*>>* colaDRequest):
       Assembler<Socket, std::pair<HttpRequest*, HttpResponse*>>(colaDSockets, colaDRequest){};
+    // el constructor toma una forma similar al constructor del Assembler
 
     //  destructor de la clase    
     virtual ~HttpConnectionHandler ();
