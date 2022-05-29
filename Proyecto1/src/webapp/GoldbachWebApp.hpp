@@ -7,6 +7,7 @@
 #include "SumGoldbachSolver.hpp"
 #include "cola.hpp"
 #include "nodo.hpp"
+#include <regex>
 
 /**
 @brief A web application that calculates prime factors
@@ -43,6 +44,14 @@ class GoldbachWebApp : public HttpApp {
   /// @return true if the factorization was handled, false if it must be
   /// handled by another application
   bool serveGoldbach(HttpRequest& httpRequest, HttpResponse& httpResponse);
+
+  /// Fix code redundancy in the following methods
+  void htmlResponse(HttpResponse& httpResponse, std::string title, cola_t* cola, int option);
+  void beginAndEndHtml(HttpResponse& httpResponse, std::string title, int option);
+  void setHeaderResponse(HttpResponse& httpResponse);
+  std::string decodeURI(HttpRequest& httpRequest, std::regex& inQuery);
+  int64_t storageData(std::sregex_iterator end, std::sregex_iterator iter, cola_t* cola);
+  void addToResults(std::ostringstream& resultado, nodo_t* nodo, int& i);
 };
 
 #endif  // GoldbachWebApp_HPP

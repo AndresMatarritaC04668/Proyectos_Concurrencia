@@ -44,31 +44,110 @@ bool GoldbachWebApp::handleHttpRequest(HttpRequest& httpRequest,
 }
 
 // TODO(you): Fix code redundancy in the following methods
+void GoldbachWebApp::setHeaderResponse(HttpResponse& httpResponse) {
+  httpResponse.setHeader("Server", "AttoServer v1.0");
+  httpResponse.setHeader("Content-type", "text/html; charset=ascii");
+}
+
+void GoldbachWebApp:: beginAndEndHtml(HttpResponse& httpResponse, std::string title, int end) {
+  if (!end) {
+    httpResponse.body() << "<!DOCTYPE html>\n"
+        << "<html lang=\"en\">\n"
+        << "  <title>" << title << "</title>\n";
+  } else {
+     httpResponse.body() 
+      << "  <hr><p><a href=\"/\">Back</a></p>\n"
+      << "</html>\n";
+  }
+}
+
+void GoldbachWebApp::htmlResponse(HttpResponse& httpResponse, std::string title, cola_t* cola, int option) {
+  if (option >= 0 && option <= 2) {
+    beginAndEndHtml(httpResponse, title, 1);
+    if (!option) {
+      httpResponse.body() << "  <style>body {font-family: monospace}</style>\n"
+      << "  <h1>" << title << "</h1>\n"
+      << "  <form method=\"get\" action=\"/goldbach\">\n"
+      << "    <label for=\"number\">Number</label>\n"
+      << "    <input type=\"text\" name=\"number\" required/>\n"
+      << "    <button type=\"submit\">Calculate</button>\n"
+      << "  </form>\n"
+      << "</html>\n";
+    } else {
+      if (option == 1) {
+        httpResponse.body()
+        << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
+        << "  <h1>" << title << "</h1>\n"
+        <<  mensaje(cola);
+      } else {
+        httpResponse.body()
+        << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
+        << "  <h1 class=\"err\">" << title << "</h1>\n"
+        << "  <p>Invalid request for Goldbach</p>\n";
+      }
+        beginAndEndHtml(httpResponse, title, 0);
+    }
+  }
+}
+
+std::string GoldbachWebApp::decodeURI(HttpRequest& httpRequest, std::regex& inQuery) {
+  inQuery = "^/goldbach(/|\\?number=)(.*)$";
+  std::string uri = httpRequest.getURI();
+   // Se decodifican comas(%2C) o espacios (\\+)|(%20)
+  std::regex decode("(%2C)|(\\+)|(%20)");
+  return regex_replace(uri, decode, ",");
+}
+
+int64_t GoldbachWebApp::storageData(std::sregex_iterator end, std::sregex_iterator iter, cola_t* cola) {
+  int64_t num;
+  std::stringstream log;
+  while (iter != end) {    
+    try {
+      num = std::stoll((*iter)[0].str());
+      if (std::to_string(num).compare((*iter)[0].str()) != 0) {
+      
+      } else {
+        if (num < 0) {
+          char signo = ' ';
+          if (num < 0) {
+            num += num*-2;
+            signo = '-';
+          }
+          cola_add(cola,num,0,signo);
+      
+        } else {
+            cola_add(cola,num,0,' ');
+        } 
+      }
+      log << "Match" << ": " << (*iter)[0].str();
+      Log::append(Log::DEBUG, "goldbach", log.str());
+      log.str("");
+    } catch(...) {
+      
+    }
+    ++iter;
+  }
+  return num;
+}
+
+void GoldbachWebApp::addToResults(std::ostringstream& resultado, nodo_t* nodo, int& i) {
+  resultado << nodo->desglose[i];
+  ++i;
+  resultado <<'+';
+  resultado << nodo->desglose[i];
+}
 
 bool GoldbachWebApp::serveHomepage(HttpRequest& httpRequest
   , HttpResponse& httpResponse) {
   (void)httpRequest;
 
   // Set HTTP response metadata (headers)
-  httpResponse.setHeader("Server", "AttoServer v1.1");
-  httpResponse.setHeader("Content-type", "text/html; charset=ascii");
-  
+  setHeaderResponse(httpResponse);
+
   // Build the body of the response
   std::string title = "Goldbach Conjecture";
-  httpResponse.body() << "<!DOCTYPE html>\n"
-    << "<html lang=\"en\">\n"
-    << "  <meta charset=\"ascii\"/>\n"
-    << "  <title>" << title << "</title>\n"
-    << "  <style>body {font-family: monospace}</style>\n"
-    << "  <h1>" << title << "</h1>\n"
-    << "  <form method=\"get\" action=\"/goldbach\">\n"
-    << "    <label for=\"number\">Number</label>\n"
-    << "    <input type=\"text\" name=\"number\" required/>\n"
-    << "    <button type=\"submit\">Calculate</button>\n"
-    << "  </form>\n"
-    << "</html>\n";
 
-  // Send the response to the client (user agent)
+  htmlResponse(httpResponse, title, nullptr, 0);
   return httpResponse.send();
 }
 
@@ -77,8 +156,7 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
   (void)httpRequest;
 
   // Set HTTP response metadata (headers)
-  httpResponse.setHeader("Server", "AttoServer v1.0");
-  httpResponse.setHeader("Content-type", "text/html; charset=ascii");
+  setHeaderResponse(httpResponse);
 
   // If a number was asked in the form "/fact/1223"
   // or "/fact?number=1223"
@@ -87,74 +165,27 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
   // TODO(you): Modularize this method
   cola_t* cola = cola_init();
   std::smatch matches;
-  std::regex inQuery("^/goldbach(/|\\?number=)(.*)$");
-  std::string uri = httpRequest.getURI();
-   // Se decodifican comas(%2C) o espacios (\\+)|(%20)
-  std::regex decode("(%2C)|(\\+)|(%20)");
-  uri = regex_replace(uri, decode, ",");
+  std::regex inQuery;
+  std::string uri = decodeURI(httpRequest, inQuery);
   if (std::regex_search(uri, matches, inQuery)) {
     assert(matches.length() >= 3);
     const std::regex re("([0-z]+)|(-?\\d+)");
     std::sregex_iterator end;
     std::sregex_iterator iter(uri.begin()+matches.position(2), uri.end(), re);
-    int64_t num;
-
-    std::stringstream log;
-    while (iter != end) {
-      try {
-        num = std::stoll((*iter)[0].str());
-        if (std::to_string(num).compare((*iter)[0].str()) != 0) {
-        
-        } else {
-          if (num < 0) {
-            char signo =' ';
-            if (num < 0) {
-              num += num*-2;
-              signo = '-';
-            }
-            cola_add(cola,num,0,signo);
-       
-          } else {
-             cola_add(cola,num,0,' ');
-          } 
-        }
-        log << "Match" << ": " << (*iter)[0].str();
-        Log::append(Log::DEBUG, "goldbach", log.str());
-        log.str("");
-      } catch(...) {
-       
-      }
-      ++iter;
-    }
+    
+    int64_t num = storageData(end, iter, cola);
     goldBach(cola);
     
-
     // TODO(you): Factorization must not be done by factorization threads
     // Build the body of the response
     
-     std::string title = "Goldbach Conjecture of " + std::to_string(num);
-     httpResponse.body() << "<!DOCTYPE html>\n"
-      << "<html lang=\"en\">\n"
-      << "  <meta charset=\"ascii\"/>\n"
-      << "  <title>" << title << "</title>\n"
-      << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
-      << "  <h1>" << title << "</h1>\n"
-      <<  mensaje(cola)
-      << "  <hr><p><a href=\"/\">Back</a></p>\n"
-      << "</html>\n";
+    std::string title = "Goldbach Conjecture of " + std::to_string(num);
+    htmlResponse(httpResponse, title, cola, 1);
 
   } else {
     // Build the body for an invalid request
     std::string title = "Invalid request";
-    httpResponse.body() << "<!DOCTYPE html>\n"
-      << "<html lang=\"en\">\n"
-      << "  <meta charset=\"ascii\"/>\n"
-      << "  <title>" << title << "</title>\n"
-      << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
-      << "  <h1 class=\"err\">" << title << "</h1>\n"
-      << "  <p>Invalid request for Goldbach</p>\n"
-      << "  <hr><p><a href=\"/\">Back</a></p>\n"
-      << "</html>\n";
+    htmlResponse(httpResponse, title, nullptr, 2);
   }
 
   // Send the response to the client (user agent)
@@ -185,10 +216,7 @@ std:: string GoldbachWebApp:: mensaje(cola_t* cola){
             resultado << " : ";
             if (nodo-> number%2 == 0) {
                 for (int i = 0; i< nodo->posicion ; i++) {
-                    resultado << nodo->desglose[i];
-                    ++i;
-                    resultado <<'+';
-                    resultado << nodo->desglose[i];
+                  addToResults(resultado, nodo, i);
 
                 if (i < nodo-> posicion-1) {
                        resultado <<", ";
@@ -196,10 +224,7 @@ std:: string GoldbachWebApp:: mensaje(cola_t* cola){
                 }
             } else {
                 for (int i = 0; i < nodo-> posicion ; i++) {
-                  resultado << nodo->desglose[i];
-                  ++i;
-                  resultado <<'+';
-                  resultado << nodo->desglose[i];
+                  addToResults(resultado, nodo, i);
                   ++i;
                   resultado <<'+';
                   resultado << nodo->desglose[i];
