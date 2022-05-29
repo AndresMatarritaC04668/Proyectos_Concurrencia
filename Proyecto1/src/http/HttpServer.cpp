@@ -56,6 +56,14 @@ int HttpServer::start(int argc, char* argv[]) {
       }
       stopApps = true;
 
+      // inicializamos el vector de Handlers del Server
+      for(size_t in = 0; in < this->max_connections; in++){
+        HttpConnectionHandler* nuevo = new HttpConnectionHandler(&this->sockets_server,&colaDRequest);
+        vHandler.push_back(nuevo);
+        vHandler[in]->aplicaciones = this->applications;
+        vHandler[in]->startThread();
+      }
+
       // Start waiting for connections
       this->listenForConnections(this->port);
       const NetworkAddress& address = this->getNetworkAddress();
@@ -68,6 +76,19 @@ int HttpServer::start(int argc, char* argv[]) {
   } catch (const std::runtime_error& error) {
     std::cerr << "error: " << error.what() << std::endl;
   }
+
+  //  se agregan los sockets respectivos a la cola
+  for(size_t u = 0; u < this->max_connections; u++){
+    this->sockets_server.push(Socket());
+  }
+
+  // agregamos valores a la cola de Requests
+  this->colaDRequest.push(std::pair<HttpRequest*, HttpResponse*>());
+  for(size_t in = 0; in < this->max_connections; in++){
+    vHandler[in]->waitToFinish();
+
+  }
+
 
   // If applications were started
   if (stopApps) {

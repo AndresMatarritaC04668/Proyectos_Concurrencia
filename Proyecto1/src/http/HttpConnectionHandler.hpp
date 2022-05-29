@@ -10,10 +10,10 @@
 #include "Socket.hpp"
 #include "Log.hpp"
 #include "Queue.hpp"
-#include "HttpServer.hpp"
 #include "NetworkAddress.hpp"
 
-
+//  por inclusion cruzada
+class HttpServer;
 
 /*  se eligio la clase assembler por suplir el rol de trabajador
 de la linea de asamblaje, siendo productor y consumidor al mismo tiempo */
@@ -23,13 +23,13 @@ class HttpConnectionHandler : public Assembler<Socket, std::pair<HttpRequest*, H
     //  constructor de la clase
     //  colaDSockets cola donde se almacenan los sockets del server
     //  colaDRequest cola donde se almacenan los valores de cada solicitud
-    explicit HttpConnectionHandler (Queue<Socket>* colaDSockets, 
+    explicit HttpConnectionHandler(Queue<Socket>* colaDSockets, 
       Queue<std::pair<HttpRequest*, HttpResponse*>>* colaDRequest):
       Assembler<Socket, std::pair<HttpRequest*, HttpResponse*>>(colaDSockets, colaDRequest){};
     // el constructor toma una forma similar al constructor del Assembler
 
-    //  destructor de la clase    
-    virtual ~HttpConnectionHandler ();
+    //  destructor de la clase
+    virtual ~HttpConnectionHandler (){};
 
     /**
      * @brief Override de run del consumer de la clase Assembler

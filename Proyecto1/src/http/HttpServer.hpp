@@ -5,11 +5,10 @@
 
 #include <vector>
 #include <unistd.h> //  para encontrar los nucleos de la maquina
-#include "HttpConnectionHandler.hpp"
 #include "TcpServer.hpp"
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
-
+#include "HttpConnectionHandler.hpp"
 #define DEFAULT_PORT "8080"
 
 class HttpApp;
@@ -40,8 +39,15 @@ class HttpServer : public TcpServer {
   /// cantidad maxima de conexiones de clientes permitida 
   uint64_t max_connections = sysconf(_SC_NPROCESSORS_ONLN);
 
-  ///cola que contiene los sockets del Server
+  /// cola que contiene los sockets del Server
   Queue<Socket> sockets_server;
+
+
+  /// Cola de Requests
+  Queue<std::pair<HttpRequest*, HttpResponse*>> colaDRequest;
+
+  /// vector de handlers
+  std::vector<HttpConnectionHandler*> vHandler;
 
   /// Registers a web application to the chain
   void chainWebApp(HttpApp* application);

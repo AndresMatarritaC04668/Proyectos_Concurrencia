@@ -29,7 +29,7 @@ bool HttpConnectionHandler::serveNotFound(HttpRequest& httpRequest, HttpResponse
     << "  <title>" << title << "</title>\n"
     << "  <style>body {font-family: monospace} h1 {color: red}</style>\n"
     << "  <h1>" << title << "</h1>\n"
-    << "  <p>El recurso pedido no fue encontrado en este server.</p>\n"
+    << "  <p>El recurso pedido no fue encontrado en este server ratilla.</p>\n"
     << "  <hr><p><a href=\"/\">Homepage</a></p>\n"
     << "</html>\n";
 
