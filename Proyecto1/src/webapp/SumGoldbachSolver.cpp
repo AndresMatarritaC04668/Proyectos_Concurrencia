@@ -3,6 +3,8 @@
 #include <cinttypes>
 #include <cstdint>
 #include <cmath>
+
+
 #include "SumGoldbachSolver.hpp"
 #include "nodo.hpp"
 cola_t * goldBach(cola_t * cola) {

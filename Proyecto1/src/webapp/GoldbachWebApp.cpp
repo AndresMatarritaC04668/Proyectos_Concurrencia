@@ -6,6 +6,8 @@
 #include <regex>
 #include <stdexcept>
 #include <string>
+#include <unistd.h>
+#include <Log.hpp>
 
 #include "GoldbachWebApp.hpp"
 #include "HttpRequest.hpp"
@@ -61,7 +63,7 @@ bool GoldbachWebApp::serveHomepage(HttpRequest& httpRequest
     << "  <h1>" << title << "</h1>\n"
     << "  <form method=\"get\" action=\"/goldbach\">\n"
     << "    <label for=\"number\">Number</label>\n"
-    << "    <input type=\"number\" name=\"number\" required/>\n"
+    << "    <input type=\"text\" name=\"number\" required/>\n"
     << "    <button type=\"submit\">Calculate</button>\n"
     << "  </form>\n"
     << "</html>\n";
@@ -85,7 +87,7 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
   // TODO(you): Modularize this method
   cola_t* cola = cola_init();
   std::smatch matches;
-  std::regex inQuery("^/goldbach(/|\\?number=)(\\d+)$");
+  std::regex inQuery("^/goldbach(/|\\?number=)(.*)$");
   std::string uri = httpRequest.getURI();
    // Se decodifican comas(%2C) o espacios (\\+)|(%20)
   std::regex decode("(%2C)|(\\+)|(%20)");
@@ -94,9 +96,10 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
     assert(matches.length() >= 3);
     const std::regex re("([0-z]+)|(-?\\d+)");
     std::sregex_iterator end;
-    std::smatch match;
     std::sregex_iterator iter(uri.begin()+matches.position(2), uri.end(), re);
     int64_t num;
+
+    std::stringstream log;
     while (iter != end) {
       try {
         num = std::stoll((*iter)[0].str());
@@ -115,7 +118,9 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
              cola_add(cola,num,0,' ');
           } 
         }
-     
+        log << "Match" << ": " << (*iter)[0].str();
+        Log::append(Log::DEBUG, "goldbach", log.str());
+        log.str("");
       } catch(...) {
        
       }
@@ -209,6 +214,5 @@ std:: string GoldbachWebApp:: mensaje(cola_t* cola){
     nodo = nodo->next;
   }
 
-  cola_print(cola);
   return resultado.str();
 }
