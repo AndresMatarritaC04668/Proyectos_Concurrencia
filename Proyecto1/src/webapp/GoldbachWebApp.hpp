@@ -5,6 +5,8 @@
 
 #include "HttpApp.hpp"
 #include "SumGoldbachSolver.hpp"
+#include "cola.hpp"
+#include "nodo.hpp"
 
 /**
 @brief A web application that calculates prime factors
@@ -14,6 +16,7 @@ class GoldbachWebApp : public HttpApp {
   DISABLE_COPY(GoldbachWebApp);
 
  public:
+ 
   /// Constructor
   GoldbachWebApp();
   /// Destructor
@@ -25,9 +28,11 @@ class GoldbachWebApp : public HttpApp {
   /// and another chained application should handle it
   bool handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) override;
+  std:: string mensaje(cola_t* cola);
   /// Called when the web server stops, in order to allow the web application
   /// clean up and finish as well
   void stop() override;
+
 
  protected:
   /// Handle HTTP requests. @see HttpServer::handleHttpRequest()

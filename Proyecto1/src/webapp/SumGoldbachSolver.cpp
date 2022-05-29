@@ -5,14 +5,11 @@
 #include <cmath>
 #include "SumGoldbachSolver.hpp"
 #include "nodo.hpp"
-std::string goldBach(int64_t numero) {
-  char signo =' ';
-  if (numero < 0) {
-    numero += numero*-2;
-    signo = '-';
-  }
- 
-  nodo * nodo = nodo_init(numero,0,signo);
+cola_t * goldBach(cola_t * cola) {
+   
+   nodo_t * nodo = cola->first;
+
+   while(nodo){
 
     //  Calculate golbach sums for nodo
     int sumas = 0;
@@ -24,10 +21,10 @@ std::string goldBach(int64_t numero) {
       nodo_getSigno(nodo));
     }
     nodo_setSumas(nodo, sumas);
+    nodo = nodo->next;
+   }
 
-
-
-  return createResponse(nodo);
+  return cola ;
 }
 
 //  procedure conjeturaDebil:
@@ -146,20 +143,3 @@ int esPrimo(int64_t numero) {
 }
 // end procedure
 
-
-
-std::string createResponse(nodo* nodo) {
-  std::ostringstream resultado;
-   int64_t value = nodo_getNumber(nodo), error = 0;
- 
-  if ((value <= 5 && error == 0)) {
-    resultado << " NA</p>\n ";
-  } else if (error == 1) {
-    resultado << " invalid number</p>\n ";
-  } else {
-   resultado << " " << nodo_getNumber(nodo) << ":  ";
-   resultado <<"Sums<p> "<< nodo->sumas;
-  }
-
-  return resultado.str();
-}

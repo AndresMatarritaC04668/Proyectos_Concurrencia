@@ -50,7 +50,7 @@ bool GoldbachWebApp::serveHomepage(HttpRequest& httpRequest
   // Set HTTP response metadata (headers)
   httpResponse.setHeader("Server", "AttoServer v1.1");
   httpResponse.setHeader("Content-type", "text/html; charset=ascii");
-
+  
   // Build the body of the response
   std::string title = "Goldbach Conjecture";
   httpResponse.body() << "<!DOCTYPE html>\n"
@@ -83,29 +83,61 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
   // TODO(you): URI can be a multi-value list, e.g: 100,2784,-53,200771728
   // TODO(you): Use arbitrary precision for numbers larger than int64_t
   // TODO(you): Modularize this method
+  cola_t* cola = cola_init();
   std::smatch matches;
   std::regex inQuery("^/goldbach(/|\\?number=)(\\d+)$");
-  if (std::regex_search(httpRequest.getURI(), matches, inQuery)) {
+  std::string uri = httpRequest.getURI();
+   // Se decodifican comas(%2C) o espacios (\\+)|(%20)
+  std::regex decode("(%2C)|(\\+)|(%20)");
+  uri = regex_replace(uri, decode, ",");
+  if (std::regex_search(uri, matches, inQuery)) {
     assert(matches.length() >= 3);
-    const int64_t number = std::stoll(matches[2]);
+    const std::regex re("([0-z]+)|(-?\\d+)");
+    std::sregex_iterator end;
+    std::smatch match;
+    std::sregex_iterator iter(uri.begin()+matches.position(2), uri.end(), re);
+    int64_t num;
+    while (iter != end) {
+      try {
+        num = std::stoll((*iter)[0].str());
+        if (std::to_string(num).compare((*iter)[0].str()) != 0) {
+        
+        } else {
+          if (num < 0) {
+            char signo =' ';
+            if (num < 0) {
+              num += num*-2;
+              signo = '-';
+            }
+            cola_add(cola,num,0,signo);
+       
+          } else {
+             cola_add(cola,num,0,' ');
+          } 
+        }
+     
+      } catch(...) {
+       
+      }
+      ++iter;
+    }
+    goldBach(cola);
+    
 
     // TODO(you): Factorization must not be done by factorization threads
     // Build the body of the response
-    std::string title = "Goldbach Conjecture of " + std::to_string(number);
-    httpResponse.body() << "<!DOCTYPE html>\n"
+    
+     std::string title = "Goldbach Conjecture of " + std::to_string(num);
+     httpResponse.body() << "<!DOCTYPE html>\n"
       << "<html lang=\"en\">\n"
       << "  <meta charset=\"ascii\"/>\n"
       << "  <title>" << title << "</title>\n"
       << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
       << "  <h1>" << title << "</h1>\n"
-      << "  <h2>200</h2>\n"
-      << "  <p>200 = 2<sup>3</sup> 5<sup>2</sup></p>\n"
-      << "  <h2 class=\"err\">-3</h2>\n"
-      << "  <p>-3: invalid number</p>\n"
-      << "  <h2>13</h2>\n"
-      << "  <p>-13 is prime</p>\n"
+      <<  mensaje(cola)
       << "  <hr><p><a href=\"/\">Back</a></p>\n"
       << "</html>\n";
+
   } else {
     // Build the body for an invalid request
     std::string title = "Invalid request";
@@ -122,4 +154,61 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
 
   // Send the response to the client (user agent)
   return httpResponse.send();
+}
+
+std:: string GoldbachWebApp:: mensaje(cola_t* cola){
+  std::ostringstream resultado;
+
+  int64_t comparacion = 5;
+    
+  nodo_t* nodo = cola->first;
+
+ 
+  while (nodo) {
+    resultado << "  <h2>" << nodo_getSigno(nodo) << nodo_getNumber(nodo) << "</h2>\n";
+    if ( nodo_getNumber(nodo)<= comparacion ) {
+        //  Imprime "NA" si es menor que 5;
+        resultado << "  <p> NA</p>\n";
+   
+    } else {
+         //  Imprime Informacion;
+       resultado << " " <<nodo_getSigno(nodo) << nodo_getNumber(nodo) << ": ";
+        resultado << "Sumas: "<< nodo->sumas; 
+
+        if (nodo->signo == '-') {
+            //  Imprime desglose si es negativo;
+            resultado << " : ";
+            if (nodo-> number%2 == 0) {
+                for (int i = 0; i< nodo->posicion ; i++) {
+                    resultado << nodo->desglose[i];
+                    ++i;
+                    resultado <<'+';
+                    resultado << nodo->desglose[i];
+
+                if (i < nodo-> posicion-1) {
+                       resultado <<", ";
+                    }
+                }
+            } else {
+                for (int i = 0; i < nodo-> posicion ; i++) {
+                  resultado << nodo->desglose[i];
+                  ++i;
+                  resultado <<'+';
+                  resultado << nodo->desglose[i];
+                  ++i;
+                  resultado <<'+';
+                  resultado << nodo->desglose[i];
+                  if (i < nodo-> posicion-1) {
+                        resultado <<", ";
+                    }
+                }
+            }
+        }
+    }
+    printf("\n");
+    nodo = nodo->next;
+  }
+
+  cola_print(cola);
+  return resultado.str();
 }
