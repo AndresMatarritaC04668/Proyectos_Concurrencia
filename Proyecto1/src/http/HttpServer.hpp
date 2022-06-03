@@ -29,13 +29,14 @@ class HttpServer : public TcpServer {
   /// the request, the not found page will be served.
   std::vector<HttpApp*> applications;
 
- public:
-  /// Constructor
+ private:
+  /// Constructor estilo Singleton
   HttpServer();
 
-  /// Destructor
+  /// Destructor estilo Singleton
   ~HttpServer();
 
+ public:
   /// cantidad maxima de conexiones de clientes permitida 
   uint64_t max_connections = sysconf(_SC_NPROCESSORS_ONLN);
 
@@ -64,6 +65,10 @@ class HttpServer : public TcpServer {
   /// For each accepted connection request, the virtual onConnectionAccepted()
   /// will be called. Inherited classes must override that method
   void listenForever(const char* port);
+
+  //  permite tener acceso a la unica instancia de esta clase
+  //  singleton
+  static HttpServer& getInstance();
 
  protected:
   /// Analyze the command line arguments

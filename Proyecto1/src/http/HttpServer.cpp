@@ -30,6 +30,11 @@ void HttpServer::listenForever(const char* port) {
   return TcpServer::listenForever(port);
 }
 
+HttpServer& HttpServer::getInstance() {
+  static HttpServer server;
+  return server;
+}
+
 void HttpServer::handleClientConnection(Socket& client) {
   // TODO(you): Make this method concurrent. Store client connections (sockets)
   // into a collection (e.g thread-safe queue) and stop
@@ -45,6 +50,8 @@ void HttpServer::chainWebApp(HttpApp* application) {
 
 int HttpServer::start(int argc, char* argv[]) {
   bool stopApps = false;
+  //  por la convecion singleton
+  HttpServer();
   try {
     if (this->analyzeArguments(argc, argv)) {
       // Start the log service
@@ -74,21 +81,25 @@ int HttpServer::start(int argc, char* argv[]) {
       this->acceptAllConnections();
     }
   } catch (const std::runtime_error& error) {
+    Log::append(Log::INFO, "Programa",
+      std::string("no es posible aceptar mas conexiones de usuario"));
     std::cerr << "error: " << error.what() << std::endl;
   }
 
   //  se agregan los sockets respectivos a la cola
   for(size_t u = 0; u < this->max_connections; u++){
     this->sockets_server.push(Socket());
+
   }
 
   // agregamos valores a la cola de Requests
   this->colaDRequest.push(std::pair<HttpRequest*, HttpResponse*>());
   for(size_t in = 0; in < this->max_connections; in++){
     vHandler[in]->waitToFinish();
-
+    delete vHandler[in];
   }
-
+  //  limpiamos la memoria utilizada en los vHandlers
+  this->vHandler.clear();
 
   // If applications were started
   if (stopApps) {
@@ -116,6 +127,11 @@ bool HttpServer::analyzeArguments(int argc, char* argv[]) {
 
   if (argc >= 2) {
     this->port = argv[1];
+    if(argc >= 3){
+      //  hacemos un atoi para pasar de char* a int
+      //  y cambiar el maximo de clientes
+      this->max_connections = atoi(argv[2]);
+    }
   }
 
   return true;
@@ -123,5 +139,6 @@ bool HttpServer::analyzeArguments(int argc, char* argv[]) {
 
 void HttpServer::stop() {
   // Stop listening for incoming client connection requests
-  this->stopListening();
+  //  adaptado para seguir el patron singleton
+  HttpServer::getInstance().stopListening();
 }

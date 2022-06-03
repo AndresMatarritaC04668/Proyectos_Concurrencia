@@ -2,15 +2,25 @@
 // Serial web server's initial code for parallelization
 
 #ifdef WEBSERVER
-
+#include <csignal>
 #include "HttpServer.hpp"
 #include "FactWebApp.hpp"
 #include "GoldbachWebApp.hpp"
 
+void signalHandler(int signal){
+  //  llamamos a la funcion stop del HttpServer
+  Log::append(Log::INFO, "Server",
+      std::string("El server fue detenido por la senal ("+std::to_string(signal))
+      +std::string(")"));
+  HttpServer::getInstance().stop();
+}
+
 /// Start the web server
 int main(int argc, char* argv[]) {
+  signal(SIGINT,signalHandler);
+  signal(SIGTERM, signalHandler);
   // Create the web server
-  HttpServer httpServer;
+  HttpServer& httpServer = HttpServer::getInstance();
   // Create a factorization web application, and other apps if you want
   // FactWebApp factWebApp;
   GoldbachWebApp goldbachWebApp;
