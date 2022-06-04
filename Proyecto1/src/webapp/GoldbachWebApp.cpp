@@ -173,13 +173,13 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
     std::sregex_iterator end;
     std::sregex_iterator iter(uri.begin()+matches.position(2), uri.end(), re);
     
-    int64_t num = storageData(end, iter, cola);
+    storageData(end, iter, cola);
     goldBach(cola);
     
     // TODO(you): Factorization must not be done by factorization threads
     // Build the body of the response
     
-    std::string title = "Goldbach Conjecture of " + std::to_string(num);
+    std::string title = "Goldbach Conjecture of the input";
     htmlResponse(httpResponse, title, cola, 1);
 
   } else {
@@ -187,6 +187,7 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
     std::string title = "Invalid request";
     htmlResponse(httpResponse, title, nullptr, 2);
   }
+  cola_destroy(cola);
 
   // Send the response to the client (user agent)
   return httpResponse.send();
