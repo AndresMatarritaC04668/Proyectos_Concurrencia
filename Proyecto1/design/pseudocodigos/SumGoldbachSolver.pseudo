@@ -1,0 +1,79 @@
+
+procedure goldBach(cola):
+  declare nodo :=  first nodo of cola
+  while nodo != null do 
+    declare sums := 0
+    if number of nodo is even do 
+      sumas := sumas + conjeturaFuerte(nodo)
+    end  if
+    else do 
+      sumas := sumas + conjeturaDebil(nodo)
+    end else 
+    nodo := nodo next
+  end while
+
+  return cola
+end procedure
+
+procedure esPrimo(num):
+  declare answer := 1
+  if num == 1 do 
+    answer := 0
+  end if
+
+  declare i := 2
+  for i to num and answer == 1 do 
+    if num mod i == 0 do 
+      answer := 0
+    end if
+  end for
+  return answer
+end procedure
+
+procedure conjeturaDebil(num, vector_nodo, signo):
+  declare primes as an array of integers := primes numbers until num
+  declare len = length of primes
+  declare sums = 0
+  
+  declare number1 := 0
+  for number1 to len do 
+    declare number2 := 0
+    for number2 to len do 
+      declare number3 := 0
+      for number3 to len do 
+        if primes[number1] + primes[number2] + primes[number3] == num do 
+          sums := sums + 1
+          if show sums == true do 
+            save the number1, number2, number3 in vector_nodo
+          end
+        end if
+        number3 := number3 + 1 
+      end for
+      number2 := number2 + 1
+    end for
+    number1 := number1 + 1
+  end for
+  return sums
+end procedure
+
+procedure conjeturaFuerte(num, vector_nodo, signo):
+  declare primes as an array of integers := prime numbers until num
+  declare len = length of primes
+  declare sums = 0
+
+  declare number1 := 0
+  for number1 to len do 
+    declare number2 := 0
+    for number2 to len do 
+      if primes[number1] + primes[number2] == num do 
+        sums := sums + 1
+        if show sums == true do 
+          save the number1, number2 in vector_nodo
+        end
+      end if
+      number2 := number2 + 1
+    end for
+    number1 := number1 + 1
+  end for
+  return sums
+end procedure

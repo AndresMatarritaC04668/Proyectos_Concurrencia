@@ -1,0 +1,82 @@
+
+procedure handleHttpRequest(httpRequest, httpResponse):
+  if getMethod from httpRequest == "GET" 
+    and getURI from httpRequest == "/" do
+    return serverHomepage(httpRequest, httpResponse)
+  end if
+
+  if "/goldbach" in getURI do
+    return serverGoldbach(httpRequest, httpResponse)
+  end if
+end procedure
+
+procedure htmlResponse(httpResponse, title, cola, option):
+  set the begining body of HTML file
+  if option == 0 do
+    htmlResponse.body := set the HTML body of homepage
+  end if
+
+  if option == 1 do
+    htmlResponse.body := set the HTML body to print the results of cola
+  end if
+
+  if option == 2 do
+    htmlResponse.body := set the HTML body for a invalid request
+  end if
+
+  set the end body of HTML file
+end procedure
+
+procedure serveHomepage(httpRequest, httpResponse):
+  htmlResponse(httpResponse, "Goldbach Conjecture")
+  return  send the httpRequest
+end procedure
+
+procedure storageData(endIter, actualIter, cola):
+  declare num := 0
+  while endIter != actualIter do
+    num := get the number from actualIter
+    if num < 0 do
+      add to cola num, has to show the sums
+    end if
+    else do
+      add to cola num, DON'T has to show the sums
+    end else
+
+    actualIter := actualIter + 1
+  end while
+end procedure
+
+procedure serveGoldbach(httpRequest, htmlResponse):
+  init cola
+  declare endIter := null
+  declare actualIter := first position in URL
+
+  storageData(endIter, actualIter, cola);
+
+  Calculte Goldbach Conjecture to the number in cola
+
+  htmlResponse(httpResponse, title, cola, 1);
+
+  destroy cola
+
+  return send the httpResponse
+end procedure
+
+procedure mensaje(cola):
+  declare result := ""
+  declare nodo: first nodo of cola
+  while nodo != null do
+    if number of nodo < 5 do 
+      result := result + NA
+    end 
+    else do
+      result := result + number of nodo + sums of nodo
+      if number of nodo show sums == true do
+        result := result + every sum of the number of nodo
+      end if
+    end else
+    nodo := nodo next
+  end while
+  return result
+end procedure
