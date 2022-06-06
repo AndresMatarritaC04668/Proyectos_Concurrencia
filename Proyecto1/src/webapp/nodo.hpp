@@ -3,6 +3,7 @@
 #define TAREAS_GOLDBACH_SERIAL_SRC_NODO_H_
 #include <stdint.h>
 #include <inttypes.h>
+#include <string>
 
 
 //! \ class Clase nodo.h
@@ -16,11 +17,13 @@ typedef struct nodo {  //!< Atributos privados
   char signo;  //!< Signo del Numero
   int64_t  desglose[10000];   //!< Vector de int
   int posicion;  //!< Posicion del vector
+  std::string numeroErroneo; //!< Guarda un numero invalido
+  int64_t error;  //!< Indica si un numero es invalido
   nodo_t* next;   //!< Referencia al siguiente nodo
 } nodo_t;
 
 
-nodo_t* nodo_init(int64_t , int , char);  //!< Procedimiento de inicializacion
+nodo_t* nodo_init(int64_t , int , char , int64_t , std::string);  //!< Procedimiento de inicializacion
 void nodo_destroy(nodo_t* nodo);  //!< Procedimiento de eliminar
 void nodo_print(nodo_t* nodo);  //!< Procedimiento de imprimir
 char nodo_getSigno(nodo_t* nodo);  //!< Procedimiento getter

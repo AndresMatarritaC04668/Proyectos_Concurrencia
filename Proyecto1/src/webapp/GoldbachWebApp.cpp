@@ -105,6 +105,7 @@ int64_t GoldbachWebApp::storageData(std::sregex_iterator end, std::sregex_iterat
     try {
       num = std::stoll((*iter)[0].str());
       if (std::to_string(num).compare((*iter)[0].str()) != 0) {
+        cola_add(cola , 0 , 0 , ' ' , 1 , (*iter)[0].str());
       
       } else {
         if (num < 0) {
@@ -113,10 +114,10 @@ int64_t GoldbachWebApp::storageData(std::sregex_iterator end, std::sregex_iterat
             num += num*-2;
             signo = '-';
           }
-          cola_add(cola,num,0,signo);
+          cola_add(cola, num , 0 , signo , 0 , " ");
       
         } else {
-            cola_add(cola,num,0,' ');
+            cola_add(cola , num , 0 , ' ' , 0 , " ");
         } 
       }
       log << "Match" << ": " << (*iter)[0].str();
@@ -124,6 +125,9 @@ int64_t GoldbachWebApp::storageData(std::sregex_iterator end, std::sregex_iterat
       log.str("");
     } catch(...) {
       
+      cola_add(cola , 0 , 0 , ' ' , 1 , (*iter)[0].str());
+      log << "Match" << ": " << (*iter)[0].str();
+      Log::append(Log::DEBUG, "goldbach", log.str());
     }
     ++iter;
   }
@@ -202,11 +206,11 @@ std:: string GoldbachWebApp:: mensaje(cola_t* cola){
 
  
   while (nodo) {
+   if(nodo->error == 0){
     resultado << "  <h2>" << nodo_getSigno(nodo) << nodo_getNumber(nodo) << "</h2>\n";
     if ( nodo_getNumber(nodo)<= comparacion ) {
         //  Imprime "NA" si es menor que 5;
         resultado << "  <p> NA</p>\n";
-   
     } else {
          //  Imprime Informacion;
        resultado << " " <<nodo_getSigno(nodo) << nodo_getNumber(nodo) << ": ";
@@ -236,8 +240,13 @@ std:: string GoldbachWebApp:: mensaje(cola_t* cola){
             }
         }
     }
-    printf("\n");
-    nodo = nodo->next;
+  
+   }else{
+          resultado << " <h2 class=\"err\">" << nodo->numeroErroneo << "</h2>\n";
+          resultado <<  " <p> " << nodo->numeroErroneo << ": invalid number</p>\n";
+   }
+   printf("\n");
+   nodo = nodo->next;
   }
 
   return resultado.str();

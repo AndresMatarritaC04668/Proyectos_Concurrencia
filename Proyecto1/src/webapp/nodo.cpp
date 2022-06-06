@@ -14,12 +14,14 @@
  @return Retorna un puntero a un nodo 
 */
 //  procedure nodo_init:
-nodo_t* nodo_init(int64_t number , int sumas , char signo) {
+nodo_t* nodo_init(int64_t number , int sumas , char signo , int64_t error , std::string numeroErroneo){
     //   Iguala atributos a parametros;
     nodo_t* nodo = (nodo_t*) malloc(1*sizeof(nodo_t));
     nodo->number = number;
     nodo->sumas = sumas;
     nodo->signo = signo;
+    nodo->error = error;
+    nodo->numeroErroneo = numeroErroneo;
     //  Inicializa atributos
     nodo->posicion = 0;
     nodo->desglose[0] = 0;

@@ -30,9 +30,9 @@ cola_t* cola_init() {
  @return Retorna un Exit_Success si termina correctamente
 */
   // procedure cola_add:
-int cola_add(cola_t* cola  ,  int64_t nuevoValor , int sumas  ,  char signo) {
+int cola_add(cola_t* cola  ,  int64_t nuevoValor , int sumas  ,  char signo , int64_t error , std::string numeroErroneo) {
   // crea un nuevo nodo con los valores de parametros;
-  nodo_t* newOne = nodo_init(nuevoValor , sumas , signo);
+  nodo_t* newOne = nodo_init(nuevoValor , sumas , signo , error , numeroErroneo);
 
   if (cola->first == NULL) {
   cola->first = newOne;
