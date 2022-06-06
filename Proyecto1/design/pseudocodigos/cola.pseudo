@@ -1,0 +1,57 @@
+Definir clase cola
+
+    Clase cola
+    
+    Atributos Privados:
+        cola; referencia a cola
+        first; referencia a cola
+        last; referencia a cola
+    Atributos Publicos:
+    
+    
+    
+    procedure cola_init:
+        Inicializa atributos a cero;
+    end procedure 
+
+    procedure cola_add:
+        crea un nuevo nodo con los valores de parametros;
+        Agrega el nuevo nodo a la cola;
+    end procedure 
+    
+    procedure cola_destroy:
+        Libera todos los nodos;
+        Libera cola;
+    end procedure
+    
+    procedure cola_print:
+        Verifica si existe nodo;
+        Llama el print del nodo;
+    end procedure
+
+    procedure delete:
+        Verifica si existe el primer nodo de la cola;
+        Destruye primer nodo de la cola;
+    end procedure
+    
+    procedure cola_getSigno:
+        retorna atributo signo del nodo
+    end procedure
+    
+    procedure cola_getNumber:
+        retorna atributo Numero del nodo;
+    end procedure
+    
+    procedure cola_addDesglose:
+        Agrega un numero int al vector desglose del nodo;
+        Incrementa posicionVector del nodo;
+    end procedure
+    
+    procedure cola_setSumas:
+        Iguala atributo sumas del nodo al parametro recibido;
+    end procedure
+    
+    Finaliza clase cola
+    
+    
+    

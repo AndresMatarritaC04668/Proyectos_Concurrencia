@@ -1,0 +1,53 @@
+Definir clase nodo
+
+Clase Nodo
+
+Atributos Privados:
+
+    Numero entero de 64 bits
+    CantidadSumas entero int
+    SignoDelNumero char
+    PosicionActualVector entero
+    desgloseSumas vector de Int de 64 bits
+    next puntero al siguiente nodo
+
+Atributos Publicos:
+
+
+
+procedure nodo_init:
+    Iguala atributos a parametros;
+    Inicializa atributos
+end procedure 
+
+procedure nodo_destroy:
+    Libera nodo
+    Borra atributos
+end procedure
+
+procedure nodo_print:
+    Imprime "NA" si es menor que 5;
+    Imprime Informacion;
+    Imprime desglose si es negativo;
+end procedure
+
+procedure nodo_getSigno:
+    retorna atributo signo;
+end procedure
+
+procedure nodo_getNumber:
+    retorna atributo Numero;
+end procedure
+
+procedure nodo_addDesglose:
+    Agrega un numero int al vector desglose;
+    Incrementa posicionVector;
+end procedure
+
+procedure nodo_setSumas:
+    Iguala atributo sumas al parametro recibido;
+end procedure
+
+Finaliza clase nodo
+
+
