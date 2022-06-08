@@ -4,7 +4,8 @@
 #define HTTPSERVER_H
 
 #include <vector>
-#include <unistd.h> //  para encontrar los nucleos de la maquina
+#include "unistd.h"  //  para encontrar los nucleos de la maquina
+#include "utility"
 #include "TcpServer.hpp"
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
@@ -37,7 +38,7 @@ class HttpServer : public TcpServer {
   ~HttpServer();
 
  public:
-  /// cantidad maxima de conexiones de clientes permitida 
+  /// cantidad maxima de conexiones de clientes permitida
   uint64_t max_connections = sysconf(_SC_NPROCESSORS_ONLN);
 
   /// cola que contiene los sockets del Server
@@ -76,7 +77,6 @@ class HttpServer : public TcpServer {
   bool analyzeArguments(int argc, char* argv[]);
   /// This method is called each time a client connection request is accepted.
   void handleClientConnection(Socket& client) override;
-
 };
 
 #endif  // HTTPSERVER_H

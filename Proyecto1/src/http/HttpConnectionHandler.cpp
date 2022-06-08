@@ -1,5 +1,6 @@
 //  Copyright 2022 Equipo Dinamita. UCR. CC BY 4.0
 #include <string>
+#include <utility>
 #include "HttpConnectionHandler.hpp"
 
 int HttpConnectionHandler::run() {
@@ -13,7 +14,8 @@ void HttpConnectionHandler::consume(Socket datos) {
     this->procesarCliente(datos);
 }
 
-bool HttpConnectionHandler::serveNotFound(HttpRequest& httpRequest, HttpResponse& httpResponse){
+bool HttpConnectionHandler::serveNotFound(HttpRequest& httpRequest,
+HttpResponse& httpResponse) {
   (void)httpRequest;
 
   // Set HTTP response metadata (headers)
@@ -37,7 +39,8 @@ bool HttpConnectionHandler::serveNotFound(HttpRequest& httpRequest, HttpResponse
   return httpResponse.send();
 }
 
-bool HttpConnectionHandler::route(HttpRequest& httpRequest, HttpResponse& httpResponse){
+bool HttpConnectionHandler::route(HttpRequest& httpRequest,
+HttpResponse& httpResponse) {
     // Traverse the chain of applications
   for (size_t index = 0; index < this->aplicaciones.size(); ++index) {
     // If this application handles the request
@@ -50,8 +53,8 @@ bool HttpConnectionHandler::route(HttpRequest& httpRequest, HttpResponse& httpRe
   return this->serveNotFound(httpRequest, httpResponse);
 }
 
-bool HttpConnectionHandler::handleHttpRequest(HttpRequest& httpRequest, 
-    HttpResponse& httpResponse){
+bool HttpConnectionHandler::handleHttpRequest(HttpRequest& httpRequest,
+    HttpResponse& httpResponse) {
     // Print IP and port from client
     const NetworkAddress& address = httpRequest.getNetworkAddress();
     Log::append(Log::INFO, "connection",
@@ -62,12 +65,11 @@ bool HttpConnectionHandler::handleHttpRequest(HttpRequest& httpRequest,
     + ' ' + httpRequest.getURI()
     + ' ' + httpRequest.getHttpVersion());
 
-  return this->route(httpRequest, httpResponse);    
-
+  return this->route(httpRequest, httpResponse);
 }
 
-void HttpConnectionHandler::procesarCliente(Socket cliente){
-  // este metodo fue movido para hacer al server algo concurrente  
+void HttpConnectionHandler::procesarCliente(Socket cliente) {
+  // este metodo fue movido para hacer al server algo concurrente
   while (true) {
     // Create an object that parses the HTTP request from the socket
     HttpRequest httpRequest(cliente);
@@ -94,5 +96,5 @@ void HttpConnectionHandler::procesarCliente(Socket cliente){
       break;
     }
     //  eliminamos el break para que todas las solicitudes sean trabajadas
-  }  
+  }
 }

@@ -1,8 +1,11 @@
+// Copyright Equipo Dinamita. Universidad de Costa Rica. CC BY 4.0
 #include <iostream>
 #include <sstream>
 #include <cinttypes>
 #include <cstdint>
 #include <cmath>
+#include "unistd.h"
+#include "regex"
 
 
 #include "SumGoldbachSolver.hpp"
@@ -10,42 +13,40 @@
 //  procedure goldBach(cola):
 cola_t * goldBach(cola_t * cola) {
   //  declare nodo :=  first nodo of cola
-   nodo_t * nodo = cola->first;
+  nodo_t * nodo = cola->first;
   //  while nodo != null do
-   while(nodo){
-
+  while (nodo) {
     //  Calculate golbach sums for nodo
     //  declare sums := 0
     int sumas = 0;
     //  if number of nodo is even do
     if (nodo_getNumber(nodo) % 2 == 0) {
       //  sumas := sumas + conjeturaFuerte(nodo)
-      sumas+=  conjeturaFuerte(nodo_getNumber(nodo), nodo, 
+      sumas+=  conjeturaFuerte(nodo_getNumber(nodo), nodo,
       nodo_getSigno(nodo));
-    }  //  end if
-    //  else do
-    else {
-      sumas+=  conjeturaDebil(nodo_getNumber(nodo), nodo, 
+    } else {
+      sumas+=  conjeturaDebil(nodo_getNumber(nodo), nodo,
       nodo_getSigno(nodo));
     }  //  end else
     nodo_setSumas(nodo, sumas);
     //  nodo := nodo next
     nodo = nodo->next;
-   }
+  }
 
   //  return cola
-  return cola ;
+  return cola;
 }
 
 //  procedure conjeturaDebil(num, vector_nodo, signo):
 int conjeturaDebil(int64_t numero , nodo_t* vector_nodo , char signo) {
   //  declare primes as an array of integers := primes numbers until num
-  int64_t* numeros_Primos = (int64_t*) calloc(numero, sizeof(int64_t));
+  int64_t  numeros_Primos[numero];
+
 
   // declare len = length of primes
   int64_t longitud = 0;
 
-  
+
   for (int64_t i=2 ; i < numero; ++i) {
     if ( esPrimo(i) ) {
       numeros_Primos[longitud++] = i;
@@ -54,10 +55,10 @@ int conjeturaDebil(int64_t numero , nodo_t* vector_nodo , char signo) {
   // declare sums := 0
   int esSuma = 0;
   // declare number1 := 0
-  // for number1 to len do 
+  // for number1 to len do
   for (int64_t sumando1 = 0 ; sumando1 < longitud ; ++sumando1) {
       // declare number2 := 0
-      // for number2 to len do 
+      // for number2 to len do
       for (int64_t sumando2 = sumando1 ; sumando2  < longitud ; ++sumando2) {
         // declare number3 := 0
         // for number3 to len do
@@ -78,8 +79,6 @@ int conjeturaDebil(int64_t numero , nodo_t* vector_nodo , char signo) {
         }  // end for
       }  // end for
     }  // end for
-
-  free(numeros_Primos);
   // return sums
   return esSuma;
 }  // end procedure
@@ -89,7 +88,7 @@ int conjeturaDebil(int64_t numero , nodo_t* vector_nodo , char signo) {
 // procedure conjeturaFuerte(num, vector_nodo, signo):
 int conjeturaFuerte(int64_t numero , nodo_t* vector_nodo , char signo) {
   // declare primes as an array of integers := prime numbers until num
-  int64_t* numeros_Primos = (int64_t*) calloc(numero, sizeof(int64_t));
+  int64_t  numeros_Primos[numero];
 
   // declare len = length of primes
   int64_t longitud = 0;
@@ -120,8 +119,6 @@ int conjeturaFuerte(int64_t numero , nodo_t* vector_nodo , char signo) {
       }  // end for
     }  // end for
   }  // end for
-
-  free(numeros_Primos);
   // return sumas
   return esSuma;
 }  // end procedure

@@ -6,7 +6,8 @@
 #include <regex>
 #include <stdexcept>
 #include <string>
-#include <unistd.h>
+#include "unistd.h"
+#include "utility"
 #include <Log.hpp>
 
 #include "GoldbachWebApp.hpp"
@@ -31,7 +32,7 @@ void GoldbachWebApp::stop() {
 bool GoldbachWebApp::handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) {
   // If the home page was asked
-  // if getMethod from httpRequest == "GET" 
+  // if getMethod from httpRequest == "GET"
   // and getURI from httpRequest == "/" do
   if (httpRequest.getMethod() == "GET" && httpRequest.getURI() == "/") {
     // return serverHomepage(httpRequest, httpResponse)
@@ -55,7 +56,8 @@ void GoldbachWebApp::setHeaderResponse(HttpResponse& httpResponse) {
   httpResponse.setHeader("Content-type", "text/html; charset=ascii");
 }
 
-void GoldbachWebApp:: beginAndEndHtml(HttpResponse& httpResponse, std::string title, int end) {
+void GoldbachWebApp:: beginAndEndHtml(
+HttpResponse& httpResponse, std::string title, int end) {
   if (!end) {
     // Start part of a HTML file
     httpResponse.body() << "<!DOCTYPE html>\n"
@@ -63,14 +65,15 @@ void GoldbachWebApp:: beginAndEndHtml(HttpResponse& httpResponse, std::string ti
         << "  <title>" << title << "</title>\n";
   } else {
     // End part of a HTML file
-     httpResponse.body() 
+     httpResponse.body()
       << "  <hr><p><a href=\"/\">Back</a></p>\n"
       << "</html>\n";
   }
 }
 
 // procedure htmlResponse(httpResponse, title, cola, option):
-void GoldbachWebApp::htmlResponse(HttpResponse& httpResponse, std::string title, cola_t* cola, int option) {
+void GoldbachWebApp::htmlResponse(
+  HttpResponse& httpResponse , std::string title , cola_t* cola, int option) {
   if (option >= 0 && option <= 2) {
     // set the begining body of HTML file
     beginAndEndHtml(httpResponse, title, 1);
@@ -85,19 +88,16 @@ void GoldbachWebApp::htmlResponse(HttpResponse& httpResponse, std::string title,
       << "    <button type=\"submit\">Calculate</button>\n"
       << "  </form>\n"
       << "</html>\n";
-    }  // end if
-    else {
+    } else {
       // if option == 1 do
       if (option == 1) {
-        // htmlResponse.body := set the HTML body to print 
+        // htmlResponse.body := set the HTML body to print
         // the results of cola
         httpResponse.body()
         << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
         << "  <h1>" << title << "</h1>\n"
         <<  mensaje(cola);
-      }  // end if
-      // if option == 2 do
-      else {
+      } else {
         // htmlResponse.body := set the HTML body for a invalid request
         httpResponse.body()
         << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
@@ -110,27 +110,29 @@ void GoldbachWebApp::htmlResponse(HttpResponse& httpResponse, std::string title,
   }
 }  // end procedure
 
-std::string GoldbachWebApp::decodeURI(HttpRequest& httpRequest, std::regex& inQuery) {
+std::string GoldbachWebApp::decodeURI(
+HttpRequest& httpRequest, std::regex& inQuery) {
   inQuery = "^/goldbach(/|\\?number=)(.*)$";
   std::string uri = httpRequest.getURI();
-   // Se decodifican comas(%2C) o espacios (\\+)|(%20)
+  // Se decodifican comas(%2C) o espacios (\\+)|(%20)
   std::regex decode("(%2C)|(\\+)|(%20)");
   return regex_replace(uri, decode, ",");
 }
 
 // procedure storageData(endIter, actualIter, cola):
-int64_t GoldbachWebApp::storageData(std::sregex_iterator end, std::sregex_iterator iter, cola_t* cola) {
+int64_t GoldbachWebApp::storageData(
+std::sregex_iterator end, std::sregex_iterator iter, cola_t* cola) {
   // declare num := 0
   int64_t num;
   std::stringstream log;
   // while endIter != actualIter do
-  while (iter != end) {    
+  while (iter != end) {
     try {
       // num := get the number from actualIter
       num = std::stoll((*iter)[0].str());
       if (std::to_string(num).compare((*iter)[0].str()) != 0) {
         cola_add(cola , 0 , 0 , ' ' , 1 , (*iter)[0].str());
-      
+
       } else {
         // if num < 0 do
         if (num < 0) {
@@ -140,31 +142,28 @@ int64_t GoldbachWebApp::storageData(std::sregex_iterator end, std::sregex_iterat
             num += num*-2;
             signo = '-';
           }
-          cola_add(cola, num , 0 , signo , 0 , " ");
-      
-        }  // end if
-        // else do
-        else {
+          cola_add(cola, num , 0 , signo , 0 , "nul");
+        } else {
           // add to cola num, DON'T has to show the sums
-          cola_add(cola , num , 0 , ' ' , 0 , " ");
+          cola_add(cola , num , 0 , ' ' , 0 , "nul");
         }  // end else
       }
       log << "Match" << ": " << (*iter)[0].str();
       Log::append(Log::DEBUG, "goldbach", log.str());
       log.str("");
     } catch(...) {
-      
       cola_add(cola , 0 , 0 , ' ' , 1 , (*iter)[0].str());
       log << "Match" << ": " << (*iter)[0].str();
       Log::append(Log::DEBUG, "goldbach", log.str());
     }
-    // actualIter := actualIter + 1
+    //  actualIter := actualIter + 1
     ++iter;
-  }  // end while
+  }  //  end while
   return num;
-} // end procedure
+}  //  end procedure
 
-void GoldbachWebApp::addToResults(std::ostringstream& resultado, nodo_t* nodo, int& i) {
+void GoldbachWebApp::addToResults(std::ostringstream& resultado,
+ nodo_t* nodo, int& i) {
   resultado << nodo->desglose[i];
   ++i;
   resultado <<'+';
@@ -213,15 +212,14 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
     std::sregex_iterator end;
     // declare actualIter := first position in URL
     std::sregex_iterator iter(uri.begin()+matches.position(2), uri.end(), re);
-    
     // storageData(endIter, actualIter, cola);
     storageData(end, iter, cola);
     // Calculte Goldbach Conjecture to the number in cola
     goldBach(cola);
-    
+
     // TODO(you): Factorization must not be done by factorization threads
     // Build the body of the response
-    
+
     std::string title = "Goldbach Conjecture of the input";
     // htmlResponse(httpResponse, title, cola, 1);
     htmlResponse(httpResponse, title, cola, 1);
@@ -240,7 +238,7 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
 }  // end procedure
 
 // procedure mensaje(cola):
-std:: string GoldbachWebApp:: mensaje(cola_t* cola){
+std:: string GoldbachWebApp:: mensaje(cola_t* cola) {
   // declare result := ""
   std::ostringstream resultado;
   int64_t comparacion = 5;
@@ -249,18 +247,17 @@ std:: string GoldbachWebApp:: mensaje(cola_t* cola){
 
   // while nodo != null do
   while (nodo) {
-   if(nodo->error == 0){
-    resultado << "  <h2>" << nodo_getSigno(nodo) << nodo_getNumber(nodo) << "</h2>\n";
-    // if number of nodo < 5 do 
+    if (nodo->error == 0) {
+    resultado << "  <h2>" << nodo_getSigno(nodo)
+    << nodo_getNumber(nodo) << "</h2>\n";
+    // if number of nodo < 5 do
     if ( nodo_getNumber(nodo)<= comparacion ) {
         // result := result + NA
         resultado << "  <p> NA</p>\n";
-    }  // end if
-    // else do
-    else {
+    } else {
          //  result := result + number of nodo + sums of nodo
        resultado << " " <<nodo_getSigno(nodo) << nodo_getNumber(nodo) << ": ";
-        resultado << "Sumas: "<< nodo->sumas; 
+        resultado << "Sumas: "<< nodo->sumas;
 
         // if number of nodo show sums == true do
         if (nodo->signo == '-') {
@@ -287,14 +284,15 @@ std:: string GoldbachWebApp:: mensaje(cola_t* cola){
             }
         }  // end if
     }  // end else
-  
-   }else{
-          resultado << " <h2 class=\"err\">" << nodo->numeroErroneo << "</h2>\n";
-          resultado <<  " <p> " << nodo->numeroErroneo << ": invalid number</p>\n";
-   }
-   printf("\n");
-   // nodo := nodo next
-   nodo = nodo->next;
+  } else {
+          resultado << " <h2 class=\"err\">"
+          << nodo->numeroErroneo << "</h2>\n";
+          resultado <<  " <p> " << nodo->numeroErroneo
+          << ": invalid number</p>\n";
+  }
+  printf("\n");
+  // nodo := nodo next
+  nodo = nodo->next;
   }  // end while
 
   return resultado.str();

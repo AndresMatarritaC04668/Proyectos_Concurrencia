@@ -1,3 +1,4 @@
+// Copyright Equipo Dinamita. Universidad de Costa Rica. CC BY 4.0
 #ifndef GOLDBACHSOLVER_HPP_
 #define  GOLDBACHSOLVER_HPP_
 
@@ -50,4 +51,4 @@ int conjeturaFuerte(int64_t numero , nodo_t* vector_nodo, char signo);
  */
 int esPrimo(int64_t numero);
 
-#endif 
+#endif

@@ -1,13 +1,12 @@
 // Copyright Equipo Dinamita. Universidad de Costa Rica. CC BY 4.0
-
 #ifndef GOLDBACHWEBAPP_HPP
 #define GOLDBACHWEBAPP_HPP
-
+#include <string>
 #include "HttpApp.hpp"
 #include "SumGoldbachSolver.hpp"
 #include "cola.hpp"
 #include "nodo.hpp"
-#include <regex>
+#include "regex"
 
 /**
 * @brief A web application that calculates
@@ -19,14 +18,13 @@ class GoldbachWebApp : public HttpApp {
   DISABLE_COPY(GoldbachWebApp);
 
  public:
- 
   /// Constructor
   /**
    * @brief Constructor of class GoldbachWebApp
    * 
    */
   GoldbachWebApp();
-  
+
   /// Destructor
   /**
    * @brief Destructor of class GoldbachWebApp
@@ -69,7 +67,6 @@ class GoldbachWebApp : public HttpApp {
 
 
  protected:
-
   /**
    * @brief Sends the homepage as HTTP response 
    * 
@@ -103,7 +100,8 @@ class GoldbachWebApp : public HttpApp {
    * @param cola is a conteiner with the numbers to work
    * @param option is a flag, to know which html use
    */
-  void htmlResponse(HttpResponse& httpResponse, std::string title, cola_t* cola, int option);
+  void htmlResponse(HttpResponse& httpResponse, std::string title,
+  cola_t* cola, int option);
 
   /**
    * @brief It has the begining of a html file and the end as well
@@ -114,7 +112,8 @@ class GoldbachWebApp : public HttpApp {
    * @param title message to show in html file
    * @param option is a flag, to know which html use
    */
-  void beginAndEndHtml(HttpResponse& httpResponse, std::string title, int option);
+  void beginAndEndHtml(HttpResponse& httpResponse, std::string title,
+  int option);
 
   /**
    * @brief Set the Header Response object
@@ -141,7 +140,8 @@ class GoldbachWebApp : public HttpApp {
    * @param cola is a conteiner with the numbers to work
    * @return int64_t the last number inserted in the conteiner
    */
-  int64_t storageData(std::sregex_iterator end, std::sregex_iterator iter, cola_t* cola);
+  int64_t storageData(std::sregex_iterator end, std::sregex_iterator iter,
+   cola_t* cola);
 
   /**
    * @brief 

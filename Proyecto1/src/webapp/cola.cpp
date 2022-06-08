@@ -1,8 +1,9 @@
   //  "Copyright 2022 <Andres Matarrita>"
-  #include <assert.h>
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <inttypes.h>
+#include <string>
 #include "cola.hpp"
 
 
@@ -14,7 +15,7 @@
   // procedure cola_init:
 cola_t* cola_init() {
   // Inicializa atributos a cero;
-  cola_t* cola = (cola_t*) malloc(1*sizeof(cola_t));
+  cola_t* cola = new cola_t;
   cola->first = NULL;
   cola-> last = NULL;
   return cola;
@@ -30,9 +31,11 @@ cola_t* cola_init() {
  @return Retorna un Exit_Success si termina correctamente
 */
   // procedure cola_add:
-int cola_add(cola_t* cola  ,  int64_t nuevoValor , int sumas  ,  char signo , int64_t error , std::string numeroErroneo) {
+int cola_add(cola_t* cola  ,  int64_t nuevoValor , int sumas  ,
+char signo , int64_t error , std::string numeroErroneo) {
   // crea un nuevo nodo con los valores de parametros;
-  nodo_t* newOne = nodo_init(nuevoValor , sumas , signo , error , numeroErroneo);
+  nodo_t* newOne = nodo_init(nuevoValor ,
+  sumas , signo , error , numeroErroneo);
 
   if (cola->first == NULL) {
   cola->first = newOne;
@@ -121,7 +124,7 @@ void cola_destroy(cola_t* cola) {
   }
 
   // Libera cola;
-  free(cola);
+  delete cola;
 }
   // end procedure
 

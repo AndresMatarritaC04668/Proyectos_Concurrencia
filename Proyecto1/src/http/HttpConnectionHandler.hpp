@@ -3,6 +3,7 @@
 #define HTTPCONNECTIONHANDLER_HPP
 
 #include <vector>
+#include <utility>
 #include "Assembler.hpp"
 #include "HttpApp.hpp"
 #include "HttpResponse.hpp"
@@ -17,19 +18,22 @@ class HttpServer;
 
 /*  se eligio la clase assembler por suplir el rol de trabajador
 de la linea de asamblaje, siendo productor y consumidor al mismo tiempo */
-class HttpConnectionHandler : public Assembler<Socket, std::pair<HttpRequest*, HttpResponse*>> {
-  public:
+class HttpConnectionHandler : public Assembler
+<Socket, std::pair<HttpRequest*, HttpResponse*>> {
+ public:
     std::vector<HttpApp*> aplicaciones;
     //  constructor de la clase
     //  colaDSockets cola donde se almacenan los sockets del server
     //  colaDRequest cola donde se almacenan los valores de cada solicitud
-    explicit HttpConnectionHandler(Queue<Socket>* colaDSockets, 
-      Queue<std::pair<HttpRequest*, HttpResponse*>>* colaDRequest):
-      Assembler<Socket, std::pair<HttpRequest*, HttpResponse*>>(colaDSockets, colaDRequest){};
+    explicit HttpConnectionHandler(Queue<Socket>* colaDSockets,
+      Queue<std::pair<HttpRequest*,
+      HttpResponse*>>* colaDRequest):
+      Assembler<Socket, std::pair<HttpRequest*, HttpResponse*>>(colaDSockets,
+       colaDRequest) {}
     // el constructor toma una forma similar al constructor del Assembler
 
     //  destructor de la clase
-    virtual ~HttpConnectionHandler (){};
+    virtual ~HttpConnectionHandler() {}
 
     /**
      * @brief Override de run del consumer de la clase Assembler
@@ -45,14 +49,15 @@ class HttpConnectionHandler : public Assembler<Socket, std::pair<HttpRequest*, H
      */
     void consume(Socket datos) override;
 
-    //  los siguientes metodos fueron sacados del HTTP server para lograr la paralelizacion
+    //  los siguientes metodos fueron sacados del HTTP server
+    //  para lograr la paralelizacion
 
     /**
      * @brief procesa las peticiones realizadas por un cliente 
      * @param usuario socket donde se encuentra la informacion del cliente
      */
     void procesarCliente(Socket usuario);
-    
+
     /**
      * @brief Called each time an HTTP request is received. Web server should analyze
       the request object and assemble a response with the response object.
@@ -64,7 +69,7 @@ class HttpConnectionHandler : public Assembler<Socket, std::pair<HttpRequest*, H
      */
     bool handleHttpRequest(HttpRequest& httpRequest,
       HttpResponse& httpResponse);
-    
+
     /**
      * @brief Route, that provide an answer according to the URI value
       For example, home page is handled different than a number

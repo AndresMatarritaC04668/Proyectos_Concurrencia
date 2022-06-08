@@ -3,6 +3,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 #include "HttpApp.hpp"
 #include "HttpServer.hpp"
@@ -40,7 +41,6 @@ void HttpServer::handleClientConnection(Socket& client) {
   // into a collection (e.g thread-safe queue) and stop
   // almacenamos el socket en la cola
   this->sockets_server.push(client);
-
 }
 
 void HttpServer::chainWebApp(HttpApp* application) {
@@ -64,8 +64,9 @@ int HttpServer::start(int argc, char* argv[]) {
       stopApps = true;
 
       // inicializamos el vector de Handlers del Server
-      for(size_t in = 0; in < this->max_connections; in++){
-        HttpConnectionHandler* nuevo = new HttpConnectionHandler(&this->sockets_server,&colaDRequest);
+      for (size_t in = 0; in < this->max_connections; in++) {
+        HttpConnectionHandler* nuevo =
+        new HttpConnectionHandler(&this->sockets_server , &colaDRequest);
         vHandler.push_back(nuevo);
         vHandler[in]->aplicaciones = this->applications;
         vHandler[in]->startThread();
@@ -87,14 +88,13 @@ int HttpServer::start(int argc, char* argv[]) {
   }
 
   //  se agregan los sockets respectivos a la cola
-  for(size_t u = 0; u < this->max_connections; u++){
+  for (size_t u = 0; u < this->max_connections; u++) {
     this->sockets_server.push(Socket());
-
   }
 
   // agregamos valores a la cola de Requests
   this->colaDRequest.push(std::pair<HttpRequest*, HttpResponse*>());
-  for(size_t in = 0; in < this->max_connections; in++){
+  for (size_t in = 0; in < this->max_connections; in++) {
     vHandler[in]->waitToFinish();
     delete vHandler[in];
   }
@@ -127,7 +127,7 @@ bool HttpServer::analyzeArguments(int argc, char* argv[]) {
 
   if (argc >= 2) {
     this->port = argv[1];
-    if(argc >= 3){
+    if (argc >= 3) {
       //  hacemos un atoi para pasar de char* a int
       //  y cambiar el maximo de clientes
       this->max_connections = atoi(argv[2]);

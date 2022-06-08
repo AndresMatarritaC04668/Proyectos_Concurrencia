@@ -14,9 +14,10 @@
  @return Retorna un puntero a un nodo 
 */
 //  procedure nodo_init:
-nodo_t* nodo_init(int64_t number , int sumas , char signo , int64_t error , std::string numeroErroneo){
+nodo_t* nodo_init(int64_t number , int sumas , char signo ,
+ int64_t error , std::string numeroErroneo) {
     //   Iguala atributos a parametros;
-    nodo_t* nodo = (nodo_t*) malloc(1*sizeof(nodo_t));
+    nodo_t* nodo = new nodo_t;
     nodo->number = number;
     nodo->sumas = sumas;
     nodo->signo = signo;
@@ -42,7 +43,7 @@ void nodo_destroy(nodo_t* nodo) {
     nodo->number = 0;
     nodo->next = NULL;
     //  Libera nodo
-    free(nodo);
+    delete nodo;
 }
 //  end procedure
 
