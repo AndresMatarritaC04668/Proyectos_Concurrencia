@@ -33,7 +33,7 @@ llamado Proyecto1, por lo que lo primero que hay que hacer es abrir una terminal
 
 ### Correr y finalizar el ejecutable
 
-Una vez dentro del directorio Proyecto1 es muy sencillo, como se dijo anteriormente este ejecutable se encuentra dentro del directorio **bin/** y se llamma **Proyecto1**, por lo que en la terminal se agrega esa ruta, **bin/Proyecto1**. Se puede agregar un puerto o si no se agrega se toma por default el **puerto 8080**, para agregar uno en especifico es muy sencillo, la ruta quedaria de la siguiente manera **bin/Proyecto1 puerto**.
+Una vez dentro del directorio Proyecto1 es muy sencillo, como se dijo anteriormente este ejecutable se encuentra dentro del directorio **bin/** y se llamma **Proyecto1**, por lo que en la terminal se agrega esa ruta, **bin/Proyecto1**. Se puede agregar un puerto o si no se agrega se toma por default el **puerto 8080**, para agregar uno en especifico es muy sencillo, la ruta quedaria de la siguiente manera **bin/Proyecto1 puerto**, ademas hay un segundo parametro opcioanl, este corresponde con la cantidad maxima de conecciones que puede tener el server quedando **bin/Proyecto1 puerto max_connections**.
 
 Al ejecutar la ruta anterior, la terminal debe de estar de la siguiente manera:
 
@@ -45,7 +45,11 @@ Para terminar el programa se puede finalizar de 2 maneras:
 
 **Ctrl+C**: debe de ingresar en la terminal donde se esta corriendo el server un Ctrl + c, la respuesta del programa es que ya no va a recibir mas conecciones con el usuario por lo que finalizaria y se cierra el server.
 
-**kill**: ...
+**kill**: para detener el programa mediante el comando Kill, es importante abrir una segunda terminal en el mismo directivo del proyecto, acto seguido se introduce **ps -eu** en la consola, este desplegara las distintas actividades de Linux, luego debemos buscar la que tiene bin/Proyecto1 en su TIME COMMAND, nos fijamos en la columna "PID" para saber el numero de proceso, por ultimo ponemos el comando kill PID, siendo PID el numero anteriormente visto, para terminar el proceso.  
+Esto se ve de la siguiente manera:
+
+![kill](https://git.ucr.ac.cr/JOSE.MATARRITAMIRANDA/proyectos/-/blob/main/Proyecto1/img/comando_Kill.png)  
+En la consola donde se corrio el programa se imprimira la misma respuesta final que para el Ctrl + c
 
 ### Prueba
 
@@ -59,7 +63,7 @@ Y la respuesta que genera el servidor es la siguiente
 
 ## Creditos
 
-**Estudiante1:** Gabriel Chacon segundo_apellido **Carne:** C*****
+**Estudiante1:** Gabriel Antonio Chacon Garro **Carne:** C02063
 
 **Estudiante2:** Andres Matarrita Miranda **Carne:** C04668
 
