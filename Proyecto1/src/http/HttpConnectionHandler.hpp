@@ -52,24 +52,36 @@ class HttpConnectionHandler : public Assembler<Socket, std::pair<HttpRequest*, H
      * @param usuario socket donde se encuentra la informacion del cliente
      */
     void procesarCliente(Socket usuario);
-
-    /// Called each time an HTTP request is received. Web server should analyze
-    /// the request object and assemble a response with the response object.
-    /// Finally send the response calling the httpResponse.send() method.
-    /// @return true on success and the server will continue handling further
-    /// HTTP requests, or false if server should stop accepting requests from
-    /// this client (e.g: HTTP/1.0)
+    
+    /**
+     * @brief Called each time an HTTP request is received. Web server should analyze
+      the request object and assemble a response with the response object.
+      Finally send the response calling the httpResponse.send() method.
+     * 
+     * @param httpRequest httpRequest con la peticion del usuario
+     * @param httpResponse httpResponse utilizado para la respuesta
+     * @return true on success and the server will continue handling further
+     */
     bool handleHttpRequest(HttpRequest& httpRequest,
       HttpResponse& httpResponse);
-
-    /// Route, that provide an answer according to the URI value
-    /// For example, home page is handled different than a number
+    
+    /**
+     * @brief Route, that provide an answer according to the URI value
+      For example, home page is handled different than a number
+     * 
+     * @param httpRequest httpRequest con la peticion del usuario
+     * @param httpResponse httpResponse utilizado para la respuesta
+     * @return true si logra encontrar la app a redireccionar
+     */
     bool route(HttpRequest& httpRequest, HttpResponse& httpResponse);
 
-    /// Sends a page for a non found resouce in this server. This method is called
-    /// if none of the registered web applications handled the request.
-    /// If you want to override this method, create a web app, e.g NotFoundWebApp
-    /// that reacts to all URIs, and chain it as the last web app
+    /**
+     * @brief Sends a page for a non found resouce in this server. This method is called
+      if none of the registered web applications handled the request.
+     * @param httpRequest httpRequest con la peticion del usuario
+     * @param httpResponse usado para avisar al usuario que la pagina no fue encontrada
+     * @return el resultado de hacer send() del HttpResponse
+     */
     bool serveNotFound(HttpRequest& httpRequest, HttpResponse& httpResponse);
 };
 #endif
