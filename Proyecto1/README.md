@@ -60,5 +60,7 @@ Y la respuesta que genera el servidor es la siguiente
 ## Creditos
 
 **Estudiante1:** Gabriel Chacon segundo_apellido **Carne:** C*****
+
 **Estudiante2:** Andres Matarrita Miranda **Carne:** C04668
+
 **Estudiante3:** Esteban Mora Garcia **Carne:** C05126
