@@ -8,11 +8,10 @@
 #include "GoldbachWebApp.hpp"
 
 void signalHandler(int signal) {
+  //  el int signal se queda sin usar aproposito
+  //  para evitar problemas con el helgrind
   //  llamamos a la funcion stop del HttpServer
-  Log::append(Log::INFO, "Server",
-      std::string(
-      "El server fue detenido por la senal ("+std::to_string(signal))
-      +std::string(")"));
+  printf("\n");
   HttpServer::getInstance().stop();
 }
 

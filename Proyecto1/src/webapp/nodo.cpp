@@ -66,7 +66,7 @@ void nodo_print(nodo_t* nodo) {
 
     } else {
          //  Imprime Informacion;
-        printf("%C%" PRIu64 ":" ,  nodo->signo , nodo->number);
+        printf("%c%" PRIu64 ":" ,  nodo->signo , nodo->number);
         printf(" %i Sumas" ,  nodo->sumas);
 
         if (nodo->signo == '-') {
