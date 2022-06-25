@@ -4,15 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-
-/**
- @brief Inicializa los valores del nodo al darle los valores de los parametros
- @param number Numero a demostrar con goldbach
- @param sumas Cantidad de sumas posibles encontradas
- @param signo Char que identifica si un numero es negativo ('-')
- @return Retorna un puntero a un nodo 
-*/
 //  procedure nodo_init:
 nodo_t* nodo_init(int64_t number , int sumas , char signo ,
  int64_t error , std::string numeroErroneo) {
@@ -31,10 +22,6 @@ nodo_t* nodo_init(int64_t number , int sumas , char signo ,
     return nodo;
 }
 
-/**
- @brief Libera a el nodo y sus valores
- @param nodo Nodo que se va a liberar
-*/
 //  procedure nodo_destroy:
 void nodo_destroy(nodo_t* nodo) {
     assert(nodo);
@@ -47,12 +34,6 @@ void nodo_destroy(nodo_t* nodo) {
 }
 //  end procedure
 
-
-/**
- @brief Imprime los datos del nodo y si es negativo imprime
-        el desglose de sumas del numero
- @param nodo Nodo que contiene los datos que se van a imprimir 
- */
 //  procedure nodo_print:
 void nodo_print(nodo_t* nodo) {
     assert(nodo);
@@ -103,15 +84,6 @@ void nodo_print(nodo_t* nodo) {
 }
 //  end procedure
 
-
-/**
- @brief Devuelve el char signo de un numero
- @param nodo Contiene el char a devolver
-
- @return Retorna un char:
- '-' Si el numero es negativo
- ' ' Si el numero es positivo
-*/
 //  procedure nodo_getSigno:
 char nodo_getSigno(nodo_t* nodo) {
     //  retorna atributo signo;
@@ -119,13 +91,6 @@ char nodo_getSigno(nodo_t* nodo) {
 }
 //  end procedure
 
-
-/**
- @brief Devuelve el numero int64_t de un nodo 
- @param nodo Contiene el numero a devolver
-
- @return Retorna el valor del atributo number
- */
 //  procedure nodo_getNumber:
 int64_t nodo_getNumber(nodo_t* nodo) {
     //  retorna atributo Numero;
@@ -133,14 +98,6 @@ int64_t nodo_getNumber(nodo_t* nodo) {
 }
 //  end procedure
 
-
-/**
- @brief Agrega al vector deslose un numero que forma parte de las posibles sumas
- *      del teorema de golbach
- @param nodo Nodo al que se le cambiaran los valores
- @param digito Numero que se almacenara en el vector desglose
- @return Retorna un char:
- */
 //  procedure nodo_addDesglose:
 void nodo_addDesglose(nodo_t* nodo , int64_t digito) {
     //  Agrega un numero int al vector desglose;
@@ -150,12 +107,6 @@ void nodo_addDesglose(nodo_t* nodo , int64_t digito) {
 }
 //  end procedure
 
-
-/**
- @brief Cambia el valor del atributo "sumas" de un nodo
- @param nodo Nodo al que se aplicara el cambio
- @param sumas int que contiene el nuevo valor de sumas
-*/
 //  procedure nodo_setSumas:
 void nodo_setSumas(nodo_t* nodo , int sumas) {
     //  Iguala atributo sumas al parametro recibido;

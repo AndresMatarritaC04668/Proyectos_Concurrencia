@@ -11,6 +11,7 @@ void signalHandler(int signal) {
   //  el int signal se queda sin usar aproposito
   //  para evitar problemas con el helgrind
   //  llamamos a la funcion stop del HttpServer
+  (void) signal;
   printf("\n");
   HttpServer::getInstance().stop();
 }
