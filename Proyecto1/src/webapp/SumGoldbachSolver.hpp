@@ -9,15 +9,27 @@
 #include "cola.hpp"
 #include "SumGoldbachSolver.hpp"
 
+
+class SumGoldbachSolver{
+  public:
+
+/**
+ * @brief Constructor de la clase  SumGoldbachSolver
+ */
+ SumGoldbachSolver();
+
+/**
+ * @brief Destructor de la clase SumGoldbachSolver
+ */
+ ~SumGoldbachSolver();
 /**
  * @brief This method is the general conjecture, is gets a 
  * cola, then fill it with the numbers, calculate the conjecture 
  * and the return it
  * 
- * @param cola is the conteiner to storege the data
- * @return cola_t* with the Conjecture calculates in that cola 
+ * @param cola is the conteiner to storege the data 
  */
-cola_t * goldBach(cola_t* cola);
+void goldBach(cola_t* cola);
 
 /**
  * @brief If the number is odd, this is the method that
@@ -50,5 +62,6 @@ int conjeturaFuerte(int64_t numero , nodo_t* vector_nodo, char signo);
  * @return int 1 if it is prime, 0 if it is not prime
  */
 int esPrimo(int64_t numero);
+};
 
-#endif
+#endif //  SumGoldbachSolver

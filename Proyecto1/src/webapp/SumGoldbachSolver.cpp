@@ -6,12 +6,20 @@
 #include <cmath>
 #include "unistd.h"
 #include "regex"
-
-
 #include "SumGoldbachSolver.hpp"
 #include "nodo.hpp"
+
+//  Constructor
+SumGoldbachSolver::SumGoldbachSolver(){
+
+}
+
+//Destructor
+SumGoldbachSolver::~SumGoldbachSolver(){
+
+}
 //  procedure goldBach(cola):
-cola_t * goldBach(cola_t * cola) {
+void SumGoldbachSolver::goldBach(cola_t * cola) {
   //  declare nodo :=  first nodo of cola
   nodo_t * nodo = cola->first;
   //  while nodo != null do
@@ -32,13 +40,10 @@ cola_t * goldBach(cola_t * cola) {
     //  nodo := nodo next
     nodo = nodo->next;
   }
-
-  //  return cola
-  return cola;
 }
 
 //  procedure conjeturaDebil(num, vector_nodo, signo):
-int conjeturaDebil(int64_t numero , nodo_t* vector_nodo , char signo) {
+int SumGoldbachSolver::conjeturaDebil(int64_t numero , nodo_t* vector_nodo , char signo) {
   //  declare primes as an array of integers := primes numbers until num
   int64_t  numeros_Primos[numero];
 
@@ -86,7 +91,7 @@ int conjeturaDebil(int64_t numero , nodo_t* vector_nodo , char signo) {
 
 
 // procedure conjeturaFuerte(num, vector_nodo, signo):
-int conjeturaFuerte(int64_t numero , nodo_t* vector_nodo , char signo) {
+int SumGoldbachSolver::conjeturaFuerte(int64_t numero , nodo_t* vector_nodo , char signo) {
   // declare primes as an array of integers := prime numbers until num
   int64_t  numeros_Primos[numero];
 
@@ -132,7 +137,7 @@ int conjeturaFuerte(int64_t numero , nodo_t* vector_nodo , char signo) {
 */
 
 // procedure esPrimo(num):
-int esPrimo(int64_t numero) {
+int SumGoldbachSolver::esPrimo(int64_t numero) {
   // declare answer := 1
   int respuesta = 1;
   // if num == 1 do

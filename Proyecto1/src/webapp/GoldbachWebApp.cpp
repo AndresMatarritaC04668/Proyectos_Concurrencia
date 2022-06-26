@@ -215,7 +215,8 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
     // storageData(endIter, actualIter, cola);
     storageData(end, iter, cola);
     // Calculte Goldbach Conjecture to the number in cola
-    goldBach(cola);
+    SumGoldbachSolver calculator;
+    calculator.goldBach(cola);
 
     // TODO(you): Factorization must not be done by factorization threads
     // Build the body of the response
