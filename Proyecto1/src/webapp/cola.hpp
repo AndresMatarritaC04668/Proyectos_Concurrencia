@@ -3,6 +3,7 @@
 #define TAREAS_GOLDBACH_SERIAL_SRC_COLA_H_
 #include <inttypes.h>
 #include <string>
+#include <pthread.h>
 #include "nodo.hpp"
 
 /**
@@ -13,7 +14,20 @@
 typedef struct {
     nodo_t* first;
     nodo_t* last;
+    int64_t cantidadNumeros;
+    int64_t numerosProcesados;
+    pthread_mutex_t  can_access; //  Mutex que previene condiciones de carrera ;
 } cola_t;
+
+/**
+ * @brief struct de la clase cola, trabaja con la clase nodo
+ * @param first referencia al primer nodo de la cola
+ * @param last referencia al ultimo nodo de la cola
+ */
+typedef struct {
+    nodo_t* nodo; //  Refencia a n un  nodo
+    cola_t* cola; //  Referencia a cola;
+} shared_data_t;
 
 /**
  @brief Crea una nueva cola dinamicamente ,  inicializa los atributos de la cola en null

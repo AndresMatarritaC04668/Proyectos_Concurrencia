@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <string>
+#include <pthread.h>
 #include "cola.hpp"
 
 // procedure cola_init:
@@ -12,6 +13,9 @@ cola_t* cola_init() {
   cola_t* cola = new cola_t;
   cola->first = NULL;
   cola-> last = NULL;
+  cola->cantidadNumeros = 0;
+  cola->numerosProcesados = 0;
+  pthread_mutex_init(&cola->can_access, /*attr*/NULL);
   return cola;
 }
 // end procedure
@@ -23,6 +27,7 @@ char signo , int64_t error , std::string numeroErroneo) {
   // crea un nuevo nodo con los valores de parametros;
   nodo_t* newOne = nodo_init(nuevoValor ,
   sumas , signo , error , numeroErroneo);
+  ++cola->cantidadNumeros;
 
   if (cola->first == NULL) {
   cola->first = newOne;
