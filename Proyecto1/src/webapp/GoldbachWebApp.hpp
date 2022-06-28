@@ -9,8 +9,9 @@
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
 
-#include "SumGoldbachSolver.hpp"
+class SumGoldbachSolver;
 class Empaquetador;
+class Despachador;
 /**
 * @brief A web application that calculates
 * the Goldbach Conjecture
@@ -75,6 +76,12 @@ class GoldbachWebApp : public HttpApp {
   */
    Empaquetador * empaquetador;
 
+   /**
+   * @brief Despachador, se encarga de ensamblar el mensaje e imprimirselo
+   * al usuario.
+  */
+  Despachador* despachador;
+
     /**
    * @brief Called when the web server stops, in order to allow the web application
    *        clean up and finish as well
@@ -83,7 +90,7 @@ class GoldbachWebApp : public HttpApp {
    * @return void
   */
   std::vector<SumGoldbachSolver*> goldbachThreads;
-  Queue<cola_t*> empaquetadorProduct;
+  Queue<shared_data_t*> empaquetadorProduct;
 
 
  protected:

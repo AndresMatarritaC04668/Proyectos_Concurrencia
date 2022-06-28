@@ -8,7 +8,7 @@
 #include "cola.hpp"
 
 
-class Despachador : public Consumer<cola_t*> {
+class Despachador : public Consumer<shared_data_t*> {
   private:
     /* data */
   public:

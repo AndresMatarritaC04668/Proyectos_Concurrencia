@@ -8,7 +8,8 @@
 #include "regex"
 #include "SumGoldbachSolver.hpp"
 #include "nodo.hpp"
-
+#include "Empaquetador.hpp"
+#include "Assembler.hpp"
 //  Constructor
 SumGoldbachSolver::SumGoldbachSolver(){
 

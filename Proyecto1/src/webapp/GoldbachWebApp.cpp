@@ -9,6 +9,8 @@
 #include "unistd.h"
 #include "utility"
 #include "Empaquetador.hpp"
+#include "Despachador.hpp"
+#include "SumGoldbachSolver.hpp"
 #include <Log.hpp>
 
 #include "GoldbachWebApp.hpp"
@@ -26,12 +28,16 @@ GoldbachWebApp::~GoldbachWebApp() {
 
 void GoldbachWebApp::start() {
   // TODO(you): Start producers, consumers, assemblers...
-  /*empaquetador = new Empaquetador();
+  empaquetador = new Empaquetador();
   empaquetador->createOwnQueue();
   empaquetador->setProducingQueue(&empaquetadorProduct);
   empaquetador->setConsumingQueue(this->getProducingQueue());
-  empaquetador->startThread();*/
-
+  empaquetador->startThread();
+  
+  despachador = new Despachador();
+  despachador->setConsumingQueue(this->empaquetador->getProducingQueue());
+  despachador->startThread();
+   
   goldbachThreads.resize(sysconf(_SC_NPROCESSORS_ONLN));
   for (int i = 0; i < sysconf(_SC_NPROCESSORS_ONLN); i++) {
     goldbachThreads[i] = new SumGoldbachSolver();
@@ -47,6 +53,11 @@ void GoldbachWebApp::stop() {
   // TODO(you): Stop producers, consumers, assemblers...
    
   int number_CPU= sysconf(_SC_NPROCESSORS_ONLN);
+
+  for (int i = 0; i < number_CPU ; i++) {
+     shared_data_t* paradaCondicion = nullptr; 
+     goldbachThreads[i]->getConsumingQueue()->push(paradaCondicion);
+  }
 
   for (int i= 0; i < number_CPU ; i++) {
     shared_data_t* paradaCondicion = nullptr; 
