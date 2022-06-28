@@ -10,6 +10,7 @@
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
 #include "HttpConnectionHandler.hpp"
+#include "distribuidor.hpp"
 #define DEFAULT_PORT "8080"
 
 class HttpApp;
@@ -50,6 +51,9 @@ class HttpServer : public TcpServer {
 
   /// vector de handlers
   std::vector<HttpConnectionHandler*> vHandler;
+
+  /// distribuidor que repartira las solicitudes entre apps
+  distribuidor* distriSolicitudes;
 
   /// Registers a web application to the chain
   void chainWebApp(HttpApp* application);

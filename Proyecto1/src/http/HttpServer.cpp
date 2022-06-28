@@ -46,6 +46,14 @@ void HttpServer::handleClientConnection(Socket& client) {
 void HttpServer::chainWebApp(HttpApp* application) {
   assert(application);
   this->applications.push_back(application);
+  if(distriSolicitudes == nullptr){
+    // el distribuidor consume de las solicitudes que tiene el sistema
+    distriSolicitudes = new distribuidor(&colaDRequest);
+    for(size_t keyNum = 0; keyNum < application->keys.size(); keyNum++) {
+      this->distriSolicitudes->registerRedirect
+      (application->keys[keyNum],application->getConsumingQueue());
+    }
+  }
 }
 
 int HttpServer::start(int argc, char* argv[]) {
@@ -71,6 +79,8 @@ int HttpServer::start(int argc, char* argv[]) {
         vHandler[in]->aplicaciones = this->applications;
         vHandler[in]->startThread();
       }
+
+      distriSolicitudes->startThread();
 
       // Start waiting for connections
       this->listenForConnections(this->port);
