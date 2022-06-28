@@ -19,11 +19,10 @@ SumGoldbachSolver::~SumGoldbachSolver(){
 
 }
 //  procedure goldBach(cola):
-void SumGoldbachSolver::goldBach(cola_t * cola) {
-  //  declare nodo :=  first nodo of cola
-  nodo_t * nodo = cola->first;
-  //  while nodo != null do
-  while (nodo) {
+void SumGoldbachSolver::consume(shared_data_t* shared_data) {
+  
+  nodo_t * nodo = shared_data->nodo;
+  
     //  Calculate golbach sums for nodo
     //  declare sums := 0
     int sumas = 0;
@@ -37,9 +36,15 @@ void SumGoldbachSolver::goldBach(cola_t * cola) {
       nodo_getSigno(nodo));
     }  //  end else
     nodo_setSumas(nodo, sumas);
-    //  nodo := nodo next
-    nodo = nodo->next;
-  }
+    
+    //  Agrega a la cola shared_data para ser consumido por el empaquetador
+    this->produce(shared_data);
+}
+
+// Method override from Thread class
+int SumGoldbachSolver::run() {
+  this->consumeForever();
+  return 0;
 }
 
 //  procedure conjeturaDebil(num, vector_nodo, signo):

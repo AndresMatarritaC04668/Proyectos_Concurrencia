@@ -8,6 +8,7 @@
 #include <string>
 #include "unistd.h"
 #include "utility"
+#include "Empaquetador.hpp"
 #include <Log.hpp>
 
 #include "GoldbachWebApp.hpp"
@@ -22,10 +23,33 @@ GoldbachWebApp::~GoldbachWebApp() {
 
 void GoldbachWebApp::start() {
   // TODO(you): Start producers, consumers, assemblers...
+  empaquetador = new Empaquetador();
+  empaquetador->createOwnQueue();
+  empaquetador->setProducingQueue(&empaquetadorProduct);
+  empaquetador->startThread();
+
+  goldbachThreads.resize(sysconf(_SC_NPROCESSORS_ONLN));
+  for (int i = 0; i < sysconf(_SC_NPROCESSORS_ONLN); i++) {
+    goldbachThreads[i] = new SumGoldbachSolver();
+    goldbachThreads[i]->setConsumingQueue(this->getProducingQueue());
+    goldbachThreads[i]->setProducingQueue(
+        empaquetador->getConsumingQueue());
+    goldbachThreads[i]->startThread();
+  }
+ 
 }
 
 void GoldbachWebApp::stop() {
   // TODO(you): Stop producers, consumers, assemblers...
+   
+  int number_CPU= sysconf(_SC_NPROCESSORS_ONLN);
+
+  for (int i= 0; i < number_CPU ; i++) {
+    shared_data_t* paradaCondicion = nullptr; 
+    if ( i == 0) {
+      goldbachThreads[0]->produce(paradaCondicion);
+    }
+  }
 }
 
 // procedure handleHttpRequest(httpRequest, httpResponse):
@@ -215,8 +239,20 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
     // storageData(endIter, actualIter, cola);
     storageData(end, iter, cola);
     // Calculte Goldbach Conjecture to the number in cola
-    SumGoldbachSolver calculator;
-    calculator.goldBach(cola);
+  
+    nodo_t* nodo = cola->first;
+   //  while nodo != null do
+   while (nodo) {
+    //  Inicializa el shared_data
+    shared_data_t* shared_data =  new shared_data_t();
+    shared_data->cola = cola;
+    shared_data->nodo = nodo;
+    this->produce(shared_data);
+    //  nodo := nodo next
+    nodo = nodo->next;
+   }
+  
+    
 
     // TODO(you): Factorization must not be done by factorization threads
     // Build the body of the response

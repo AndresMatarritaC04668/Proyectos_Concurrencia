@@ -8,9 +8,10 @@
 #include "nodo.hpp"
 #include "cola.hpp"
 #include "SumGoldbachSolver.hpp"
+#include "Assembler.hpp"
 
 
-class SumGoldbachSolver{
+class SumGoldbachSolver : public Assembler<shared_data_t*,shared_data_t*> {
   public:
 
 /**
@@ -22,14 +23,19 @@ class SumGoldbachSolver{
  * @brief Destructor de la clase SumGoldbachSolver
  */
  ~SumGoldbachSolver();
+  
+  /**
+   * @brief Override method from Consumer class
+   * @param shared_data_t
+   * @return void
+   */
+void consume(shared_data_t* shared_data) override;
+
 /**
- * @brief This method is the general conjecture, is gets a 
- * cola, then fill it with the numbers, calculate the conjecture 
- * and the return it
- * 
- * @param cola is the conteiner to storege the data 
- */
-void goldBach(cola_t* cola);
+   * @brief Override method from thread class
+   * @return 0;
+   */
+  int run() override;
 
 /**
  * @brief If the number is odd, this is the method that

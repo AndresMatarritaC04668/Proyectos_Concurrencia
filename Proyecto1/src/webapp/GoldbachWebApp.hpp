@@ -3,11 +3,14 @@
 #define GOLDBACHWEBAPP_HPP
 #include <string>
 #include "HttpApp.hpp"
-#include "SumGoldbachSolver.hpp"
 #include "cola.hpp"
 #include "nodo.hpp"
 #include "regex"
+#include "HttpRequest.hpp"
+#include "HttpResponse.hpp"
 
+#include "SumGoldbachSolver.hpp"
+class Empaquetador;
 /**
 * @brief A web application that calculates
 * the Goldbach Conjecture
@@ -64,6 +67,23 @@ class GoldbachWebApp : public HttpApp {
    * 
    */
   void stop() override;
+    
+    /**
+   * @brief Empaquetador, se encarga de verificar que la solicitud ya haya sido
+   * completamente procesada, por lo que verifica que las sumas de goldbach
+   * ya este listas.
+  */
+   Empaquetador * empaquetador;
+
+    /**
+   * @brief Called when the web server stops, in order to allow the web application
+   *        clean up and finish as well
+   * @return void
+   * @param pair<HttpRequest*, HttpResponse*>
+   * @return void
+  */
+  std::vector<SumGoldbachSolver*> goldbachThreads;
+  Queue<cola_t*> empaquetadorProduct;
 
 
  protected:
