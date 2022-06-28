@@ -16,6 +16,9 @@
 #include "HttpResponse.hpp"
 
 GoldbachWebApp::GoldbachWebApp() {
+  //  agregamos las 2 keys de la App
+  this->keys.push_back("/goldbach");
+  this->keys.push_back("/");
 }
 
 GoldbachWebApp::~GoldbachWebApp() {
@@ -23,10 +26,11 @@ GoldbachWebApp::~GoldbachWebApp() {
 
 void GoldbachWebApp::start() {
   // TODO(you): Start producers, consumers, assemblers...
-  empaquetador = new Empaquetador();
+  /*empaquetador = new Empaquetador();
   empaquetador->createOwnQueue();
   empaquetador->setProducingQueue(&empaquetadorProduct);
-  empaquetador->startThread();
+  empaquetador->setConsumingQueue(this->getProducingQueue());
+  empaquetador->startThread();*/
 
   goldbachThreads.resize(sysconf(_SC_NPROCESSORS_ONLN));
   for (int i = 0; i < sysconf(_SC_NPROCESSORS_ONLN); i++) {

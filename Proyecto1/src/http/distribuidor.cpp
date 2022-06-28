@@ -14,3 +14,8 @@ HttpResponse*> &solicitud) const{
 
     return keySol;
 }
+
+int distribuidor::run() {
+    this->consumeForever();
+    return 0;
+}
