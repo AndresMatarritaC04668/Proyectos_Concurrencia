@@ -65,11 +65,15 @@ bool HttpConnectionHandler::handleHttpRequest(HttpRequest& httpRequest,
     + ' ' + httpRequest.getURI()
     + ' ' + httpRequest.getHttpVersion());
 
-  return this->route(httpRequest, httpResponse);
+  std::pair<HttpRequest*, HttpResponse*> nuevaSolicitud;
+  std::get<0>(nuevaSolicitud) = &httpRequest;
+  std::get<1>(nuevaSolicitud) = &httpResponse;
+  produce(nuevaSolicitud);
+  return true;
 }
 
 void HttpConnectionHandler::procesarCliente(Socket cliente) {
-  // este metodo fue movido para hacer al server algo concurrente
+  // este metodo fue movido para hacer que el server trabaje de manera concurrente
   while (true) {
     // Create an object that parses the HTTP request from the socket
     HttpRequest httpRequest(cliente);

@@ -4,13 +4,12 @@
 #include <cstdint>  
 #include <cstdlib>  
 #include "Assembler.hpp"
-#include "Consumer.hpp"
 #include "cola.hpp"
 
 
-class Empaquetador : public Assembler<cola_t*, shared_data_t*> {
+class Empaquetador : public Assembler<shared_data_t*, cola_t*> {
   private:
-    /* data */
+    /* datos */
 
   public:
 

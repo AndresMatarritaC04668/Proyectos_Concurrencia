@@ -18,13 +18,17 @@ class HttpServer;
 
 /*  se eligio la clase assembler por suplir el rol de trabajador
 de la linea de asamblaje, siendo productor y consumidor al mismo tiempo */
+/**
+ * @brief constructor de la clase HttpConnectionHandler
+ * @param colaDSockets cola donde se almacenan los sockets del server y la cola donde se consumen
+ * @param colaDRequest cola donde se almacenan el request y response de cada solicitud, es donde se producen
+ * @param aplicaciones vector que contiene las aplicaciones de cada Handler, 
+  siendo las mismas que las dispuestas por el servidor
+ */
 class HttpConnectionHandler : public Assembler
 <Socket, std::pair<HttpRequest*, HttpResponse*>> {
  public:
     std::vector<HttpApp*> aplicaciones;
-    //  constructor de la clase
-    //  colaDSockets cola donde se almacenan los sockets del server
-    //  colaDRequest cola donde se almacenan los valores de cada solicitud
     explicit HttpConnectionHandler(Queue<Socket>* colaDSockets,
       Queue<std::pair<HttpRequest*,
       HttpResponse*>>* colaDRequest):

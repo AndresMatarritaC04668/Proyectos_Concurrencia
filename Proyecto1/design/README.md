@@ -14,3 +14,5 @@ Este es el diagrama UML, el cual es muy util a la hora de moverse al codigo, mue
 ### Parte 2
 ### Diagrama del servidor 1.2
 
+![Server](https://git.ucr.ac.cr/JOSE.MATARRITAMIRANDA/proyectos/-/blob/main/Proyecto1/design/Diagrama_Server_Parte1.2.png)
+

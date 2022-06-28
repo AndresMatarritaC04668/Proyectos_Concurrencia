@@ -87,12 +87,14 @@ int HttpServer::start(int argc, char* argv[]) {
     std::cerr << "error: " << error.what() << std::endl;
   }
 
-  //  se agregan los sockets respectivos a la cola
+  //  se agregan los sockets vacios que marcan el final del server
+  //  se utilizan para detener el consumo de estos y dar tiempo a cualquier
+  //  operacion sin finalizar
   for (size_t u = 0; u < this->max_connections; u++) {
     this->sockets_server.push(Socket());
   }
 
-  // agregamos valores a la cola de Requests
+  // agregamos a la colaDRequest lo necesario para finalizar su utilizacion
   this->colaDRequest.push(std::pair<HttpRequest*, HttpResponse*>());
   for (size_t in = 0; in < this->max_connections; in++) {
     vHandler[in]->waitToFinish();

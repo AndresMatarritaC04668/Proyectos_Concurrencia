@@ -20,9 +20,9 @@ typedef struct {
 } cola_t;
 
 /**
- * @brief struct de la clase cola, trabaja con la clase nodo
- * @param first referencia al primer nodo de la cola
- * @param last referencia al ultimo nodo de la cola
+ * @brief struct del shared_Data, el tipo de objeto utilizado en la WebApp
+ * @param nodo referencia al nodo de una cola
+ * @param last referencia a la cola trabajada
  */
 typedef struct {
     nodo_t* nodo; //  Refencia a n un  nodo

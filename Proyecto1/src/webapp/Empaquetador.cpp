@@ -13,7 +13,7 @@ void Empaquetador::consume(shared_data_t* shared_data) {
   if (local_shared_data->cola->numerosProcesados ==
     local_shared_data->cola->cantidadNumeros) {
     // Una vez verifica que ha procesado todos los numeros, produce.
-    produce(local_shared_data);
+    produce(local_shared_data->cola);
   }
   pthread_mutex_unlock(&local_shared_data->cola->can_access);
   delete local_shared_data;
