@@ -5,6 +5,7 @@
 #include <string>
 #include <pthread.h>
 #include "nodo.hpp"
+#include "HttpResponse.hpp"
 
 /**
  * @brief struct de la clase cola, trabaja con la clase nodo
@@ -27,6 +28,7 @@ typedef struct {
 typedef struct {
     nodo_t* nodo; //  Refencia a n un  nodo
     cola_t* cola; //  Referencia a cola;
+    HttpResponse* httpResponse;
 } shared_data_t;
 
 /**
