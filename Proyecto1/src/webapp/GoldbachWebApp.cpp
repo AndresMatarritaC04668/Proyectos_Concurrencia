@@ -65,6 +65,21 @@ void GoldbachWebApp::stop() {
       goldbachThreads[0]->produce(paradaCondicion);
     }
   }
+
+  shared_data_t  * condicionDespachador = nullptr;
+  this->empaquetador->getProducingQueue()->push(condicionDespachador);
+  this->empaquetador->waitToFinish();
+
+  for (int i= 0; i < number_CPU ; i++) {
+    // std::cout<< "hilo: "<<index<<"\n";
+    goldbachThreads[i]->waitToFinish();
+
+    delete goldbachThreads[i];
+  }
+
+  despachador->waitToFinish();
+  delete despachador;
+  delete empaquetador;
 }
 
 // procedure handleHttpRequest(httpRequest, httpResponse):
