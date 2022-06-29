@@ -4,7 +4,6 @@
 #define DISTRIBUIDOR_H
 
 #include <string.h>
-#include <vector>
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
 #include "Dispatcher.hpp"

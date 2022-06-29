@@ -7,6 +7,7 @@
 
 #include <exception>
 #include <map>
+#include <vector>
 
 #include "Consumer.hpp"
 #include <iostream>
@@ -27,6 +28,8 @@ class Dispatcher : public Consumer<DataType> {
 
   /// This thread will distribute elements to the following queues
   std::map<KeyType, Queue<DataType>*> toQueues;
+  std::vector<KeyType> keysDis;
+
 
  public:
   /// Constructor
@@ -44,6 +47,7 @@ class Dispatcher : public Consumer<DataType> {
   /// redirected to the the given queue
   inline void registerRedirect(const KeyType& key,  Queue<DataType>* toQueue) {
     this->toQueues[key] = toQueue;
+    this->keysDis.push_back(key);
   }
 
   /// Override this method to process any data extracted from the queue

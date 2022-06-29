@@ -68,6 +68,7 @@ int HttpServer::start(int argc, char* argv[]) {
       // Start all web applications
       for (size_t index = 0; index < this->applications.size(); ++index) {
         this->applications[index]->start();
+        this->applications[index]->startThread();
       }
       stopApps = true;
 

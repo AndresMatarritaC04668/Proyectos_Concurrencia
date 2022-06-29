@@ -18,9 +18,10 @@
 #include "HttpResponse.hpp"
 
 GoldbachWebApp::GoldbachWebApp() {
-  //  agregamos las 2 keys de la App
+  //  agregamos las 3 keys de la App
   this->keys.push_back("/goldbach");
   this->keys.push_back("/");
+  this->keys.push_back("/noEncontrada");
   this->createOwnQueue();
   this->setProducingQueue(&appProduct);
 }
@@ -51,8 +52,6 @@ void GoldbachWebApp::start() {
   despachador->setConsumingQueue(&empaquetadorProduct);
   
   despachador->startThread();
-
-  this->startThread();
  
 }
 
@@ -100,7 +99,7 @@ bool GoldbachWebApp::handleHttpRequest(HttpRequest& httpRequest,
     return this->serveHomepage(httpRequest, httpResponse);
   }  // end if
 
-  // If the request starts with "fact/" is for this web app
+  // If the request starts with "/goldbach" is for this web app
   // if "/goldbach" in getURI do
   if (httpRequest.getURI().rfind("/goldbach", 0) == 0) {
     // return serverGoldbach(httpRequest, httpResponse)
@@ -108,7 +107,7 @@ bool GoldbachWebApp::handleHttpRequest(HttpRequest& httpRequest,
   }  // end if
 
   // Unrecognized request
-  return false;
+  return this->serveNotFound(httpRequest, httpResponse);
 }  // end procedure
 
 // TODO(you): Fix code redundancy in the following methods
@@ -371,3 +370,28 @@ std:: string GoldbachWebApp:: mensaje(cola_t* cola) {
 
   return resultado.str();
 }  // end procedure
+
+bool GoldbachWebApp::serveNotFound(HttpRequest& httpRequest,
+HttpResponse& httpResponse) {
+  (void)httpRequest;
+
+  // Set HTTP response metadata (headers)
+  httpResponse.setStatusCode(404);
+  httpResponse.setHeader("Server", "AttoServer v1.0");
+  httpResponse.setHeader("Content-type", "text/html; charset=ascii");
+
+  // Build the body of the response
+  std::string title = "Not found";
+  httpResponse.body() << "<!DOCTYPE html>\n"
+    << "<html lang=\"en\">\n"
+    << "  <meta charset=\"ascii\"/>\n"
+    << "  <title>" << title << "</title>\n"
+    << "  <style>body {font-family: monospace} h1 {color: red}</style>\n"
+    << "  <h1>" << title << "</h1>\n"
+    << "  <p>El recurso pedido no fue encontrado en este server ratilla.</p>\n"
+    << "  <hr><p><a href=\"/\">Homepage</a></p>\n"
+    << "</html>\n";
+
+  // Send the response to the client (user agent)
+  return httpResponse.send();
+}

@@ -84,13 +84,5 @@ class HttpConnectionHandler : public Assembler
      */
     bool route(HttpRequest& httpRequest, HttpResponse& httpResponse);
 
-    /**
-     * @brief Sends a page for a non found resouce in this server. This method is called
-      if none of the registered web applications handled the request.
-     * @param httpRequest httpRequest con la peticion del usuario
-     * @param httpResponse usado para avisar al usuario que la pagina no fue encontrada
-     * @return el resultado de hacer send() del HttpResponse
-     */
-    bool serveNotFound(HttpRequest& httpRequest, HttpResponse& httpResponse);
 };
 #endif
