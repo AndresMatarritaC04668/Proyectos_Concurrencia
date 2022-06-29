@@ -21,6 +21,8 @@ GoldbachWebApp::GoldbachWebApp() {
   //  agregamos las 2 keys de la App
   this->keys.push_back("/goldbach");
   this->keys.push_back("/");
+  this->createOwnQueue();
+  this->setProducingQueue(&appProduct);
 }
 
 GoldbachWebApp::~GoldbachWebApp() {
@@ -31,21 +33,26 @@ void GoldbachWebApp::start() {
   empaquetador = new Empaquetador();
   empaquetador->createOwnQueue();
   empaquetador->setProducingQueue(&empaquetadorProduct);
-  empaquetador->setConsumingQueue(this->getProducingQueue());
+  empaquetador->setConsumingQueue(&solversProduct);
   empaquetador->startThread();
+
   
-  despachador = new Despachador();
-  despachador->setConsumingQueue(this->empaquetador->getProducingQueue());
-  despachador->startThread();
    
   goldbachThreads.resize(sysconf(_SC_NPROCESSORS_ONLN));
   for (int i = 0; i < sysconf(_SC_NPROCESSORS_ONLN); i++) {
-    goldbachThreads[i] = new SumGoldbachSolver();
-    goldbachThreads[i]->setConsumingQueue(this->getProducingQueue());
-    goldbachThreads[i]->setProducingQueue(
-        empaquetador->getConsumingQueue());
+    SumGoldbachSolver* golNue = new SumGoldbachSolver(this->getProducingQueue(),
+      &solversProduct);
+    goldbachThreads[i] = golNue;
+  
     goldbachThreads[i]->startThread();
+
   }
+  despachador = new Despachador();
+  despachador->setConsumingQueue(&empaquetadorProduct);
+  
+  despachador->startThread();
+
+  this->startThread();
  
 }
 

@@ -28,6 +28,7 @@ class Queue {
   Semaphore canConsume;
   /// Contains the actual data shared between producer and consumer
   std::queue<DataType> queue;
+  
 
  public:
   /// Constructor
@@ -39,7 +40,6 @@ class Queue {
   ~Queue() {
     // TODO(jhc): clear()?
   }
-
   /// Produces an element that is pushed in the queue
   /// The semaphore is increased to wait potential consumers
   void push(const DataType& data) {

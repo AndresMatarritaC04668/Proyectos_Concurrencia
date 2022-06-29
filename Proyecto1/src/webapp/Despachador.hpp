@@ -15,7 +15,7 @@ class Despachador : public Consumer<shared_data_t*> {
 
     Despachador(/* args */);
 
-    void consume(shared_data_t* shared_data) /* override */;
+    void consume(shared_data_t* shared_data) override;
 
     bool sendResponse(shared_data_t* shared_data);
 

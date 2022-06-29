@@ -17,7 +17,7 @@ class Empaquetador : public Assembler<shared_data_t*,shared_data_t*> {
 
     shared_data_t* local_shared_data;
    
-    void consume(shared_data_t* shared_data);
+    void consume(shared_data_t* shared_data) override;
 
     int run() override;
 

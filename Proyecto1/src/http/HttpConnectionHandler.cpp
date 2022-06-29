@@ -66,6 +66,8 @@ bool HttpConnectionHandler::handleHttpRequest(HttpRequest& httpRequest,
     + ' ' + httpRequest.getHttpVersion());
 
   std::pair<HttpRequest*, HttpResponse*> nuevaSolicitud;
+
+  httpRequest.identificador = 'h';
   std::get<0>(nuevaSolicitud) = &httpRequest;
   std::get<1>(nuevaSolicitud) = &httpResponse;
   produce(nuevaSolicitud);

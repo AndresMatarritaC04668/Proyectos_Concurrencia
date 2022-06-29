@@ -7,23 +7,20 @@
 #include <string>
 #include "nodo.hpp"
 #include "cola.hpp"
-#include "SumGoldbachSolver.hpp"
 #include "Assembler.hpp"
 
 
 class SumGoldbachSolver : public Assembler<shared_data_t*,shared_data_t*> {
   public:
 
-/**
- * @brief Constructor de la clase  SumGoldbachSolver
- */
- SumGoldbachSolver();
+    explicit SumGoldbachSolver(Queue<shared_data_t*> *data1,
+      Queue<shared_data_t*> *data2):
+      Assembler<shared_data_t*, shared_data_t*>(data1,
+       data2) {}
 
-/**
- * @brief Destructor de la clase SumGoldbachSolver
- */
- ~SumGoldbachSolver();
   
+  virtual ~SumGoldbachSolver() {}
+
   /**
    * @brief Override method from Consumer class
    * @param shared_data_t

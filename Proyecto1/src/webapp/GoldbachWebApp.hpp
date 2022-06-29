@@ -91,7 +91,8 @@ class GoldbachWebApp : public HttpApp {
   */
   std::vector<SumGoldbachSolver*> goldbachThreads;
   Queue<shared_data_t*> empaquetadorProduct;
-
+  Queue<shared_data_t*> solversProduct;
+  Queue<shared_data_t*> appProduct;
 
  protected:
   /**

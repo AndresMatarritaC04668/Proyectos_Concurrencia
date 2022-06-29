@@ -9,14 +9,15 @@
 #include "HttpResponse.hpp"
 #include "Dispatcher.hpp"
 #include "HttpApp.hpp"
+#include "Log.hpp"
 
 /**
  * @brief clase que distribuye las solicitudes a la correspondiente WebApp
  * @param aplicaciones vector de referencias a las aplicaciones del Server
  */
-class distribuidor : public Dispatcher<std::string, std::pair<HttpRequest*, HttpResponse*>> {
+class distribuidor : public Dispatcher<std::string, 
+std::pair<HttpRequest*, HttpResponse*>> {
     public:
-        std::vector <HttpApp> *aplicaciones;
         /**
          * @brief Construct a new distribuidor object con argumento
          * 

@@ -10,18 +10,9 @@
 #include "nodo.hpp"
 #include "Empaquetador.hpp"
 #include "Assembler.hpp"
-//  Constructor
-SumGoldbachSolver::SumGoldbachSolver(){
 
-}
-
-//Destructor
-SumGoldbachSolver::~SumGoldbachSolver(){
-
-}
 //  procedure goldBach(cola):
 void SumGoldbachSolver::consume(shared_data_t* shared_data) {
-  
   nodo_t * nodo = shared_data->nodo;
   
     //  Calculate golbach sums for nodo

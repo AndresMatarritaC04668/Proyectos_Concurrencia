@@ -35,6 +35,8 @@ class HttpRequest : public HttpMessage {
   /// Get access to the HTTP version used by client
   inline const std::string& getHttpVersion() const { return this->httpVersion; }
 
+  char identificador;
+
  protected:
   /// Parse the request line from the socket
   /// @return true on success, false on error or connection closed by peer
