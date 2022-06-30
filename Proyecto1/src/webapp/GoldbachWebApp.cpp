@@ -37,21 +37,19 @@ void GoldbachWebApp::start() {
   empaquetador->setConsumingQueue(&solversProduct);
   empaquetador->startThread();
 
-  
+  despachador = new Despachador();
+  despachador->setConsumingQueue(&empaquetadorProduct);
+  despachador->startThread();
    
   goldbachThreads.resize(sysconf(_SC_NPROCESSORS_ONLN));
   for (int i = 0; i < sysconf(_SC_NPROCESSORS_ONLN); i++) {
     SumGoldbachSolver* golNue = new SumGoldbachSolver(this->getProducingQueue(),
       &solversProduct);
     goldbachThreads[i] = golNue;
-  
     goldbachThreads[i]->startThread();
 
   }
-  despachador = new Despachador();
-  despachador->setConsumingQueue(&empaquetadorProduct);
-  
-  despachador->startThread();
+ 
  
 }
 
@@ -61,18 +59,18 @@ void GoldbachWebApp::stop() {
   int number_CPU= sysconf(_SC_NPROCESSORS_ONLN);
 
   for (int i = 0; i < number_CPU ; i++) {
-     shared_data_t* paradaCondicion = nullptr; 
+     shared_data_t* paradaCondicion = 0; 
      goldbachThreads[i]->getConsumingQueue()->push(paradaCondicion);
   }
 
   for (int i= 0; i < number_CPU ; i++) {
-    shared_data_t* paradaCondicion = nullptr; 
+    shared_data_t* paradaCondicion = 0; 
     if ( i == 0) {
       goldbachThreads[0]->produce(paradaCondicion);
     }
   }
 
-  shared_data_t  * condicionDespachador = nullptr;
+  shared_data_t  * condicionDespachador = 0;
   this->empaquetador->getProducingQueue()->push(condicionDespachador);
   this->empaquetador->waitToFinish();
 
@@ -85,7 +83,8 @@ void GoldbachWebApp::stop() {
 
   despachador->waitToFinish();
   delete despachador;
-  delete empaquetador;
+
+ 
 }
 
 // procedure handleHttpRequest(httpRequest, httpResponse):
@@ -122,12 +121,7 @@ HttpResponse& httpResponse, std::string title, int end) {
     // Start part of a HTML file
     httpResponse.body() << "<!DOCTYPE html>\n"
         << "<html lang=\"en\">\n"
-        << "  <title>" << title << "</title>\n";
-  } else {
-    // End part of a HTML file
-     httpResponse.body()
-      << "  <hr><p><a href=\"/\">Back</a></p>\n"
-      << "</html>\n";
+      << "  <title>" << title << "</title>\n";
   }
 }
 
@@ -155,8 +149,7 @@ void GoldbachWebApp::htmlResponse(
         // the results of cola
         httpResponse.body()
         << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
-        << "  <h1>" << title << "</h1>\n"
-        <<  mensaje(cola);
+        << "  <h1>" << title << "</h1>\n";
       } else {
         // htmlResponse.body := set the HTML body for a invalid request
         httpResponse.body()
@@ -222,14 +215,6 @@ std::sregex_iterator end, std::sregex_iterator iter, cola_t* cola) {
   return num;
 }  //  end procedure
 
-void GoldbachWebApp::addToResults(std::ostringstream& resultado,
- nodo_t* nodo, int& i) {
-  resultado << nodo->desglose[i];
-  ++i;
-  resultado <<'+';
-  resultado << nodo->desglose[i];
-}
-
 // procedure serveHomepage(httpRequest, httpResponse):
 bool GoldbachWebApp::serveHomepage(HttpRequest& httpRequest
   , HttpResponse& httpResponse) {
@@ -261,7 +246,10 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
   // TODO(you): Use arbitrary precision for numbers larger than int64_t
   // TODO(you): Modularize this method
   // init cola
-  cola_t* cola = cola_init();
+  cola_t* cola = cola_init();\
+  StructureResponse * structureResponse = new StructureResponse(httpResponse);
+  cola->structureResponse = structureResponse;
+  pthread_mutex_init(&cola->can_access , NULL );
   std::smatch matches;
   std::regex inQuery;
   std::string uri = decodeURI(httpRequest, inQuery);
@@ -275,101 +263,34 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
     // storageData(endIter, actualIter, cola);
     storageData(end, iter, cola);
     // Calculte Goldbach Conjecture to the number in cola
-  
+    shared_data_t* shared_data[cola->cantidadNumeros];
+   
     nodo_t* nodo = cola->first;
+    int i = 0;
    //  while nodo != null do
    while (nodo) {
     //  Inicializa el shared_data
-    shared_data_t* shared_data =  new shared_data_t();
-    shared_data->cola = cola;
-    shared_data->nodo = nodo;
-    this->produce(shared_data);
+    shared_data[i] = new shared_data_t();
+    shared_data[i]->cola = cola;
+    shared_data[i]->nodo = nodo;
+    this->produce(shared_data[i]);
     //  nodo := nodo next
+    i++;
     nodo = nodo->next;
    }
-  
+
+
     
-
-    // TODO(you): Factorization must not be done by factorization threads
-    // Build the body of the response
-
-    std::string title = "Goldbach Conjecture of the input";
-    // htmlResponse(httpResponse, title, cola, 1);
-    htmlResponse(httpResponse, title, cola, 1);
-
+  
   } else {
     // Build the body for an invalid request
     std::string title = "Invalid request";
     htmlResponse(httpResponse, title, nullptr, 2);
   }
-  // destroy cola
-  cola_destroy(cola);
 
-  // Send the response to the client (user agent)
-  // return send the httpResponse
-  return httpResponse.send();
+  return 0;
 }  // end procedure
 
-// procedure mensaje(cola):
-std:: string GoldbachWebApp:: mensaje(cola_t* cola) {
-  // declare result := ""
-  std::ostringstream resultado;
-  int64_t comparacion = 5;
-  // declare nodo: first nodo of cola
-  nodo_t* nodo = cola->first;
-
-  // while nodo != null do
-  while (nodo) {
-    if (nodo->error == 0) {
-    resultado << "  <h2>" << nodo_getSigno(nodo)
-    << nodo_getNumber(nodo) << "</h2>\n";
-    // if number of nodo < 5 do
-    if ( nodo_getNumber(nodo)<= comparacion ) {
-        // result := result + NA
-        resultado << "  <p> NA</p>\n";
-    } else {
-         //  result := result + number of nodo + sums of nodo
-       resultado << " " <<nodo_getSigno(nodo) << nodo_getNumber(nodo) << ": ";
-        resultado << "Sumas: "<< nodo->sumas;
-
-        // if number of nodo show sums == true do
-        if (nodo->signo == '-') {
-            // result := result + every sum of the number of nodo
-            resultado << " : ";
-            if (nodo-> number%2 == 0) {
-                for (int i = 0; i< nodo->posicion ; i++) {
-                  addToResults(resultado, nodo, i);
-
-                if (i < nodo-> posicion-1) {
-                       resultado <<", ";
-                    }
-                }
-            } else {
-                for (int i = 0; i < nodo-> posicion ; i++) {
-                  addToResults(resultado, nodo, i);
-                  ++i;
-                  resultado <<'+';
-                  resultado << nodo->desglose[i];
-                  if (i < nodo-> posicion-1) {
-                        resultado <<", ";
-                    }
-                }
-            }
-        }  // end if
-    }  // end else
-  } else {
-          resultado << " <h2 class=\"err\">"
-          << nodo->numeroErroneo << "</h2>\n";
-          resultado <<  " <p> " << nodo->numeroErroneo
-          << ": invalid number</p>\n";
-  }
-  printf("\n");
-  // nodo := nodo next
-  nodo = nodo->next;
-  }  // end while
-
-  return resultado.str();
-}  // end procedure
 
 bool GoldbachWebApp::serveNotFound(HttpRequest& httpRequest,
 HttpResponse& httpResponse) {

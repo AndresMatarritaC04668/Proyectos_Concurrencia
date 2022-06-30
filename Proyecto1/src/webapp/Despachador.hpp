@@ -21,6 +21,10 @@ class Despachador : public Consumer<shared_data_t*> {
 
     int run() override;
 
+     void addToResults(HttpResponse& httpResponse ,
+    nodo_t* nodo, int& i);
+
+
     ~Despachador();
 
 

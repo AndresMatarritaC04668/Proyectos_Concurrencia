@@ -21,6 +21,7 @@ class Empaquetador : public Assembler<shared_data_t*,shared_data_t*> {
 
     int run() override;
 
+   
     ~Empaquetador();
 
 };

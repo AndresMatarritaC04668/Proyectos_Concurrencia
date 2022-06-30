@@ -15,7 +15,7 @@ cola_t* cola_init() {
   cola-> last = NULL;
   cola->cantidadNumeros = 0;
   cola->numerosProcesados = 0;
-  pthread_mutex_init(&cola->can_access, /*attr*/NULL);
+  
   return cola;
 }
 // end procedure

@@ -16,8 +16,10 @@ void Empaquetador::consume(shared_data_t* shared_data) {
     produce(local_shared_data);
   }
   pthread_mutex_unlock(&local_shared_data->cola->can_access);
-  delete local_shared_data;
+  local_shared_data = nullptr;
 }
+
+
 
 int Empaquetador::run() {
   this->consumeForever();

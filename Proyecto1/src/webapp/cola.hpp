@@ -6,6 +6,7 @@
 #include <pthread.h>
 #include "nodo.hpp"
 #include "HttpResponse.hpp"
+#include "StructureResponse.hpp"
 
 /**
  * @brief struct de la clase cola, trabaja con la clase nodo
@@ -18,6 +19,8 @@ typedef struct {
     int64_t cantidadNumeros;
     int64_t numerosProcesados;
     pthread_mutex_t  can_access; //  Mutex que previene condiciones de carrera ;
+     StructureResponse * structureResponse ;
+    
 } cola_t;
 
 /**
@@ -28,7 +31,8 @@ typedef struct {
 typedef struct {
     nodo_t* nodo; //  Refencia a n un  nodo
     cola_t* cola; //  Referencia a cola;
-    HttpResponse* httpResponse;
+   
+  
 } shared_data_t;
 
 /**

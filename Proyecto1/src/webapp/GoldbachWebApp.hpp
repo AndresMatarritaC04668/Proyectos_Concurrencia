@@ -52,16 +52,7 @@ class GoldbachWebApp : public HttpApp {
   bool handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) override;
 
-  /**
-   * @brief add in a string the results of the goldbach conjectures
-   *  if the number has to show sums it adds the sums if not, only the
-   *  amount of sums
-   * 
-   * @param cola is the conteiner with the numbers
-   * @return string that has the final message for the user
-   */
-  std::string mensaje(cola_t* cola);
-
+  
   /**
    * @brief Called when the web server stops, in order to allow the web application
    * clean up and finish as well 
@@ -170,16 +161,6 @@ class GoldbachWebApp : public HttpApp {
    */
   int64_t storageData(std::sregex_iterator end, std::sregex_iterator iter,
    cola_t* cola);
-
-  /**
-   * @brief 
-   * 
-   * 
-   * @param resultado is the final message to show to the user
-   * @param nodo is the current working nodo
-   * @param i is the index use in nodo->desglose to know with what number work
-   */
-  void addToResults(std::ostringstream& resultado, nodo_t* nodo, int& i);
 
   /**
     * @brief Sends a page for a non found resouce in this server. This method is called
