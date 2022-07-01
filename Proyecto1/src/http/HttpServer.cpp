@@ -106,6 +106,8 @@ int HttpServer::start(int argc, char* argv[]) {
 
   // agregamos a la colaDRequest lo necesario para finalizar su utilizacion
   this->colaDRequest.push(std::pair<HttpRequest*, HttpResponse*>());
+  distriSolicitudes->waitToFinish();
+  delete distriSolicitudes;
   for (size_t in = 0; in < this->max_connections; in++) {
     vHandler[in]->waitToFinish();
     delete vHandler[in];

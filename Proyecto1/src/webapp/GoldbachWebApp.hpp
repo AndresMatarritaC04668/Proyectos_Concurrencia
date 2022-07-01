@@ -4,16 +4,15 @@
 #include <string>
 #include "HttpApp.hpp"
 #include "cola.hpp"
-#include "nodo.hpp"
 #include "regex"
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
 #include "DecodeURL.hpp"
+#include "SumGoldbachSolver.hpp"
+#include "Empaquetador.hpp"
+#include "Despachador.hpp"
+#include "DecodeURL.hpp"
 
-class SumGoldbachSolver;
-class Empaquetador;
-class Despachador;
-class DecodeURL;
 /**
 * @brief A web application that calculates
 * the Goldbach Conjecture
@@ -88,19 +87,7 @@ class GoldbachWebApp : public HttpApp {
   Queue<shared_data_t*> empaquetadorProduct;
   Queue<shared_data_t*> solversProduct;
   Queue<shared_data_t*> urlProduct;
-
- protected:
-  /**
-   * @brief Sends the homepage as HTTP response 
-   * 
-   * @param httpRequest has URL of the page asked
-   * @param httpResponse has the result of the page request
-   * @return true If this application handled the request, false otherwise
-   */
-  bool serveHomepage(HttpRequest& httpRequest, HttpResponse& httpResponse);
-
- 
-
+    
 };
 
 #endif  // GoldbachWebApp_HPP

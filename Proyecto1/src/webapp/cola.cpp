@@ -90,7 +90,7 @@ nodo_t* cola_getNodo(cola_t* cola , int64_t posicion) {
 void cola_destroy(cola_t* cola) {
   // Libera todos los nodos;
   while (cola->first) {
-  cola_delete(cola);
+    cola_delete(cola);
   }
 
   // Libera cola;

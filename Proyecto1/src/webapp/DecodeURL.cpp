@@ -102,7 +102,12 @@ bool DecodeURL::handle(HttpRequest& httpRequest,
   }
 
   // Unrecognized request
-  return false;
+  if (httpRequest.getMethod() == "GET"
+  && httpRequest.getURI().rfind("/noEncontrada", 0) == 0) {
+    return this->serveNotFound(httpRequest, httpResponse);
+  }
+
+  return 1;
 }
 
 bool DecodeURL::serveHomepage(HttpRequest& httpRequest

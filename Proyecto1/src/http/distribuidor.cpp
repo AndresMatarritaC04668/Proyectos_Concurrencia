@@ -15,7 +15,6 @@ HttpResponse*> &solicitud) const {
   }
 
   bool keyRegistrada = false;
-  Log::getInstance().append(Log::INFO, "Repartidor", "Request for "+ keySol);
   for (size_t index = 0; index <
   this->keysDis.size(); ++index) {
     // If this application handles the request
@@ -26,6 +25,7 @@ HttpResponse*> &solicitud) const {
   if (!keyRegistrada) {
     keySol = "/noEncontrada";
   }
+  Log::getInstance().append(Log::INFO, "Repartidor", "Request for "+ keySol);
   return keySol;
 }
 

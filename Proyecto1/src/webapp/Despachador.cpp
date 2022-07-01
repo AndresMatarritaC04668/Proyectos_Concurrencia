@@ -72,11 +72,11 @@ void Despachador::consume(shared_data_t* shared_data) {
       << "  <hr><p><a href=\"/\">Back</a></p>\n"
       << "</html>\n";
   
-   this->sendResponse(shared_data);
+  this->sendResponse(shared_data);
 
- 
+  cola_destroy(shared_data->cola);
+  delete shared_data;
   
-
 }
 
 
