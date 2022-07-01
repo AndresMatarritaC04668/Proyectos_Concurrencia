@@ -22,8 +22,6 @@ GoldbachWebApp::GoldbachWebApp() {
   this->keys.push_back("/goldbach");
   this->keys.push_back("/");
   this->keys.push_back("/noEncontrada");
-  this->createOwnQueue();
-  this->setProducingQueue(&appProduct);
 }
 
 GoldbachWebApp::~GoldbachWebApp() {
@@ -31,47 +29,45 @@ GoldbachWebApp::~GoldbachWebApp() {
 
 void GoldbachWebApp::start() {
   // TODO(you): Start producers, consumers, assemblers...
+  
+  //  crear urlMiedo aqui
+   
+  goldbachThreads.resize(sysconf(_SC_NPROCESSORS_ONLN));
+  for (int i = 0; i < sysconf(_SC_NPROCESSORS_ONLN); i++) {
+    SumGoldbachSolver* golNue = new SumGoldbachSolver(&urlProduct,
+      &solversProduct);
+    goldbachThreads[i] = golNue;
+    goldbachThreads[i]->startThread();
+  }
+  
   empaquetador = new Empaquetador();
   empaquetador->createOwnQueue();
   empaquetador->setProducingQueue(&empaquetadorProduct);
   empaquetador->setConsumingQueue(&solversProduct);
   empaquetador->startThread();
-
   despachador = new Despachador();
   despachador->setConsumingQueue(&empaquetadorProduct);
   despachador->startThread();
-   
-  goldbachThreads.resize(sysconf(_SC_NPROCESSORS_ONLN));
-  for (int i = 0; i < sysconf(_SC_NPROCESSORS_ONLN); i++) {
-    SumGoldbachSolver* golNue = new SumGoldbachSolver(this->getProducingQueue(),
-      &solversProduct);
-    goldbachThreads[i] = golNue;
-    goldbachThreads[i]->startThread();
-
-  }
- 
- 
 }
 
 void GoldbachWebApp::stop() {
   // TODO(you): Stop producers, consumers, assemblers...
+  this->solicitudes.push(std::pair<HttpRequest*, HttpResponse*>());
    
   int number_CPU= sysconf(_SC_NPROCESSORS_ONLN);
+  shared_data_t* condicionParada = 0;
 
   for (int i = 0; i < number_CPU ; i++) {
-     shared_data_t* paradaCondicion = 0; 
-     goldbachThreads[i]->getConsumingQueue()->push(paradaCondicion);
+     goldbachThreads[i]->getConsumingQueue()->push(condicionParada);
   }
 
-  for (int i= 0; i < number_CPU ; i++) {
-    shared_data_t* paradaCondicion = 0; 
-    if ( i == 0) {
-      goldbachThreads[0]->produce(paradaCondicion);
+  for(int i = 0; i < number_CPU; i++){
+    if(i == 0){
+      goldbachThreads[0]->produce(condicionParada);
     }
   }
 
-  shared_data_t  * condicionDespachador = 0;
-  this->empaquetador->getProducingQueue()->push(condicionDespachador);
+  this->empaquetador->getProducingQueue()->push(condicionParada);
   this->empaquetador->waitToFinish();
 
   for (int i= 0; i < number_CPU ; i++) {
@@ -128,6 +124,7 @@ HttpResponse& httpResponse, std::string title, int end) {
 // procedure htmlResponse(httpResponse, title, cola, option):
 void GoldbachWebApp::htmlResponse(
   HttpResponse& httpResponse , std::string title , cola_t* cola, int option) {
+  (void) cola;
   if (option >= 0 && option <= 2) {
     // set the begining body of HTML file
     beginAndEndHtml(httpResponse, title, 1);
@@ -273,7 +270,7 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
     shared_data[i] = new shared_data_t();
     shared_data[i]->cola = cola;
     shared_data[i]->nodo = nodo;
-    this->produce(shared_data[i]);
+    //  this->produce(shared_data[i]);
     //  nodo := nodo next
     i++;
     nodo = nodo->next;

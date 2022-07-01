@@ -52,7 +52,7 @@ void HttpServer::chainWebApp(HttpApp* application) {
   // guardamos las solicitudes en el mapa del distribuidor
   for(size_t keyNum = 0; keyNum < application->keys.size(); keyNum++) {
     this->distriSolicitudes->registerRedirect
-      (application->keys[keyNum],application->getConsumingQueue());
+      (application->keys[keyNum],&application->solicitudes);
   }
 }
 
@@ -68,7 +68,6 @@ int HttpServer::start(int argc, char* argv[]) {
       // Start all web applications
       for (size_t index = 0; index < this->applications.size(); ++index) {
         this->applications[index]->start();
-        this->applications[index]->startThread();
       }
       stopApps = true;
 
