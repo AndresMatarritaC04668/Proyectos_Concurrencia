@@ -8,10 +8,12 @@
 #include "regex"
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
+#include "DecodeURL.hpp"
 
 class SumGoldbachSolver;
 class Empaquetador;
 class Despachador;
+class DecodeURL;
 /**
 * @brief A web application that calculates
 * the Goldbach Conjecture
@@ -73,6 +75,8 @@ class GoldbachWebApp : public HttpApp {
   */
   Despachador* despachador;
 
+  DecodeURL* decodeURL;
+
     /**
    * @brief Called when the web server stops, in order to allow the web application
    *        clean up and finish as well
@@ -98,6 +102,13 @@ class GoldbachWebApp : public HttpApp {
   /// @return true if the factorization was handled, false if it must be
   /// handled by another application
 
+
+
+  
+
+
+  // METODOS QUE ESTAN EN DecodeURL
+
   /**
    * @brief Personal server of Goldbach Conjecture, it can calculate
    * the conjecture to the numbers sent in the input
@@ -106,8 +117,7 @@ class GoldbachWebApp : public HttpApp {
    * @param httpResponse 
    * @return true if the conjecure was handled, false if it must be 
    */
-  bool serveGoldbach(HttpRequest& httpRequest, HttpResponse& httpResponse);
-
+//  bool serveGoldbach(HttpRequest& httpRequest, HttpResponse& httpResponse);
   /// Fix code redundancy in the following methods
 
   /**
@@ -119,8 +129,8 @@ class GoldbachWebApp : public HttpApp {
    * @param cola is a conteiner with the numbers to work
    * @param option is a flag, to know which html use
    */
-  void htmlResponse(HttpResponse& httpResponse, std::string title,
-  cola_t* cola, int option);
+//  void htmlResponse(HttpResponse& httpResponse, std::string title,
+//  cola_t* cola, int option);
 
   /**
    * @brief It has the begining of a html file and the end as well
@@ -131,15 +141,15 @@ class GoldbachWebApp : public HttpApp {
    * @param title message to show in html file
    * @param option is a flag, to know which html use
    */
-  void beginAndEndHtml(HttpResponse& httpResponse, std::string title,
-  int option);
+ // void beginAndEndHtml(HttpResponse& httpResponse, std::string title,
+ // int option);
 
   /**
    * @brief Set the Header Response object
    * 
    * @param httpResponse is the http result that the user is waiting
    */
-  void setHeaderResponse(HttpResponse& httpResponse);
+ // void setHeaderResponse(HttpResponse& httpResponse);
 
   /**
    * @brief Clean the URL, delete the garbage and let only 
@@ -149,7 +159,7 @@ class GoldbachWebApp : public HttpApp {
    * @param inQuery use to identify the wep app
    * @return string that it is the new URL 
    */
-  std::string decodeURI(HttpRequest& httpRequest, std::regex& inQuery);
+ // std::string decodeURI(HttpRequest& httpRequest, std::regex& inQuery);
 
   /**
    * @brief 
@@ -159,8 +169,8 @@ class GoldbachWebApp : public HttpApp {
    * @param cola is a conteiner with the numbers to work
    * @return int64_t the last number inserted in the conteiner
    */
-  int64_t storageData(std::sregex_iterator end, std::sregex_iterator iter,
-   cola_t* cola);
+ // int64_t storageData(std::sregex_iterator end, std::sregex_iterator iter,
+  // cola_t* cola);
 
   /**
     * @brief Sends a page for a non found resouce in this server. This method is called
@@ -169,8 +179,9 @@ class GoldbachWebApp : public HttpApp {
     * @param httpResponse usado para avisar al usuario que la pagina no fue encontrada
     * @return el resultado de hacer send() del HttpResponse
     */
-  bool serveNotFound(HttpRequest& httpRequest,
-  HttpResponse& httpResponse);
+ // bool serveNotFound(HttpRequest& httpRequest,
+  // HttpResponse& httpResponse);
+  
 };
 
 #endif  // GoldbachWebApp_HPP

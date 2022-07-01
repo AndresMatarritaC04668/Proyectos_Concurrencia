@@ -40,6 +40,10 @@ void GoldbachWebApp::start() {
     goldbachThreads[i]->startThread();
   }
   
+  decodeURL = new DecodeURL();
+  decodeURL->setProducingQueue(&urlProduct);
+  decodeURL->setConsumingQueue(&this->solicitudes);
+  decodeURL->startThread();
   empaquetador = new Empaquetador();
   empaquetador->createOwnQueue();
   empaquetador->setProducingQueue(&empaquetadorProduct);
@@ -80,31 +84,20 @@ void GoldbachWebApp::stop() {
   despachador->waitToFinish();
   delete despachador;
 
+  decodeURL->waitToFinish();
+  delete decodeURL;
+  //delete empaquetador;
+
  
 }
 
 // procedure handleHttpRequest(httpRequest, httpResponse):
 bool GoldbachWebApp::handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) {
-  // If the home page was asked
-  // if getMethod from httpRequest == "GET"
-  // and getURI from httpRequest == "/" do
-  if (httpRequest.getMethod() == "GET" && httpRequest.getURI() == "/") {
-    // return serverHomepage(httpRequest, httpResponse)
-    return this->serveHomepage(httpRequest, httpResponse);
-  }  // end if
-
-  // If the request starts with "/goldbach" is for this web app
-  // if "/goldbach" in getURI do
-  if (httpRequest.getURI().rfind("/goldbach", 0) == 0) {
-    // return serverGoldbach(httpRequest, httpResponse)
-    return this->serveGoldbach(httpRequest, httpResponse);
-  }  // end if
-
-  // Unrecognized request
-  return this->serveNotFound(httpRequest, httpResponse);
+ return 1;
 }  // end procedure
 
+/*
 // TODO(you): Fix code redundancy in the following methods
 void GoldbachWebApp::setHeaderResponse(HttpResponse& httpResponse) {
   httpResponse.setHeader("Server", "AttoServer v1.0");
@@ -215,7 +208,7 @@ std::sregex_iterator end, std::sregex_iterator iter, cola_t* cola) {
 // procedure serveHomepage(httpRequest, httpResponse):
 bool GoldbachWebApp::serveHomepage(HttpRequest& httpRequest
   , HttpResponse& httpResponse) {
-  (void)httpRequest;
+  /*(void)httpRequest;
 
   // Set HTTP response metadata (headers)
   setHeaderResponse(httpResponse);
@@ -247,6 +240,8 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
   StructureResponse * structureResponse = new StructureResponse(httpResponse);
   cola->structureResponse = structureResponse;
   pthread_mutex_init(&cola->can_access , NULL );
+  
+  
   std::smatch matches;
   std::regex inQuery;
   std::string uri = decodeURI(httpRequest, inQuery);
@@ -275,16 +270,17 @@ bool GoldbachWebApp::serveGoldbach(HttpRequest& httpRequest
     i++;
     nodo = nodo->next;
    }
-
+    */
+   //decodeURL->serveDecodeURL(httpRequest, httpResponse);
 
     
-  
+  /*
   } else {
     // Build the body for an invalid request
     std::string title = "Invalid request";
     htmlResponse(httpResponse, title, nullptr, 2);
   }
-
+  
   return 0;
 }  // end procedure
 
@@ -312,4 +308,6 @@ HttpResponse& httpResponse) {
 
   // Send the response to the client (user agent)
   return httpResponse.send();
+
 }
+*/
