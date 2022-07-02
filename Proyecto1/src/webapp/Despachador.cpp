@@ -69,6 +69,7 @@ void Despachador::consume(cola_t* cola) {
 
   this->sendResponse(cola);
   delete &cola->structureResponse->httpResponse;
+  delete cola->structureResponse;
   cola_destroy(cola);
     
 }

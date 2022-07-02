@@ -16,11 +16,18 @@ struct StructureResponse{
 
   HttpResponse&  httpResponse;
 
+
+
  public:
   /// Convenience constructor
   /// @param httpResponse HttpResponse&
   explicit StructureResponse(HttpResponse& httpResponse)
     : httpResponse(httpResponse) {
+  }
+
+    /// Convenience destrutuc
+  /// @param httpResponse HttpResponse&
+  ~StructureResponse() {
   }
 
 

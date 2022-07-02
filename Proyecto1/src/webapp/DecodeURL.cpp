@@ -63,7 +63,7 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
       return 0;
     }
     delete &httpRequest;
-    return 0;
+    return 1;
 }
 
 void DecodeURL::consume(std::pair<HttpRequest*, HttpResponse*> request) {
