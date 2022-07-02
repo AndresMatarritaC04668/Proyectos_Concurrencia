@@ -7,7 +7,7 @@
 Despachador::Despachador(/* args */) { }
 
 bool Despachador::sendResponse(shared_data_t* shared_data) {
-   return shared_data->cola->structureResponse->httpResponse.send();  
+  return shared_data->cola->structureResponse->httpResponse.send();  
 }
 
 void Despachador::consume(shared_data_t* shared_data) {
@@ -74,15 +74,15 @@ void Despachador::consume(shared_data_t* shared_data) {
   
   this->sendResponse(shared_data);
 
-  cola_destroy(shared_data->cola);
-  delete shared_data;
+  /*cola_destroy(shared_data->cola);
+  delete shared_data;*/
   
 }
 
 
 void Despachador::addToResults( HttpResponse& httpResponse ,
  nodo_t* nodo, int& i) {
-  httpResponse .body() << nodo->desglose[i];
+  httpResponse.body() << nodo->desglose[i];
   ++i;
   httpResponse.body() <<'+';
   httpResponse.body() << nodo->desglose[i];

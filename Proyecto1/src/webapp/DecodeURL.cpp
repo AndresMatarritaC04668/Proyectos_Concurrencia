@@ -25,7 +25,7 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
     // TODO(you): Use arbitrary precision for numbers larger than int64_t
     // TODO(you): Modularize this method
     // init cola
-    cola_t* cola = cola_init();\
+    cola_t* cola = cola_init();
     StructureResponse * structureResponse = new StructureResponse(httpResponse);
     cola->structureResponse = structureResponse;
     pthread_mutex_init(&cola->can_access , NULL );
@@ -48,21 +48,17 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
     
       nodo_t* nodo = cola->first;
       int i = 0;
-    //  while nodo != null do
-    while (nodo) {
-      //  Inicializa el shared_data
-      shared_data[i] = new shared_data_t();
-      shared_data[i]->cola = cola;
-      shared_data[i]->nodo = nodo;
-        this->produce(shared_data[i]);
-      //  nodo := nodo next
-      i++;
-      nodo = nodo->next;
-    }
-
-
-    return 1;
-    
+      //  while nodo != null do
+      while (nodo) {
+        //  Inicializa el shared_data
+        shared_data[i] = new shared_data_t();
+        shared_data[i]->cola = cola;
+        shared_data[i]->nodo = nodo;
+          this->produce(shared_data[i]);
+        //  nodo := nodo next
+        i++;
+        nodo = nodo->next;
+      }
     } else {
       // Build the body for an invalid request
       std::string title = "Invalid request";
@@ -70,7 +66,7 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
       return 0;
     }
 
-    
+    return 1;
 }
 
 void DecodeURL::consume(std::pair<HttpRequest*, HttpResponse*> request) {

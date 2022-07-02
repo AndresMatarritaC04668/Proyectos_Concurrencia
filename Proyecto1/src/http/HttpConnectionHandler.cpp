@@ -57,6 +57,7 @@ void HttpConnectionHandler::procesarCliente(Socket cliente) {
 
     // If the request is not valid or an error happened
     if (!httpRequest->parse()) {
+      delete httpRequest;
       // Non-valid requests are normal after a previous valid request. Do not
       // close the connection yet, because the valid request may take time to
       // be processed. Just stop waiting for more requests
@@ -73,6 +74,7 @@ void HttpConnectionHandler::procesarCliente(Socket cliente) {
     // If subclass did not handle the request or the client used HTTP/1.0
     if (!handled || httpRequest->getHttpVersion() == "HTTP/1.0") {
       // The socket will not be more used, close the connection
+      delete httpRequest;
       cliente.close();
       break;
     }
