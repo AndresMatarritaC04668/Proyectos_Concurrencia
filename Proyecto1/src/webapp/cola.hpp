@@ -13,14 +13,12 @@
  * @param first referencia al primer nodo de la cola
  * @param last referencia al ultimo nodo de la cola
  */
-typedef struct {
+typedef struct cola_t {
     nodo_t* first;
     nodo_t* last;
     int64_t cantidadNumeros;
-    int64_t numerosProcesados;
-    pthread_mutex_t  can_access; //  Mutex que previene condiciones de carrera ;
-     StructureResponse * structureResponse ;
-    
+    int64_t numerosProcesados = 0;
+    StructureResponse * structureResponse ;
 } cola_t;
 
 /**
@@ -31,7 +29,7 @@ typedef struct {
 typedef struct {
     nodo_t* nodo; //  Refencia a n un  nodo
     cola_t* cola; //  Referencia a cola;
-   
+    pthread_mutex_t  can_access; //  Mutex que previene condiciones de carrera ;
   
 } shared_data_t;
 
@@ -114,5 +112,6 @@ void cola_addDesglose(cola_t* cola , int64_t digito);
  @param sumas int que contiene el nuevo valor de sumas del nodo
 */
 void cola_setSumas(cola_t* cola , int sumas);
+
 
 #endif  // TAREAS_GOLDBACH_SERIAL_SRC_COLA_H_

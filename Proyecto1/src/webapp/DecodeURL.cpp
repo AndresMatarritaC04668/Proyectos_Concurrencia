@@ -19,23 +19,20 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
     // Set HTTP response metadata (headers)
     setHeaderResponse(httpResponse);
 
-    // If a number was asked in the form "/fact/1223"
-    // or "/fact?number=1223"
-    // TODO(you): URI can be a multi-value list, e.g: 100,2784,-53,200771728
-    // TODO(you): Use arbitrary precision for numbers larger than int64_t
-    // TODO(you): Modularize this method
     // init cola
-    cola_t* cola = cola_init();
-    StructureResponse * structureResponse = new StructureResponse(httpResponse);
-    cola->structureResponse = structureResponse;
-    pthread_mutex_init(&cola->can_access , NULL );
-    
-    
+      
     std::smatch matches;
     std::regex inQuery;
     std::string uri = workingURL(httpRequest, inQuery);
     if (std::regex_search(uri, matches, inQuery)) {
       assert(matches.length() >= 3);
+      
+      cola_t* cola = cola_init();
+      StructureResponse * structureResponse = new StructureResponse(httpResponse);
+      cola->structureResponse = structureResponse;
+      pthread_mutex_t  can_access;
+      pthread_mutex_init(&can_access , NULL);
+
       const std::regex re("([0-z]+)|(-?\\d+)");
       // declare endIter := null
       std::sregex_iterator end;
@@ -44,17 +41,17 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
       // storageData(endIter, actualIter, cola);
       storageData(end, iter, cola);
       // Calculte Goldbach Conjecture to the number in cola
-      shared_data_t* shared_data[cola->cantidadNumeros];
-    
+
       nodo_t* nodo = cola->first;
       int i = 0;
       //  while nodo != null do
       while (nodo) {
         //  Inicializa el shared_data
-        shared_data[i] = new shared_data_t();
-        shared_data[i]->cola = cola;
-        shared_data[i]->nodo = nodo;
-          this->produce(shared_data[i]);
+        shared_data_t* shared_data = new shared_data_t();
+        shared_data->cola = cola;
+        shared_data->nodo = nodo;
+        shared_data->can_access = can_access;
+        this->produce(shared_data);
         //  nodo := nodo next
         i++;
         nodo = nodo->next;
@@ -65,8 +62,8 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
       htmlResponse(httpResponse, title, nullptr, 2);
       return 0;
     }
-
-    return 1;
+    delete &httpRequest;
+    return 0;
 }
 
 void DecodeURL::consume(std::pair<HttpRequest*, HttpResponse*> request) {

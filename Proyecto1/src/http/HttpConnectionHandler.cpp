@@ -76,6 +76,7 @@ void HttpConnectionHandler::procesarCliente(Socket cliente) {
       // The socket will not be more used, close the connection
       delete httpRequest;
       cliente.close();
+      delete httpResponse;
       break;
     }
     //  eliminamos el break para que todas las solicitudes sean trabajadas

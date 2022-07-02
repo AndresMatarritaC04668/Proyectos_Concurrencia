@@ -8,16 +8,16 @@
 #include "cola.hpp"
 
 
-class Despachador : public Consumer<shared_data_t*> {
+class Despachador : public Consumer<cola_t*> {
   private:
     /* data */
   public:
 
     Despachador(/* args */);
 
-    void consume(shared_data_t* shared_data) override;
+    void consume(cola_t* cola) override;
 
-    bool sendResponse(shared_data_t* shared_data);
+    bool sendResponse(cola_t* cola);
 
     int run() override;
 

@@ -7,7 +7,7 @@
 #include "cola.hpp"
 
 
-class Empaquetador : public Assembler<shared_data_t*,shared_data_t*> {
+class Empaquetador : public Assembler<shared_data_t*,cola_t*> {
   private:
     /* datos */
 
@@ -15,7 +15,7 @@ class Empaquetador : public Assembler<shared_data_t*,shared_data_t*> {
 
     Empaquetador(/* args */);
 
-    shared_data_t* local_shared_data;
+   
    
     void consume(shared_data_t* shared_data) override;
 

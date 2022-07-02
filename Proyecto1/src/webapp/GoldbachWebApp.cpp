@@ -75,7 +75,8 @@ void GoldbachWebApp::stop() {
   this->empaquetador->waitToFinish();
   delete empaquetador;
   
-  this->empaquetadorProduct.push(condicionParada);
+  cola_t* condicionParadaCola = 0;
+  this->empaquetadorProduct.push(condicionParadaCola);
   despachador->waitToFinish();
   delete despachador;
 }

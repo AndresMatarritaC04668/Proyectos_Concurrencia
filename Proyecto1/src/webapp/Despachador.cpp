@@ -6,77 +6,71 @@
 
 Despachador::Despachador(/* args */) { }
 
-bool Despachador::sendResponse(shared_data_t* shared_data) {
-  return shared_data->cola->structureResponse->httpResponse.send();  
+bool Despachador::sendResponse(cola_t* cola) {
+  return cola->structureResponse->httpResponse.send();  
 }
 
-void Despachador::consume(shared_data_t* shared_data) {
+void Despachador::consume(cola_t* cola) {
 // declare result := ""
   int64_t comparacion = 5;
   // declare nodo: first nodo of cola
-  nodo_t* nodo = shared_data->cola->first;
-
+  nodo_t* nodo = cola->first;
+  
   // while nodo != null do
   while (nodo) {
     if (nodo->error == 0) {
-    shared_data->cola->structureResponse->httpResponse.body() << "  <h2>" << nodo_getSigno(nodo)
+    cola->structureResponse->httpResponse.body() << "  <h2>" << nodo_getSigno(nodo)
     << nodo_getNumber(nodo) << "</h2>\n";
     // if number of nodo < 5 do
     if ( nodo_getNumber(nodo)<= comparacion ) {
         // result := result + NA
-        shared_data->cola->structureResponse->httpResponse.body() << "  <p> NA</p>\n";
+        cola->structureResponse->httpResponse.body() << "  <p> NA</p>\n";
     } else {
          //  result := result + number of nodo + sums of nodo
-       shared_data->cola->structureResponse->httpResponse.body() << " " <<nodo_getSigno(nodo) << nodo_getNumber(nodo) << ": ";
-        shared_data->cola->structureResponse->httpResponse.body() << "Sumas: "<< nodo->sumas;
+       cola->structureResponse->httpResponse.body() << " " <<nodo_getSigno(nodo) << nodo_getNumber(nodo) << ": ";
+        cola->structureResponse->httpResponse.body() << "Sumas: "<< nodo->sumas;
 
         // if number of nodo show sums == true do
         if (nodo->signo == '-') {
             // result := result + every sum of the number of nodo
-            shared_data->cola->structureResponse->httpResponse.body() << " : ";
+            cola->structureResponse->httpResponse.body() << " : ";
             if (nodo-> number%2 == 0) {
                 for (int i = 0; i< nodo->posicion ; i++) {
-                  addToResults(shared_data->cola->structureResponse->httpResponse , nodo, i);
+                  addToResults(cola->structureResponse->httpResponse , nodo, i);
 
                 if (i < nodo-> posicion-1) {
-                       shared_data->cola->structureResponse->httpResponse.body() <<", ";
+                       cola->structureResponse->httpResponse.body() <<", ";
                     }
                 }
             } else {
                 for (int i = 0; i < nodo-> posicion ; i++) {
-                  addToResults(shared_data->cola->structureResponse->httpResponse , nodo, i);
+                  addToResults(cola->structureResponse->httpResponse , nodo, i);
                   ++i;
-                  shared_data->cola->structureResponse->httpResponse.body() <<'+';
-                  shared_data->cola->structureResponse->httpResponse.body() << nodo->desglose[i];
+                  cola->structureResponse->httpResponse.body() <<'+';
+                  cola->structureResponse->httpResponse.body() << nodo->desglose[i];
                   if (i < nodo-> posicion-1) {
-                        shared_data->cola->structureResponse->httpResponse.body() <<", ";
+                        cola->structureResponse->httpResponse.body() <<", ";
                     }
                 }
             }
         }  // end if
     }  // end else
   } else {
-          shared_data->cola->structureResponse->httpResponse.body() << " <h2 class=\"err\">"
+          cola->structureResponse->httpResponse.body() << " <h2 class=\"err\">"
           << nodo->numeroErroneo << "</h2>\n";
-          shared_data->cola->structureResponse->httpResponse.body() <<  " <p> " << nodo->numeroErroneo
+          cola->structureResponse->httpResponse.body() <<  " <p> " << nodo->numeroErroneo
           << ": invalid number</p>\n";
   }
+  
   printf("\n");
   // nodo := nodo next
   nodo = nodo->next;
   } // end while
 
-  std::string title = "Goldbach Conjecture of the input";
-  // End part of a HTML file
-     shared_data->cola->structureResponse->httpResponse.body()
-      << "  <hr><p><a href=\"/\">Back</a></p>\n"
-      << "</html>\n";
-  
-  this->sendResponse(shared_data);
-
-  /*cola_destroy(shared_data->cola);
-  delete shared_data;*/
-  
+  this->sendResponse(cola);
+  delete &cola->structureResponse->httpResponse;
+  cola_destroy(cola);
+    
 }
 
 

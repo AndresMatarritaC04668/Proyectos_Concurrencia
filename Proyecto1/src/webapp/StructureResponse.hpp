@@ -22,6 +22,8 @@ struct StructureResponse{
   explicit StructureResponse(HttpResponse& httpResponse)
     : httpResponse(httpResponse) {
   }
+
+
 };
 
 #endif  

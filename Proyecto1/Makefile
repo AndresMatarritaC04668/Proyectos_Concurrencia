@@ -112,7 +112,7 @@ run: $(EXEFILE)
 	$(EXEARGS)
 
 memcheck: $(EXEFILE)
-	valgrind --tool=memcheck $(EXEARGS)
+	valgrind --tool=memcheck    valgrind --leak-check=yes $(EXEARGS)
 
 helgrind: $(EXEFILE)
 	valgrind --quiet --tool=helgrind $(EXEARGS)
