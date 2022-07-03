@@ -11,7 +11,15 @@ bool Despachador::sendResponse(cola_t* cola) {
 }
 
 void Despachador::consume(cola_t* cola) {
-// declare result := ""
+  std::string title = "Goldbach Sums";
+  cola->structureResponse->httpResponse.body()
+   << "<!DOCTYPE html>\n"
+      << "<html lang=\"en\">\n"
+      << "  <meta charset=\"ascii\"/>\n"
+      << "  <title>" << title << "</title>\n"
+      << "  <style>body {font-family: monospace}</style>\n"
+      << "  <h1>" << title << "</h1>\n";
+  // declare result := ""
   int64_t comparacion = 5;
   // declare nodo: first nodo of cola
   nodo_t* nodo = cola->first;
@@ -56,9 +64,11 @@ void Despachador::consume(cola_t* cola) {
         }  // end if
     }  // end else
   } else {
-          cola->structureResponse->httpResponse.body() << " <h2 class=\"err\">"
+          cola->structureResponse->httpResponse.body() 
+          << " <h2 class=\"err\">"
           << nodo->numeroErroneo << "</h2>\n";
-          cola->structureResponse->httpResponse.body() <<  " <p> " << nodo->numeroErroneo
+          cola->structureResponse->httpResponse.body() 
+          <<  " <p> " << nodo->numeroErroneo
           << ": invalid number</p>\n";
   }
   
@@ -66,6 +76,9 @@ void Despachador::consume(cola_t* cola) {
   // nodo := nodo next
   nodo = nodo->next;
   } // end while
+  cola->structureResponse->httpResponse.body()
+  << "  <hr><p><a href=\"/\">Back</a></p>\n"
+  << "</html>\n";
 
   this->sendResponse(cola);
   delete &cola->structureResponse->httpResponse;

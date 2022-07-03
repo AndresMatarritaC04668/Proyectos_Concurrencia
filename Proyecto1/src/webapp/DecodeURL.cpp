@@ -42,11 +42,13 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
       storageData(end, iter, cola);
       // Calculte Goldbach Conjecture to the number in cola
 
-      nodo_t* nodo = cola->first;
+      int contador = cola->cantidadNumeros;
       int i = 0;
       //  while nodo != null do
-      while (nodo) {
+      while (i < contador) {
         //  Inicializa el shared_data
+        nodo_t* nodo = new nodo_t();
+        nodo = cola_getNodo(cola,i);
         shared_data_t* shared_data = new shared_data_t();
         shared_data->cola = cola;
         shared_data->nodo = nodo;
@@ -54,7 +56,6 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
         this->produce(shared_data);
         //  nodo := nodo next
         i++;
-        nodo = nodo->next;
       }
     } else {
       // Build the body for an invalid request
@@ -62,7 +63,7 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
       htmlResponse(httpResponse, title, nullptr, 2);
       return 0;
     }
-    delete &httpRequest;
+
     return 1;
 }
 

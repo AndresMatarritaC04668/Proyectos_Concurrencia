@@ -22,6 +22,7 @@ void Empaquetador::consume(shared_data_t* shared_data) {
     pthread_mutex_destroy(&shared_data->can_access);
   }
   delete shared_data;
+  
 
 
      
