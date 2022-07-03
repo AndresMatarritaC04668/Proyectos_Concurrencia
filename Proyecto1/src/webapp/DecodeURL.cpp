@@ -63,7 +63,6 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
       htmlResponse(httpResponse, title, nullptr, 2);
       return 0;
     }
-
     return 1;
 }
 
@@ -82,6 +81,7 @@ int DecodeURL::run() {
 
 bool DecodeURL::handle(HttpRequest& httpRequest,
     HttpResponse& httpResponse) {
+      
 
   // If the request starts with "fact/" is for this web app
   if (httpRequest.getMethod() == "GET"
@@ -91,17 +91,12 @@ bool DecodeURL::handle(HttpRequest& httpRequest,
 
   // If the home page was asked
   if (httpRequest.getMethod() == "GET"
-  && httpRequest.getURI().rfind("/", 0) == 0) {
+  && httpRequest.getURI() == "/") {
     return this->serveHomepage(httpRequest, httpResponse);
   }
 
   // Unrecognized request
-  if (httpRequest.getMethod() == "GET"
-  && httpRequest.getURI().rfind("/noEncontrada", 0) == 0) {
-    return this->serveNotFound(httpRequest, httpResponse);
-  }
-
-  return 1;
+  return this->serveNotFound(httpRequest, httpResponse);
 }
 
 bool DecodeURL::serveHomepage(HttpRequest& httpRequest
