@@ -65,11 +65,12 @@ void Despachador::consume(cola_t* cola) {
     }  // end else
   } else {
           cola->structureResponse->httpResponse.body() 
+          << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
           << " <h2 class=\"err\">"
-          << nodo->numeroErroneo << "</h2>\n";
-          cola->structureResponse->httpResponse.body() 
-          <<  " <p> " << nodo->numeroErroneo
-          << ": invalid number</p>\n";
+          << nodo->numeroErroneo << "</h2>\n"
+          <<  " <h4 class=\"err\"> " << nodo->numeroErroneo
+          << ": Invalid number request for Goldbach</h4>\n";
+          
   }
   
   printf("\n");

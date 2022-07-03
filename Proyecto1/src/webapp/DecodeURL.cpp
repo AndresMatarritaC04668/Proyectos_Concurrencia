@@ -172,13 +172,7 @@ void DecodeURL::htmlResponse(
         httpResponse.body()
         << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
         << "  <h1>" << title << "</h1>\n";
-      } else {
-        // htmlResponse.body := set the HTML body for a invalid request
-        httpResponse.body()
-        << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
-        << "  <h1 class=\"err\">" << title << "</h1>\n"
-        << "  <p>Invalid request for Goldbach</p>\n";
-      }  // end else
+      } 
       // set the end body of HTML file
       beginAndEndHtml(httpResponse, title, 0);
     }  // end else
