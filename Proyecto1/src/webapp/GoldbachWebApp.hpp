@@ -83,10 +83,10 @@ class GoldbachWebApp : public HttpApp {
    * @param pair<HttpRequest*, HttpResponse*>
    * @return void
   */
-  std::vector<SumGoldbachSolver*> goldbachThreads;
-  Queue<cola_t*> empaquetadorProduct;
-  Queue<shared_data_t*> solversProduct;
-  Queue<shared_data_t*> urlProduct;
+  std::vector<SumGoldbachSolver*> goldbachThreads; /**< vector que contiene las sumas */
+  Queue<cola_t*> empaquetadorProduct; /**< cola thread safe que tiene los productos del empaquetador */
+  Queue<shared_data_t*> solversProduct; /**< cola thread safe que tiene los productos del solver */
+  Queue<shared_data_t*> urlProduct; /**< cola thread safe que tiene los productos del url */
     
 };
 

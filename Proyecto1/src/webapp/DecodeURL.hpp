@@ -12,26 +12,66 @@ class DecodeURL : public Assembler<std::pair<HttpRequest*,
   HttpResponse*>, shared_data_t*> {
 
   public:
-    HttpApp* app;
-/*
-    //Cosntructor con argumentos
-    explicit DecodeURL(Queue<std::pair<HttpRequest*,
-    HttpResponse*>> *colaRequest, Queue<shared_data_t*> shared_data_t):
-    Assembler<std::pair<HttpRequest*, HttpResponse*>, shared_data_t*>
-    (colaRequest, shared_data) {}
-*/
 
-    DecodeURL();
+    /**
+     * @brief Construye un nuevo objeto DecodeURL
+     * 
+     */
+    DecodeURL(/* args */);
+
+    /**
+     * @brief metodo virtual que destruye el objeto DecodeURL
+     * 
+     */
     virtual ~DecodeURL() {}
 
+    /**
+     * @brief override del consume, se encarga de trabajar con
+     * el request que pidio el cliente y el response que va a ser
+     *
+     * @param request pair que contiene puntero al request y al response
+     */
     void consume(std::pair<HttpRequest*, HttpResponse*> request) override;
 
+    /**
+     * @brief Override de run del consumer de la clase Assembler
+     * y se encarga de consumir para siempre hasta encontrar una condicion de 
+     * parada
+     * @return int que fue exitoso
+     */
     int run() override;
 
+    /**
+     * @brief Se encargar de manejar el request por medio del analisis del
+     * URL, si tiene que ir goldbach o a homepage, o incluso si no fue 
+     * encontrado el request
+     * 
+     * @param httpRequest que pidio el usuario
+     * @param httpResponse es el resultado que se le va a mostrar al ususario
+     * @return true / false 
+     */
     bool handle(HttpRequest& httpRequest, HttpResponse& httpResponse);
 
+    /**
+     * @brief Crea el cuerpo del html donde se va a mostrar al usuario
+     * una caja de texto para que ingrese los numeros a calcular y un 
+     * boton para iniciar el calculo
+     * 
+     * @param httpRequest que pidio el usuario
+     * @param httpResponse es el resultado que se le va a mostrar al ususario 
+     * @return true / false 
+     */
     bool serveHomepage(HttpRequest& httpRequest, HttpResponse& httpResponse);
 
+
+    /**
+     * @brief Se encarga de llamar metodos como el de almacenar
+     *  los datos, inicializa la cola y el shared data
+     * 
+     * @param httpRequest que pidio el usuario
+     * @param httpResponse es el resultado que se le va a mostrar al ususario 
+     * @return true / false 
+     */
     bool serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpResponse);
 
 

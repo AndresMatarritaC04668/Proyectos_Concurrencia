@@ -40,7 +40,6 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
       std::sregex_iterator iter(uri.begin()+matches.position(2), uri.end(), re);
       // storageData(endIter, actualIter, cola);
       storageData(end, iter, cola);
-      // Calculte Goldbach Conjecture to the number in cola
 
       int contador = cola->cantidadNumeros;
       int i = 0;
