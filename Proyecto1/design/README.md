@@ -18,3 +18,8 @@ Este es el diagrama UML, el cual es muy util a la hora de moverse al codigo, mue
 
 En la parte 2 fue necesario volver concurrente la aplicacion Web, para lograr esto se decidio crear varias clases para repartir el trabajo a realizar, se creo una clase capaz de analizar las solicitudes que entran a la WebApp **(decodeSolver)**, las calculadores fueron convertidos en hilos de trabajo **(solvers)**, una clase se encarga de revisar que todo el trabajo de una solicitud fuera realizado **(Empaquetador)** y otra se encarga de mostrar la respuesta a la solicitud **(despachador)**
 
+
+### UML 1.2
+![UML2](https://git.ucr.ac.cr/JOSE.MATARRITAMIRANDA/proyectos/-/raw/main/Proyecto1/design/UML_2.png)
+
+Para la segunda entrega se tuvieron que realizar cambios en el diagrama, este muestra claramente las nuevas actualizaciones en las clases, lo que se puede notar es que ahora el **GoldbachWebApp**, interactura con el **DecodeURL**, tambien explica muy detallado los metodos que van a tener las nuevas clases como el **Empaquetador** y **Desempaquetador**, lo que es muy provechoso para luego implementarlas en C++.
