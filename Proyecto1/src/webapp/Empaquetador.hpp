@@ -1,18 +1,17 @@
+// Copyright Equipo Dinamita. Universidad de Costa Rica. CC BY 4.0
 #ifndef EMPAQUETADOR_HPP
 #define EMPAQUETADOR_HPP
-#include "HttpResponse.hpp"
-#include <cstdint>  
-#include <cstdlib>  
+#include <cstdint>
+#include <cstdlib>
 #include "Assembler.hpp"
 #include "cola.hpp"
+#include "HttpResponse.hpp"
 
-
-class Empaquetador : public Assembler<shared_data_t*,cola_t*> {
-  private:
+class Empaquetador : public Assembler<shared_data_t*, cola_t*> {
+ private:
     /* datos */
 
-  public:
-
+ public:
     /**
      * @brief Construye un nuevo objeto Empaquetador
      * 
@@ -24,7 +23,7 @@ class Empaquetador : public Assembler<shared_data_t*,cola_t*> {
      * 
      */
     ~Empaquetador();
-   
+
    /**
     * @brief Analiza la cantidad de numeros procesados, una vez que 
     *  los proceso a todos, hace un llamado a produce
@@ -40,7 +39,5 @@ class Empaquetador : public Assembler<shared_data_t*,cola_t*> {
      * @return int que fue exitoso
      */
     int run() override;
-
 };
-
 #endif  // EMPAQUETADOR_HPP

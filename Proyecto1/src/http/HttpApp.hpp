@@ -5,11 +5,13 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 #include "common.hpp"
 #include "Assembler.hpp"
 #include "HttpResponse.hpp"
 #include "HttpRequest.hpp"
 #include "cola.hpp"
+
 
 /**
   *@brief Base class for all web applications that can be registered with the
@@ -32,7 +34,6 @@ class HttpApp {
 
   Queue<std::pair<HttpRequest*, HttpResponse*>> solicitudes;
   std::vector<std::string> keys;
-  
   /// Called by the web server when the web server is started
   virtual void start();
   /// Handle HTTP requests. @see HttpServer::handleHttpRequest()

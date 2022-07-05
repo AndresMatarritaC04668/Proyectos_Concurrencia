@@ -1,3 +1,4 @@
+// Copyright Equipo Dinamita. Universidad de Costa Rica. CC BY 4.0
 #include "Empaquetador.hpp"
 #include "HttpResponse.hpp"
 
@@ -10,25 +11,19 @@ void Empaquetador::consume(shared_data_t* shared_data) {
   pthread_mutex_lock(&shared_data->can_access);
   // Aumenta la variable para comparar si ha procesado todos los numeros.
   shared_data->cola->numerosProcesados++;
-  if (shared_data->cola->numerosProcesados ==
-      shared_data->cola->cantidadNumeros) {
+  if ( shared_data->cola->numerosProcesados ==
+      shared_data->cola->cantidadNumeros ) {
     // Una vez verifica que ha procesado todos los numeros, produce.
     produce(shared_data->cola);
     borrar = 1;
   }
   pthread_mutex_unlock(&shared_data->can_access);
-  
-  if(borrar == 1 ){
+
+  if ( borrar == 1 ) {
     pthread_mutex_destroy(&shared_data->can_access);
   }
   delete shared_data;
-  
-
-
-     
 }
-
-
 
 int Empaquetador::run() {
   this->consumeForever();

@@ -83,6 +83,5 @@ class HttpConnectionHandler : public Assembler
      * @return true si logra encontrar la app a redireccionar
      */
     bool route(HttpRequest& httpRequest, HttpResponse& httpResponse);
-
 };
 #endif

@@ -2,8 +2,8 @@
 #ifndef TAREAS_GOLDBACH_SERIAL_SRC_COLA_H_
 #define TAREAS_GOLDBACH_SERIAL_SRC_COLA_H_
 #include <inttypes.h>
-#include <string>
 #include <pthread.h>
+#include <string>
 #include "nodo.hpp"
 #include "HttpResponse.hpp"
 #include "StructureResponse.hpp"
@@ -18,7 +18,7 @@ typedef struct cola_t {
     nodo_t* last;
     int64_t cantidadNumeros;
     int64_t numerosProcesados = 0;
-    StructureResponse * structureResponse ;
+    StructureResponse * structureResponse;
 } cola_t;
 
 /**
@@ -27,12 +27,10 @@ typedef struct cola_t {
  * @param last referencia a la cola trabajada
  */
 typedef struct {
-    nodo_t* nodo; //  Refencia a n un  nodo
-    cola_t* cola; //  Referencia a cola;
-    pthread_mutex_t  can_access; //  Mutex que previene condiciones de carrera ;
-  
+    nodo_t* nodo;  //  Refencia a n un  nodo
+    cola_t* cola;  //  Referencia a cola
+    pthread_mutex_t  can_access;  //  Mutex que previene condiciones de carrera
 } shared_data_t;
-
 /**
  @brief Crea una nueva cola dinamicamente ,  inicializa los atributos de la cola en null
  @return Retorna el puntero de la nueva cola creada

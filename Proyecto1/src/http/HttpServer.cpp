@@ -46,13 +46,13 @@ void HttpServer::handleClientConnection(Socket& client) {
 void HttpServer::chainWebApp(HttpApp* application) {
   assert(application);
   this->applications.push_back(application);
-  if(distriSolicitudes == nullptr){
+  if (distriSolicitudes == nullptr) {
     distriSolicitudes = new distribuidor(&colaDRequest);
   }
   // guardamos las solicitudes en el mapa del distribuidor
-  for(size_t keyNum = 0; keyNum < application->keys.size(); keyNum++) {
+  for (size_t keyNum = 0; keyNum < application->keys.size(); keyNum++) {
     this->distriSolicitudes->registerRedirect
-      (application->keys[keyNum],&application->solicitudes);
+      (application->keys[keyNum], &application->solicitudes);
   }
 }
 

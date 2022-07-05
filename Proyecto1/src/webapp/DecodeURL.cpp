@@ -1,3 +1,5 @@
+//  "Copyright [2022] <Equipo Dinamita>"
+#include "DecodeURL.hpp"
 #include <unistd.h>
 #include <regex>
 #include <string>
@@ -5,30 +7,28 @@
 #include <algorithm>
 #include <cassert>
 #include <stdexcept>
+#include <utility>
 #include <Log.hpp>
 
-#include "DecodeURL.hpp"
 
-DecodeURL::DecodeURL(){
+DecodeURL::DecodeURL() {}
 
-}
-
-bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpResponse) {
+bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest,
+  HttpResponse& httpResponse) {
   (void)httpRequest;
 
     // Set HTTP response metadata (headers)
     setHeaderResponse(httpResponse);
 
     // init cola
-      
     std::smatch matches;
     std::regex inQuery;
     std::string uri = workingURL(httpRequest, inQuery);
     if (std::regex_search(uri, matches, inQuery)) {
       assert(matches.length() >= 3);
-      
       cola_t* cola = cola_init();
-      StructureResponse * structureResponse = new StructureResponse(httpResponse);
+      StructureResponse * structureResponse = new
+        StructureResponse(httpResponse);
       cola->structureResponse = structureResponse;
       pthread_mutex_t  can_access;
       pthread_mutex_init(&can_access , NULL);
@@ -47,7 +47,7 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest, HttpResponse& httpRespo
       while (i < contador) {
         //  Inicializa el shared_data
         nodo_t* nodo = new nodo_t();
-        nodo = cola_getNodo(cola,i);
+        nodo = cola_getNodo(cola, i);
         shared_data_t* shared_data = new shared_data_t();
         shared_data->cola = cola;
         shared_data->nodo = nodo;
@@ -80,8 +80,6 @@ int DecodeURL::run() {
 
 bool DecodeURL::handle(HttpRequest& httpRequest,
     HttpResponse& httpResponse) {
-      
-
   // If the request starts with "fact/" is for this web app
   if (httpRequest.getMethod() == "GET"
   && httpRequest.getURI().rfind("/goldbach", 0) == 0) {
@@ -166,7 +164,7 @@ void DecodeURL::htmlResponse(
         httpResponse.body()
         << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
         << "  <h1>" << title << "</h1>\n";
-      } 
+      }
       // set the end body of HTML file
       beginAndEndHtml(httpResponse, title, 0);
     }  // end else

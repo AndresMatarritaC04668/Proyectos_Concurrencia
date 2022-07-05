@@ -28,7 +28,6 @@ class Queue {
   Semaphore canConsume;
   /// Contains the actual data shared between producer and consumer
   std::queue<DataType> queue;
-  
 
  public:
   /// Constructor

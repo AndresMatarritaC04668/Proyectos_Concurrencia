@@ -1,11 +1,9 @@
 
+// Copyright Equipo Dinamita. Universidad de Costa Rica. CC BY 4.0
 #ifndef STRUCTURERESPONSE_HPP
 #define STRUCTURERESPONSE_HPP
-
+#include <cstdint>
 #include "HttpResponse.hpp"
-#include <cstdint> 
-
-
 /**
  * @brief Es el objeto productor del empaquetador, y el consumido
  *        por el despachador, en el se encuentra el httpResponse
@@ -13,24 +11,17 @@
  */
 struct StructureResponse{
  public:
-
   HttpResponse&  httpResponse;
-
-
-
- public:
   /// Convenience constructor
   /// @param httpResponse HttpResponse&
   explicit StructureResponse(HttpResponse& httpResponse)
     : httpResponse(httpResponse) {
   }
 
-    /// Convenience destrutuc
+  /// Convenience destrutuc
   /// @param httpResponse HttpResponse&
   ~StructureResponse() {
   }
-
-
 };
 
-#endif  
+#endif  // STRUCTURERESPONSE_HPP

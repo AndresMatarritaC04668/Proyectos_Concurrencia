@@ -1,4 +1,6 @@
 //  "Copyright [2022] <Equipo Dinamita>"
+#include <string>
+#include <utility>
 #include "distribuidor.hpp"
 
 std::string distribuidor::extractKey(const std::pair<HttpRequest*,

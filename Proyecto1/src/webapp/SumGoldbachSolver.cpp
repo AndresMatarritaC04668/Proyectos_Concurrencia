@@ -14,7 +14,7 @@
 //  procedure goldBach(cola):
 void SumGoldbachSolver::consume(shared_data_t* shared_data) {
   nodo_t * nodo = shared_data->nodo;
-  
+
     //  Calculate golbach sums for nodo
     //  declare sums := 0
     int sumas = 0;
@@ -28,7 +28,7 @@ void SumGoldbachSolver::consume(shared_data_t* shared_data) {
       nodo_getSigno(nodo));
     }  //  end else
     nodo_setSumas(nodo, sumas);
-    
+
     //  Agrega a la cola shared_data para ser consumido por el empaquetador
     this->produce(shared_data);
 }
@@ -40,7 +40,8 @@ int SumGoldbachSolver::run() {
 }
 
 //  procedure conjeturaDebil(num, vector_nodo, signo):
-int SumGoldbachSolver::conjeturaDebil(int64_t numero , nodo_t* vector_nodo , char signo) {
+int SumGoldbachSolver::conjeturaDebil(int64_t numero ,
+  nodo_t* vector_nodo , char signo) {
   //  declare primes as an array of integers := primes numbers until num
   int64_t  numeros_Primos[numero];
 
@@ -88,7 +89,8 @@ int SumGoldbachSolver::conjeturaDebil(int64_t numero , nodo_t* vector_nodo , cha
 
 
 // procedure conjeturaFuerte(num, vector_nodo, signo):
-int SumGoldbachSolver::conjeturaFuerte(int64_t numero , nodo_t* vector_nodo , char signo) {
+int SumGoldbachSolver::conjeturaFuerte(int64_t numero ,
+  nodo_t* vector_nodo , char signo) {
   // declare primes as an array of integers := prime numbers until num
   int64_t  numeros_Primos[numero];
 

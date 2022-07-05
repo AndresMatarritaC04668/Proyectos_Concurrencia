@@ -10,15 +10,12 @@
 #include "Assembler.hpp"
 
 
-class SumGoldbachSolver : public Assembler<shared_data_t*,shared_data_t*> {
-  public:
-
+class SumGoldbachSolver : public Assembler<shared_data_t*, shared_data_t*> {
+ public:
     explicit SumGoldbachSolver(Queue<shared_data_t*> *data1,
       Queue<shared_data_t*> *data2):
       Assembler<shared_data_t*, shared_data_t*>(data1,
        data2) {}
-
-  
   virtual ~SumGoldbachSolver() {}
 
   /**
@@ -67,4 +64,4 @@ int conjeturaFuerte(int64_t numero , nodo_t* vector_nodo, char signo);
 int esPrimo(int64_t numero);
 };
 
-#endif //  SumGoldbachSolver
+#endif  //  SumGoldbachSolver

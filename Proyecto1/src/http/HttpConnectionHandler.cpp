@@ -14,21 +14,6 @@ void HttpConnectionHandler::consume(Socket datos) {
     this->procesarCliente(datos);
 }
 
-
-/*bool HttpConnectionHandler::route(HttpRequest& httpRequest,
-HttpResponse& httpResponse) {
-    // Traverse the chain of applications
-  for (size_t index = 0; index < this->aplicaciones.size(); ++index) {
-    // If this application handles the request
-    HttpApp* app = this->aplicaciones[index];
-    if (app->handleHttpRequest(httpRequest, httpResponse)) {
-      return true;
-    }
-  }
-  // Unrecognized request
-  return this->serveNotFound(httpRequest, httpResponse);
-}*/
-
 bool HttpConnectionHandler::handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) {
     // Print IP and port from client
@@ -42,7 +27,6 @@ bool HttpConnectionHandler::handleHttpRequest(HttpRequest& httpRequest,
     + ' ' + httpRequest.getHttpVersion());
 
   std::pair<HttpRequest*, HttpResponse*> nuevaSolicitud;
-   
   std::get<0>(nuevaSolicitud) = &httpRequest;
   std::get<1>(nuevaSolicitud) = &httpResponse;
   produce(nuevaSolicitud);
@@ -50,7 +34,8 @@ bool HttpConnectionHandler::handleHttpRequest(HttpRequest& httpRequest,
 }
 
 void HttpConnectionHandler::procesarCliente(Socket cliente) {
-  // este metodo fue movido para hacer que el server trabaje de manera concurrente
+  // este metodo fue movido para hacer que el server
+  // trabaje de manera concurrente
   while (true) {
     // Create an object that parses the HTTP request from the socket
     HttpRequest *httpRequest = new HttpRequest(cliente);

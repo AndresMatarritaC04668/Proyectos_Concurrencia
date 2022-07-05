@@ -1,18 +1,18 @@
+//  "Copyright [2022] <Equipo Dinamita>"
 #ifndef DESPACHADOR_HPP
 #define DESPACHADOR_HPP
-#include "HttpResponse.hpp"
-#include <cstdint>  
-#include <cstdlib>  
+#include <cstdint>
+#include <cstdlib>
 #include "Assembler.hpp"
 #include "Consumer.hpp"
 #include "cola.hpp"
+#include "HttpResponse.hpp"
 
 
 class Despachador : public Consumer<cola_t*> {
-  private:
+ private:
     /* data */
-  public:
-
+ public:
     /**
      * @brief Construye un nuevo objeto Despachador
      * 
@@ -60,8 +60,6 @@ class Despachador : public Consumer<cola_t*> {
      */
     void addToResults(HttpResponse& httpResponse ,
     nodo_t* nodo, int& i);
-
-
 };
 
 #endif  // DESPACHADOR_HPP

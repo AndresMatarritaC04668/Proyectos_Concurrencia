@@ -1,18 +1,20 @@
-#ifndef DESEMPAQUETADOR_HPP_
-#define DESEMPAQUETADOR_HPP_
+//  "Copyright [2022] <Equipo Dinamita>"
+#ifndef DECODEURL_HPP_
+#define DECODEURL_HPP_
 
-#include "Queue.hpp"
-#include "cola.hpp"
-#include "HttpResponse.hpp"
+#include <string>
+#include <utility>
+#include <regex>
 #include "HttpRequest.hpp"
 #include "HttpApp.hpp"
 #include "Assembler.hpp"
+#include "Queue.hpp"
+#include "cola.hpp"
+#include "HttpResponse.hpp"
 
 class DecodeURL : public Assembler<std::pair<HttpRequest*,
   HttpResponse*>, shared_data_t*> {
-
-  public:
-
+ public:
     /**
      * @brief Construye un nuevo objeto DecodeURL
      * 
@@ -54,7 +56,7 @@ class DecodeURL : public Assembler<std::pair<HttpRequest*,
 
     /**
      * @brief Crea el cuerpo del html donde se va a mostrar al usuario
-     * una caja de texto para que ingrese los numeros a calcular y un 
+     * una caja de texto para que ingrese los numeros a calcular y un
      * boton para iniciar el calculo
      * 
      * @param httpRequest que pidio el usuario
@@ -137,8 +139,6 @@ class DecodeURL : public Assembler<std::pair<HttpRequest*,
     */
   bool serveNotFound(HttpRequest& httpRequest,
   HttpResponse& httpResponse);
-
-
 };
 
 #endif  // DESEMPAQUETADOR_HPP__

@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <inttypes.h>
-#include <string>
 #include <pthread.h>
+#include <string>
 #include "cola.hpp"
 
 // procedure cola_init:
@@ -15,12 +15,9 @@ cola_t* cola_init() {
   cola-> last = NULL;
   cola->cantidadNumeros = 0;
   cola->numerosProcesados = 0;
-  
+
   return cola;
-}
-// end procedure
-
-
+}  // end procedure
 // procedure cola_add:
 int cola_add(cola_t* cola  ,  int64_t nuevoValor , int sumas  ,
 char signo , int64_t error , std::string numeroErroneo) {

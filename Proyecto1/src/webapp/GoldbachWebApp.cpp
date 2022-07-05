@@ -28,13 +28,13 @@ GoldbachWebApp::~GoldbachWebApp() {
 
 void GoldbachWebApp::start() {
   // TODO(you): Start producers, consumers, assemblers...
-  
+
   //  crear urlMiedo aqui
   decodeURL = new DecodeURL();
   decodeURL->setProducingQueue(&urlProduct);
   decodeURL->setConsumingQueue(&this->solicitudes);
   decodeURL->startThread();
-   
+
   goldbachThreads.resize(sysconf(_SC_NPROCESSORS_ONLN));
   for (int i = 0; i < sysconf(_SC_NPROCESSORS_ONLN); i++) {
     SumGoldbachSolver* golNue = new SumGoldbachSolver(&urlProduct,
@@ -42,8 +42,7 @@ void GoldbachWebApp::start() {
     goldbachThreads[i] = golNue;
     goldbachThreads[i]->startThread();
   }
-  
-  
+
   empaquetador = new Empaquetador();
   empaquetador->setProducingQueue(&empaquetadorProduct);
   empaquetador->setConsumingQueue(&solversProduct);
@@ -58,8 +57,8 @@ void GoldbachWebApp::stop() {
   this->solicitudes.push(std::pair<HttpRequest*, HttpResponse*>());
   decodeURL->waitToFinish();
   delete decodeURL;
-   
-  int number_CPU= sysconf(_SC_NPROCESSORS_ONLN);
+
+  int number_CPU = sysconf(_SC_NPROCESSORS_ONLN);
   shared_data_t* condicionParada = 0;
 
   for (int i = 0; i < number_CPU ; i++) {
@@ -74,7 +73,7 @@ void GoldbachWebApp::stop() {
   this->solversProduct.push(condicionParada);
   this->empaquetador->waitToFinish();
   delete empaquetador;
-  
+
   cola_t* condicionParadaCola = 0;
   this->empaquetadorProduct.push(condicionParadaCola);
   despachador->waitToFinish();
@@ -86,6 +85,5 @@ bool GoldbachWebApp::handleHttpRequest(HttpRequest& httpRequest,
   HttpResponse& httpResponse) {
   (void) httpRequest;
   (void) httpResponse;
-
-   return 1;
+  return 1;
 }  // end procedure

@@ -9,8 +9,8 @@
 #include <map>
 #include <vector>
 
-#include "Consumer.hpp"
 #include <iostream>
+#include "Consumer.hpp"
 
 /**
  * @brief A dispatcher is both, a consumer of its own queue, and a producer

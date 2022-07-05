@@ -2,12 +2,12 @@
 #ifndef GOLDBACHWEBAPP_HPP
 #define GOLDBACHWEBAPP_HPP
 #include <string>
+#include <vector>
 #include "HttpApp.hpp"
 #include "cola.hpp"
 #include "regex"
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
-#include "DecodeURL.hpp"
 #include "SumGoldbachSolver.hpp"
 #include "Empaquetador.hpp"
 #include "Despachador.hpp"
@@ -53,20 +53,19 @@ class GoldbachWebApp : public HttpApp {
   bool handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) override;
 
-  
   /**
    * @brief Called when the web server stops, in order to allow the web application
    * clean up and finish as well 
    * 
    */
   void stop() override;
-    
+
     /**
    * @brief Empaquetador, se encarga de verificar que la solicitud ya haya sido
    * completamente procesada, por lo que verifica que las sumas de goldbach
    * ya este listas.
   */
-   Empaquetador * empaquetador;
+  Empaquetador * empaquetador;
 
    /**
    * @brief Despachador, se encarga de ensamblar el mensaje e imprimirselo
@@ -83,11 +82,9 @@ class GoldbachWebApp : public HttpApp {
    * @param pair<HttpRequest*, HttpResponse*>
    * @return void
   */
-  std::vector<SumGoldbachSolver*> goldbachThreads; /**< vector que contiene las sumas */
-  Queue<cola_t*> empaquetadorProduct; /**< cola thread safe que tiene los productos del empaquetador */
-  Queue<shared_data_t*> solversProduct; /**< cola thread safe que tiene los productos del solver */
-  Queue<shared_data_t*> urlProduct; /**< cola thread safe que tiene los productos del url */
-    
+  std::vector<SumGoldbachSolver*> goldbachThreads; /**< vector con sumas */
+  Queue<cola_t*> empaquetadorProduct; /**< Productos del empaquetador */
+  Queue<shared_data_t*> solversProduct; /**< Productos del solver */
+  Queue<shared_data_t*> urlProduct; /**< Productos del url */
 };
-
 #endif  // GoldbachWebApp_HPP
