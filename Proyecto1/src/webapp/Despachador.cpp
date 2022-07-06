@@ -1,5 +1,6 @@
 //  "Copyright [2022] <Equipo Dinamita>"
 #include <string>
+#include <iostream>
 #include "Despachador.hpp"
 #include "HttpResponse.hpp"
 #include "nodo.hpp"

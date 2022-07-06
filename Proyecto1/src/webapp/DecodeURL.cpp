@@ -41,12 +41,14 @@ bool DecodeURL::serveDecodeURL(HttpRequest& httpRequest,
       // storageData(endIter, actualIter, cola);
       storageData(end, iter, cola);
 
+      nodo original;
+
       int contador = cola->cantidadNumeros;
       int i = 0;
       //  while nodo != null do
       while (i < contador) {
         //  Inicializa el shared_data
-        nodo_t* nodo = new nodo_t();
+        nodo_t* nodo = &original;
         nodo = cola_getNodo(cola, i);
         shared_data_t* shared_data = new shared_data_t();
         shared_data->cola = cola;

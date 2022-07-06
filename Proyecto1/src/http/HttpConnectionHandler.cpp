@@ -55,13 +55,12 @@ void HttpConnectionHandler::procesarCliente(Socket cliente) {
 
     // Give subclass a chance to respond the HTTP request
     const bool handled = handleHttpRequest(*httpRequest, *httpResponse);
-
     // If subclass did not handle the request or the client used HTTP/1.0
     if (!handled || httpRequest->getHttpVersion() == "HTTP/1.0") {
       // The socket will not be more used, close the connection
+      delete httpResponse;
       delete httpRequest;
       cliente.close();
-      delete httpResponse;
       break;
     }
     //  eliminamos el break para que todas las solicitudes sean trabajadas
