@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
+#include "simuladorPlacas.hpp"
 
 int main (int argc, char* argv[]){
     std::cout<<"bienvenido al programa de transferencia de calor de placas";
@@ -23,5 +24,7 @@ int main (int argc, char* argv[]){
         std::cout<<"Se trabajara con "<< numeroDeHilos <<" hilos";
         //  creamos los objetos como el controladorDeArchivos 
     }
+
+    simuladorPlacas_t* simuladorPlacas = simuladorPlacas_Create();
 
 }

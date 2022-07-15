@@ -21,6 +21,27 @@ simuladorPlacas_t* simuladorPlacas_Create(void){
     return simPla;
 }
 
+int menu_simulacion(){
+  
+  
+ return 1;
+}
+
+void simulacion_HeatTransfer(simuladorPlacas_t* simulador,double epsilon) {
+  double resultado = 0.0;
+  while (epsilon <=resultado) {
+    for (int64_t i = 1; i < simulador->filas - 1; i++) {
+      for (int64_t j = 1; j < simulador->columnas - 1; j++) {
+        
+        resultado = simuladorPlacas_sumarCruz(simulador,i,j);
+        simulador->placaKPlus[i][j] = resultado;
+        
+       }
+    }
+      simulador->placa.swap(simulador->placaKPlus);
+  }
+}
+
 bool simuladorPlacas_openFile(simuladorPlacas_t* simulador, std::string filename, double deltat,
     int64_t disTermA, double h, double epsilon) {
     std::ifstream filePlaca(filename, std::fstream::in | std::fstream::binary);

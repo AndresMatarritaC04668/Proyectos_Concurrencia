@@ -20,6 +20,10 @@ typedef struct simuladorPlacas {
 } simuladorPlacas_t;
 
 simuladorPlacas_t* simuladorPlacas_Create(void);
+ 
+int menu_simulacion();
+
+void simulacion_HeatTransfer(simuladorPlacas_t* simulador,double epsilon);
 
 bool simuladorPlacas_loadJobFile(simuladorPlacas_t* simulador, std::string nombreArchivo, 
 double delta, double h, double epsilon);
