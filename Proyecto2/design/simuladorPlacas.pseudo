@@ -1,0 +1,36 @@
+procedure simuladorPlacas_Create():
+    creamos el simulador con un calloc
+
+    inicializamos los distintos valores del simulador
+
+    reservamos la memoria de las filas de las 2 placas a trabajar
+        repetir desde 0 a 50:
+            reservamos la memoria de las columnas de las placas
+    
+    return el simulador
+end procedure 
+
+procedure double simuladorPlacas_getCelda(simuladorPlacas_t* simulador, double fila, double columna):
+    si fila es menor que filas del simulador Y columna es menor que columnas del simulador
+        return el valor de la celda[fila][columna]
+    si no :
+        0 representa el valor no encontrado
+        return 0    
+end procedure
+
+procedure simuladorPlacas_sumarCruz(simuladorPlacas_t* simulador, double fila, double columna):
+    resultado := 0.0
+    actual := valor actual de la celda
+
+    se suma la energia de las inmediaciones en resultado
+
+    se resta la energia perdida y distribuida a las otras celdas    
+
+    multiplicamos por el tiempo y difusividad termica entre alto de la celda al cuadrado
+
+    agregamos el estado actual de la celda
+
+    retornamos el estado k+1 de la celda almacenado en resultado
+    return resultado
+
+end procedure

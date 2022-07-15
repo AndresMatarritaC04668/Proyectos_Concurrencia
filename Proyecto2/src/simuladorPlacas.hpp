@@ -10,7 +10,7 @@
 
 typedef struct simuladorPlacas {
     double epsilon;
-    double h;
+    double altoH;
     double deltaT;
     int64_t filas;
     int64_t columnas;

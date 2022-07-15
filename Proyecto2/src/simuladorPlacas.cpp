@@ -54,7 +54,7 @@ bool simuladorPlacas_openFile(simuladorPlacas_t* simulador, std::string filename
         //  Copiar valores
         simulador->deltaT = deltat;
         simulador->disTermA = disTermA;
-        simulador->h = h;
+        simulador->altoH = h;
         simulador->epsilon = epsilon;
     }
     return true;
@@ -71,4 +71,28 @@ double fila, double columna) {
     } else {
         return 0.0;
     }
+}
+
+double simuladorPlacas_sumarCruz(simuladorPlacas_t* simulador, 
+double fila, double columna) {
+    //  resultado := 0.0
+    double resultado = 0.0;
+    //  actual := valor actual de la celda
+    double actual = simuladorPlacas_getCelda(simulador, fila, columna);
+    //  se suma la energia de las inmediaciones
+    resultado = resultado + simuladorPlacas_getCelda(simulador, fila, columna+1) 
+        + simuladorPlacas_getCelda(simulador, fila, columna - 1);
+    resultado = resultado + simuladorPlacas_getCelda(simulador, fila+1, columna) 
+        + simuladorPlacas_getCelda(simulador, fila-1,columna);
+    //  se resta la energia perdida y distribuida a las otras celdas    
+    resultado = resultado - 4*actual;
+
+    //  multiplicamos por el tiempo y difusividad termica entre alto de la celda al cuadrado
+    double tiDiAl = ((simulador->deltaT * simulador->disTermA)/(simulador->altoH*simulador->altoH));
+    resultado = resultado * tiDiAl;
+
+    //  agregamos el estado actual de la celda
+    resultado = resultado + actual;
+    // retornamos el estado k+1 de la celda almacenado en resultado
+    return resultado;
 }
