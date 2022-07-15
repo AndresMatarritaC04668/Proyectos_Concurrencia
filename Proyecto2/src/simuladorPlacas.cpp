@@ -1,5 +1,6 @@
 //  Copyright 2022 Equipo Dinamita Universidad De Costa Rica
 #include "simuladorPlacas.hpp"
+#include <iostream>
 
 simuladorPlacas_t* simuladorPlacas_Create(void){
     simuladorPlacas_t *simPla = (simuladorPlacas_t *)calloc(1, sizeof(simuladorPlacas_t));
@@ -18,6 +19,49 @@ simuladorPlacas_t* simuladorPlacas_Create(void){
         }
     }
     return simPla;
+}
+
+bool simuladorPlacas_openFile(simuladorPlacas_t* simulador, std::string filename, double deltat,
+    int64_t disTermA, double h, double epsilon) {
+    std::ifstream filePlaca(filename, std::fstream::in | std::fstream::binary);
+    if (!filePlaca) {
+        printf("ERROR: No se pudo abrir el archivo binario\n");
+        return false;
+    } else {
+        //  Se lee la cantidad de filas
+        filePlaca.read(reinterpret_cast<char*>
+            (&simulador->filas), sizeof(simulador->filas));
+        //  Se lee la cantidad de columnas
+        filePlaca.read(reinterpret_cast<char*>
+            (&simulador->columnas), sizeof(simulador->columnas));
+        simulador->placa.resize(simulador->filas);
+        simulador->placaKPlus.resize(simulador->columnas);
+        for(int64_t i = 0; i < simulador->filas; ++i) {
+            simulador->placa[i].resize(simulador->columnas);
+            simulador->placaKPlus[i].resize(simulador->columnas);
+        }
+        double valorNuevo = 0.0;
+        for(int64_t fila = 0; fila < simulador->filas; ++fila) {
+            for(int64_t columna = 0; columna < simulador->columnas; ++columna) {
+                filePlaca.read(reinterpret_cast<char*>(&valorNuevo),
+                    sizeof(valorNuevo));
+                simulador->placa[fila][columna] = valorNuevo;
+            }
+        }
+
+        filePlaca.close();
+
+        //  Copiar valores
+        simulador->deltaT = deltat;
+        simulador->disTermA = disTermA;
+        simulador->h = h;
+        simulador->epsilon = epsilon;
+    }
+    return true;
+}
+
+void loadWork(double *work) {
+    
 }
 
 double simuladorPlacas_getCelda(simuladorPlacas_t* simulador, 
