@@ -1,16 +1,13 @@
 //  Copyright 2022 Equipo Dinamita Universidad De Costa Rica
 #include "simuladorPlacas.hpp"
 #include <iostream>
+#include <vector>
+using std::string; using std::vector;
+using std::ifstream;
 
 simuladorPlacas_t* simuladorPlacas_Create(void){
     simuladorPlacas_t *simPla = (simuladorPlacas_t *)calloc(1, sizeof(simuladorPlacas_t));
     if(simPla){
-        double epsilon = 0.0;
-        double h = 0.0;
-        double deltaT = 0.0;
-        int64_t filas = 0;
-        int64_t columnas = 0;
-        int64_t disTermA = 0;
         simPla->placa.reserve(50);
         simPla->placaKPlus.reserve(50);
         for (int i = 0; i < 50; i++) {
@@ -21,11 +18,98 @@ simuladorPlacas_t* simuladorPlacas_Create(void){
     return simPla;
 }
 
-int menu_simulacion(){
-  
-  
- return 1;
+int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos){
+    simuladorPlacas_t * simPla = simuladorPlacas_Create();
+    int error = EXIT_SUCCESS ;
+    ifstream archivo;
+    archivo.open(nombreArchivo , ifstream::in);
+    if(archivo.is_open()){
+      vector<simuladorInfo> vectorData;
+      string linea ;
+      string condicion = " "; // Condicion de comienzo de un nuevo dato
+      if(directorio.length() == 0){
+        directorio = nombreArchivo.substr(0,nombreArchivo.find_last_of("/")+1);
+      }
+      while(getline(archivo,linea)){
+        simuladorInfo_t simuladorInfo;
+        size_t posicion = 0;
+        string palabraActual;
+        int tipoInformacion = 0;
+        while((posicion = linea.find(condicion)) != string::npos){
+            while(linea.find(condicion) == 0){
+              linea.erase(0,1);
+            }
+            posicion = linea.find(condicion);
+            palabraActual = linea.substr(0,posicion);
+            if(palabraActual.length( ) == 0){
+                tipoInformacion = 4;
+            }
+            switch (tipoInformacion){
+            case 0:
+              simuladorInfo.nombreLamina = directorio+palabraActual;
+              break;
+            case 1:
+                try {
+                    simuladorInfo.deltaT = stod(palabraActual);
+                    break;
+                } catch (...)  {
+                    archivo.close();
+                    return EXIT_FAILURE;
+                }
+            case 2:
+                try {
+                    simuladorInfo.disTermA = stod(palabraActual);
+                    break;
+                } catch (...)  {
+                    archivo.close();
+                    return EXIT_FAILURE;
+                }
+            case 3:
+                try {
+                    simuladorInfo.altoH = stod(palabraActual);
+                    break;
+                } catch (...)  {
+                    archivo.close();
+                    return EXIT_FAILURE;
+                }
+            case 4:
+                try {
+                    simuladorInfo.epsilon= stod(palabraActual);
+                    break;
+                } catch (...)  {
+                    archivo.close();
+                    return EXIT_FAILURE;
+                }
+            default:
+                archivo.close();
+                return EXIT_FAILURE;
+            }
+            ++tipoInformacion;
+            linea.erase(0,posicion + condicion.length());
+            if(linea.length() == 0) {
+                archivo.close();
+                return EXIT_FAILURE;
+            }
+        }
+        if(simuladorInfo.nombreLamina.length() == 0) {
+            archivo.close();
+            return EXIT_FAILURE;
+            break;
+        } else {
+            simuladorInfo.resultado = "";
+            vectorData.push_back(simuladorInfo);
+        }
+    }
+    archivo.close();
+} else {
+  fprintf(stderr, "Error: No se pudo abrir el archivo\n");
+  return EXIT_FAILURE;
 }
+return 1;
+}
+  
+  
+
 
 void simulacion_HeatTransfer(simuladorPlacas_t* simulador,double epsilon) {
   double resultado = 0.0;

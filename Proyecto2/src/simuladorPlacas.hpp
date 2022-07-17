@@ -7,21 +7,13 @@
 #include <sstream>
 #include <fstream>
 #include <string.h>
-
-typedef struct simuladorPlacas {
-    double epsilon;
-    double altoH;
-    double deltaT;
-    int64_t filas;
-    int64_t columnas;
-    int64_t disTermA;
-    std::vector<std::vector<double>> placa;
-    std::vector<std::vector<double>> placaKPlus;
-} simuladorPlacas_t;
+#include "structs.hpp"
+using std::string;
+using std::ifstream;
 
 simuladorPlacas_t* simuladorPlacas_Create(void);
  
-int menu_simulacion();
+int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos);
 
 void simulacion_HeatTransfer(simuladorPlacas_t* simulador,double epsilon);
 
