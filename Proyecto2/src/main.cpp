@@ -34,6 +34,6 @@ int main (int argc, char* argv[]){
 
     error = abrir_archivo(nombreArchivo, directorio , numeroDeHilos);
 
-    simuladorPlacas_t* simuladorPlacas = simuladorPlacas_Create();
+    
 
 }

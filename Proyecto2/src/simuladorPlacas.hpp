@@ -11,7 +11,6 @@
 using std::string;
 using std::ifstream;
 
-simuladorPlacas_t* simuladorPlacas_Create(void);
  
 int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos);
 
@@ -33,6 +32,8 @@ int64_t disTermA, double h, double epsilon);
 
 void loadWork(double *work);
 
-int writeTheResult(string nombreArchivo, vector<simuladorInfo> vectorData);
+void run(vector<simuladorInfo> * vectorData);
+
+int writeTheResult(string nombreArchivo, std::vector<simuladorInfo>*  vectorData);
 
 #endif

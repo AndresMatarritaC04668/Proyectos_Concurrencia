@@ -7,26 +7,13 @@
 using std::string; using std::vector;
 using std::ifstream;
 
-simuladorPlacas_t* simuladorPlacas_Create(void){
-    simuladorPlacas_t *simPla = (simuladorPlacas_t *)calloc(1, sizeof(simuladorPlacas_t));
-    if(simPla){
-        simPla->placa.reserve(50);
-        simPla->placaKPlus.reserve(50);
-        for (int i = 0; i < 50; i++) {
-            simPla->placa[i].reserve(50);
-            simPla->placaKPlus[i].reserve(50);
-        }
-    }
-    return simPla;
-}
 
 int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos){
-    simuladorPlacas_t * simPla = simuladorPlacas_Create();
     int error = EXIT_SUCCESS ;
     ifstream archivo;
     archivo.open(nombreArchivo , ifstream::in);
     if(archivo.is_open()){
-      vector<simuladorInfo> vectorData;
+      vector<simuladorInfo> * vectorData;
       string linea ;
       string condicion = " "; // Condicion de comienzo de un nuevo dato
       if(directorio.length() == 0){
@@ -99,11 +86,12 @@ int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos){
             break;
         } else {
             simuladorInfo.resultado = "";
-            vectorData.push_back(simuladorInfo);
+            vectorData->push_back(simuladorInfo);
         }
     }
     archivo.close();
-    writeTheResult(nombreArchivo, &vectorData);
+    run(vectorData);
+    writeTheResult(nombreArchivo, vectorData);
 } else {
   fprintf(stderr, "Error: No se pudo abrir el archivo\n");
   return EXIT_FAILURE;
@@ -111,18 +99,31 @@ int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos){
 return 1;
 }
   
-int writeTheResult(string nombreArchivo, vector<simuladorInfo> vectorData) {
+void run(vector<simuladorInfo> * vectorData){
+    for (auto it = vectorData-> begin(); it != vectorData-> end(); ++it) {
+       simuladorPlacas_t * simuladorPlacas = simuladorPlacas_Create(*it);
+       if(read_bin( it->nombreLamina , *it , simuladorPlacas)){
+
+       }
+    }
+
+
+}
+
+
+
+int writeTheResult(string nombreArchivo, vector<simuladorInfo>*  vectorData) {
     int error = EXIT_SUCCESS;
     std::fstream newFile;
     std::stringstream output;
-    for(int i=0; i<vectorData.size(); ++i){
-        output << vectorData[i].nombreLamina.substr
-        (vectorData[i].nombreLamina.find_last_of('/')+1)
-        << '\t' << vectorData[i].deltaT
-        << '\t' << vectorData[i].disTermA
-        << '\t' << vectorData[i].altoH
-        << '\t' << vectorData[i].epsilon
-        << '\t' << vectorData[i].resultado << std::endl;
+    for(auto itr = vectorData->begin(); itr != vectorData->end(); itr++){
+        output << itr->nombreLamina.substr
+        (itr->nombreLamina.find_last_of('/')+1)
+        << '\t' << itr->deltaT
+        << '\t' << itr->disTermA
+        << '\t' << itr->altoH
+        << '\t' << itr->epsilon
+        << '\t' << itr->resultado << std::endl;
     }
     size_t pos = nombreArchivo.find_last_of(".");
     nombreArchivo.erase(pos, pos+4);
