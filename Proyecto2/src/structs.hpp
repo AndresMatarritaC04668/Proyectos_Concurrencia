@@ -27,4 +27,20 @@ typedef struct simuladorPlacas {
     std::vector<std::vector<double>> placaKPlus;
 } simuladorPlacas_t;
 
+void simuladorPlacas_init(simuladorPlacas_t * simulador, int64_t filas,
+                          int64_t columnas, 
+                          std::vector<std::vector<double>> placa,
+                          std::vector<std::vector<double>> placaKPlus,
+                          double epsilon, double altoH, double deltaT,
+                          double disTermA) {
+  simulador->columnas = columnas;
+  simulador->filas = filas;
+  simulador->placa = placa;
+  simulador->placaKPlus = placaKPlus;
+  simulador->epsilon = epsilon;
+  simulador->altoH = altoH;
+  simulador->deltaT = deltaT;
+  simulador->disTermA = disTermA;
+  
+}
 #endif  // STRUCS_HPP_
