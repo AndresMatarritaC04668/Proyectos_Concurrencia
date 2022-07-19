@@ -33,4 +33,6 @@ int64_t disTermA, double h, double epsilon);
 
 void loadWork(double *work);
 
+int writeTheResult(string nombreArchivo, vector<simuladorInfo> vectorData);
+
 #endif

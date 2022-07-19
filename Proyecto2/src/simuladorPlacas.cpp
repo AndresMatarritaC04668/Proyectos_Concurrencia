@@ -1,5 +1,7 @@
 //  Copyright 2022 Equipo Dinamita Universidad De Costa Rica
 #include "simuladorPlacas.hpp"
+#include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <vector>
 using std::string; using std::vector;
@@ -101,6 +103,7 @@ int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos){
         }
     }
     archivo.close();
+    writeTheResult(nombreArchivo, &vectorData);
 } else {
   fprintf(stderr, "Error: No se pudo abrir el archivo\n");
   return EXIT_FAILURE;
@@ -108,8 +111,29 @@ int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos){
 return 1;
 }
   
-  
-
+int writeTheResult(string nombreArchivo, vector<simuladorInfo> vectorData) {
+    int error = EXIT_SUCCESS;
+    std::fstream newFile;
+    std::stringstream output;
+    for(int i=0; i<vectorData.size(); ++i){
+        output << vectorData[i].nombreLamina.substr
+        (vectorData[i].nombreLamina.find_last_of('/')+1)
+        << '\t' << vectorData[i].deltaT
+        << '\t' << vectorData[i].disTermA
+        << '\t' << vectorData[i].altoH
+        << '\t' << vectorData[i].epsilon
+        << '\t' << vectorData[i].resultado << std::endl;
+    }
+    size_t pos = nombreArchivo.find_last_of(".");
+    nombreArchivo.erase(pos, pos+4);
+    nombreArchivo.insert(pos, ".tsv");
+    newFile.open(nombreArchivo, ifstream::out);
+    if (newFile.is_open()) {
+        newFile << output.rdbuf();
+        newFile.close();
+    }
+    return error;
+}
 
 void simulacion_HeatTransfer(simuladorPlacas_t* simulador,double epsilon) {
   double resultado = 0.0;
