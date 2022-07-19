@@ -7,6 +7,7 @@
 #include <sstream>
 #include <fstream>
 #include <string.h>
+#include <cmath>
 #include "structs.hpp"
 using std::string;
 using std::ifstream;
@@ -14,7 +15,7 @@ using std::ifstream;
  
 int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos);
 
-void simulacion_HeatTransfer(simuladorPlacas_t* simulador,double epsilon);
+void simulacion_HeatTransfer(simuladorPlacas_t* simulador);
 
 bool simuladorPlacas_loadJobFile(simuladorPlacas_t* simulador, std::string nombreArchivo, 
 double delta, double h, double epsilon);
@@ -32,7 +33,9 @@ int64_t disTermA, double h, double epsilon);
 
 void loadWork(double *work);
 
-void run(vector<simuladorInfo> * vectorData);
+void run(vector<simuladorInfo>  vectorData);
+
+int verificar_diferencia(simuladorPlacas_t* simulador);
 
 int writeTheResult(string nombreArchivo, std::vector<simuladorInfo>*  vectorData);
 

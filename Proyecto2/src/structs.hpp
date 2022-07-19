@@ -32,10 +32,10 @@ typedef struct simuladorPlacas {
     std::vector<std::vector<double>> placaKPlus;
 } simuladorPlacas_t;
 
-bool read_bin(std::string nombre_bin , simuladorInfo_t simuladorInfo ,
-simuladorPlacas_t * simuladorPlacas);
+bool read_bin(std::string nombre_bin , simuladorPlacas_t * simuladorPlacas);
 
-simuladorPlacas_t* simuladorPlacas_Create(simuladorInfo_t simuladorInfo);
+simuladorPlacas_t* simuladorPlacas_Create(double deltaT,
+double disTermA, double altoH, double epsilon);
 
 #endif  // STRUCS_HPP_
 
