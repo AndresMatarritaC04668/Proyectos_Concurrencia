@@ -89,6 +89,7 @@ int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos){
             case 4:
                 try {
                     simuladorInfo.epsilon= stod(palabraActual);
+                    //cout<<""stod(palabraActual)<<endl;
                     break;
                 } catch (...)  {
                     archivo.close();
@@ -115,8 +116,8 @@ int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos){
         }
     }
     archivo.close();
-    vector<simuladorPlacas_t*>  vectorPlaca;
-    run(&vectorData , &vectorPlaca);
+    
+    run(&vectorData );
     for(int i = 0 ; i < vectorData.size(); i++){
         generar_Resultado(&vectorData[i]);
     }
@@ -166,8 +167,8 @@ void generar_Resultado( simuladorInfo_t * simuladorInfo ) {
     segundos = segundos-static_cast<double>(temporal * 31104000);  //  año
     resultado << setfill('0') << setw(4)<< temporal<< "/";
     
-    temporal= segundos/ 2592000;  // mes
-    segundos = segundos-static_cast<double>(temporal * 2592000); // mes
+    temporal= segundos/ 2592000 ;  // mes
+    segundos = segundos-static_cast<double>(temporal *  2592000); // mes
     resultado << setfill('0') << setw(2)<< temporal<< "/";
     
 
@@ -222,7 +223,7 @@ void imprimir_laminas(string nombreLamina, simuladorPlacas * simuladorPlacas){
  
 
 
-void run(vector<simuladorInfo> * vectorData , vector<simuladorPlacas_t*> * vectorPlaca){
+void run(vector<simuladorInfo> * vectorData ){
     for (auto it = vectorData->begin(); it != vectorData->end(); ++it) {
         simuladorPlacas_t * simuladorPlacas = simuladorPlacas_Create(it->deltaT,
         it->disTermA, it->altoH, it->epsilon);  
@@ -230,7 +231,9 @@ void run(vector<simuladorInfo> * vectorData , vector<simuladorPlacas_t*> * vecto
           simulacion_HeatTransfer(simuladorPlacas);
           it->estadok = simuladorPlacas->estadok;
           imprimir_laminas(it->nombreLamina , simuladorPlacas);
-          vectorPlaca->push_back(simuladorPlacas);
+          simuladorPlacas->placa.clear();
+          simuladorPlacas->placaKPlus.clear();
+          free(simuladorPlacas);
 
        }  
     }      

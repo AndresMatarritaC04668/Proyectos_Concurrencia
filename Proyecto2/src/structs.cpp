@@ -28,7 +28,7 @@ double disTermA, double altoH, double epsilon){
             simulador->placaKPlus[i].reserve(50);
         }
         simulador->epsilon = epsilon;
-        cout<<epsilon<<endl;
+        cout<< simulador->epsilon<<"\n";
         simulador->altoH = altoH;
         simulador->deltaT = deltaT;
         simulador->disTermA = disTermA;

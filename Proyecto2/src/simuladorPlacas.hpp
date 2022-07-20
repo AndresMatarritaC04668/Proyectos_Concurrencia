@@ -31,7 +31,7 @@ void simuladorPlacas_simular(simuladorPlacas_t* simulador);
 
 void generar_Resultado( simuladorInfo_t * simuladorInfo );
 
-void run(vector<simuladorInfo> * vectorData , vector<simuladorPlacas_t*> * vectorPlaca);
+void run(vector<simuladorInfo> * vectorData);
 
 int verificar_diferencia(simuladorPlacas_t* simulador);
 
