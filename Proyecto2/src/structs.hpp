@@ -18,6 +18,7 @@ typedef struct simuladorInfo {
     double altoH;
     double deltaT;
     double disTermA;
+    int64_t estadok;
   std::string resultado;
 } simuladorInfo_t;
 
@@ -28,6 +29,7 @@ typedef struct simuladorPlacas {
     double disTermA;
     int64_t filas;
     int64_t columnas;
+    int64_t estadok;
     std::vector<std::vector<double>> placa;
     std::vector<std::vector<double>> placaKPlus;
 } simuladorPlacas_t;

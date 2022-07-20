@@ -1,10 +1,19 @@
 #include "structs.hpp"
-#include <ostream>
-#include <string>
+#include <algorithm>
+#include <cmath>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <fstream>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
+#include <string>
 #include <vector>
+
 using std::string; using std::vector;
 using std::ifstream; using std::fstream;
+using namespace std;
 
 simuladorPlacas_t* simuladorPlacas_Create( double deltaT,
 double disTermA, double altoH, double epsilon){
@@ -19,6 +28,7 @@ double disTermA, double altoH, double epsilon){
             simulador->placaKPlus[i].reserve(50);
         }
         simulador->epsilon = epsilon;
+        cout<<epsilon<<endl;
         simulador->altoH = altoH;
         simulador->deltaT = deltaT;
         simulador->disTermA = disTermA;
@@ -55,7 +65,8 @@ bool read_bin(std::string nombre_bin , simuladorPlacas_t * simuladorPlacas) {
                 simuladorPlacas->placa[fila][columna] = calor;
             }
         }
-
+        // Se copian los datos a la matriz temporal
+    std::copy(std::begin(simuladorPlacas->placa), std::end(simuladorPlacas->placa), std::begin(simuladorPlacas->placaKPlus));
         simuladorPlacas->filas = filas;
         simuladorPlacas->columnas = columnas;
 
@@ -63,3 +74,5 @@ bool read_bin(std::string nombre_bin , simuladorPlacas_t * simuladorPlacas) {
     }
     return true;
 }
+
+  
