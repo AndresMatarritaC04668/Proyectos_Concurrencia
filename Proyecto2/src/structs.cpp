@@ -49,12 +49,15 @@ bool read_bin(std::string nombre_bin , simuladorPlacas_t * simuladorPlacas) {
         }
         double calor;
         for (int64_t fila = 0; fila < filas; fila++) {
-            for (uint64_t columna = 0; columna < columnas; columna++) {
+            for (int64_t columna = 0; columna < columnas; columna++) {
                 archivo_bin.read(reinterpret_cast<char*>(&calor),
                 sizeof(calor));
                 simuladorPlacas->placa[fila][columna] = calor;
             }
         }
+
+        simuladorPlacas->filas = filas;
+        simuladorPlacas->columnas = columnas;
 
         archivo_bin.close();
     }

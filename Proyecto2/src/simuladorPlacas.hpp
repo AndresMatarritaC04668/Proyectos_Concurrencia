@@ -28,10 +28,6 @@ double fila, double columna);
 
 void simuladorPlacas_simular(simuladorPlacas_t* simulador);
 
-bool simuladorPlacas_openFile(simuladorPlacas_t* simulador, std::string filename, double deltat,
-int64_t disTermA, double h, double epsilon);
-
-void loadWork(double *work);
 
 void run(vector<simuladorInfo>  vectorData);
 

@@ -7,6 +7,16 @@
 using std::string; using std::vector;
 using std::ifstream;
 
+void imprimir(simuladorPlacas_t  *  simuladorPlacas){
+    printf("\n");
+    for (int64_t i = 0; i < simuladorPlacas->filas; i++) {
+      for (int64_t j = 0; j < simuladorPlacas->columnas; j++) {
+        printf("%f ", simuladorPlacas->placa[i][j]);
+       }
+       printf("\n");
+    }
+     printf("sale");
+}
 
 int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos){
     int error = EXIT_SUCCESS ;
@@ -101,11 +111,13 @@ return 1;
   
 void run(vector<simuladorInfo>  vectorData){
     for (auto it = vectorData.begin(); it != vectorData.end(); ++it) {
-        simuladorPlacas_t * Placas = simuladorPlacas_Create(it->deltaT,
-        it->disTermA, it->altoH, it->epsilon);
-       if(read_bin( it->nombreLamina ,  Placas)){
-        simulacion_HeatTransfer(Placas);
-       }
+        simuladorPlacas_t * simuladorPlacas = simuladorPlacas_Create(it->deltaT,
+        it->disTermA, it->altoH, it->epsilon);  
+       if(read_bin( it->nombreLamina , simuladorPlacas)){
+          imprimir(simuladorPlacas);
+          simulacion_HeatTransfer(simuladorPlacas);
+          imprimir(simuladorPlacas);
+       }  
     }
     
 }
@@ -151,6 +163,8 @@ void simulacion_HeatTransfer(simuladorPlacas_t* simulador) {
       simulador->placa.swap(simulador->placaKPlus);
       continuar = verificar_diferencia(simulador);
   }
+
+  printf("sale2");
 }
  
 int verificar_diferencia(simuladorPlacas_t* simulador){
@@ -170,49 +184,6 @@ int verificar_diferencia(simuladorPlacas_t* simulador){
 
 }
 
-/**
-bool simuladorPlacas_openFile(simuladorPlacas_t* simulador, std::string filename, double deltat,
-    int64_t disTermA, double h, double epsilon) {
-    std::ifstream filePlaca(filename, std::fstream::in | std::fstream::binary);
-    if (!filePlaca) {
-        printf("//ERROR: No se pudo abrir el archivo binario\n");
-        return false;
-    } else {
-        //  Se lee la cantidad de filas
-        filePlaca.read(reinterpret_cast<char*>
-            (&simulador->filas), sizeof(simulador->filas));
-        //  Se lee la cantidad de columnas
-        filePlaca.read(reinterpret_cast<char*>
-            (&simulador->columnas), sizeof(simulador->columnas));
-        simulador->placa.resize(simulador->filas);
-        simulador->placaKPlus.resize(simulador->columnas);
-        for(int64_t i = 0; i < simulador->filas; ++i) {
-            simulador->placa[i].resize(simulador->columnas);
-            simulador->placaKPlus[i].resize(simulador->columnas);
-        }
-        double valorNuevo = 0.0;
-        for(int64_t fila = 0; fila < simulador->filas; ++fila) {
-            for(int64_t columna = 0; columna < simulador->columnas; ++columna) {
-                filePlaca.read(reinterpret_cast<char*>(&valorNuevo),
-                    sizeof(valorNuevo));
-                simulador->placa[fila][columna] = valorNuevo;
-            }
-        }
-
-        filePlaca.close();
-
-        //  Copiar valores
-        simulador->deltaT = deltat;
-        simulador->disTermA = disTermA;
-        simulador->altoH = h;
-        simulador->epsilon = epsilon;
-    }
-    return true;
-}
-**/
-void loadWork(double *work) {
-    
-}
 
 double simuladorPlacas_getCelda(simuladorPlacas_t* simulador, 
 double fila, double columna) {
