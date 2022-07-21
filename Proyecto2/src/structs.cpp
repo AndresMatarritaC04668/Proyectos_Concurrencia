@@ -14,20 +14,14 @@
 
 using std::string; using std::vector;
 using std::ifstream; using std::fstream;
-using namespace std;
+using std::cout; using std::endl;
 
-simuladorPlacas_t* simuladorPlacas_Create( double deltaT,
-double disTermA, double altoH, double epsilon){
+simuladorPlacas_t* simuladorPlacas_Create(double deltaT,
+double disTermA, double altoH, double epsilon) {
     simuladorPlacas_t* simulador = new simuladorPlacas_t();
     if (simulador) {
-        /*simulador->placa.resize(1);
-        simulador->placaKPlus.resize(1);
-        for (int i = 0; i < 1; i++) {
-            simulador->placa[i].resize(1);
-            simulador->placaKPlus[i].resize(1);
-        }*/
         simulador->epsilon = epsilon;
-        cout<< simulador->epsilon<<"\n";
+        cout << simulador->epsilon << "\n";
         simulador->altoH = altoH;
         simulador->deltaT = deltaT;
         simulador->disTermA = disTermA;
@@ -38,7 +32,7 @@ double disTermA, double altoH, double epsilon){
 bool read_bin(std::string nombre_bin , simuladorPlacas_t * simuladorPlacas) {
      // fstream:: in abrir archivo para leerlo
      // fstream:: binary  abre el archivo en forma de binario
-    ifstream archivo_bin(nombre_bin, fstream::in | fstream::binary); 
+    ifstream archivo_bin(nombre_bin, fstream::in | fstream::binary);
     if (!archivo_bin) {
         cout << "No se puede abrir el binario." << endl;
         return false;
@@ -46,7 +40,7 @@ bool read_bin(std::string nombre_bin , simuladorPlacas_t * simuladorPlacas) {
         int64_t filas;
         int64_t columnas;
         // Se lee filas
-        archivo_bin.read(reinterpret_cast<char*>(&filas), sizeof(filas));  //   
+        archivo_bin.read(reinterpret_cast<char*>(&filas), sizeof(filas));
         // Se lee columnas
         archivo_bin.read(reinterpret_cast<char*>(&columnas), sizeof(columnas));
 
@@ -66,7 +60,9 @@ bool read_bin(std::string nombre_bin , simuladorPlacas_t * simuladorPlacas) {
             }
         }
         // Se copian los datos a la matriz temporal
-    std::copy(std::begin(simuladorPlacas->placa), std::end(simuladorPlacas->placa), std::begin(simuladorPlacas->placaKPlus));
+    std::copy(std::begin(simuladorPlacas->placa),
+            std::end(simuladorPlacas->placa),
+            std::begin(simuladorPlacas->placaKPlus));
         simuladorPlacas->filas = filas;
         simuladorPlacas->columnas = columnas;
 
@@ -75,18 +71,17 @@ bool read_bin(std::string nombre_bin , simuladorPlacas_t * simuladorPlacas) {
     return true;
 }
 
-void simuladorPlacas_destroy(simuladorPlacas* simulador){
+void simuladorPlacas_destroy(simuladorPlacas* simulador) {
     simulador->epsilon = 0;
     simulador->altoH = 0;
     simulador->deltaT = 0;
     simulador->disTermA = 0;
     int fin = simulador->filas;
-    for(int index = 0; index < fin; index++){
+    for (int index = 0; index < fin; index++) {
         simulador->placa[index].clear();
         simulador->placaKPlus[index].clear();
     }
     simulador->placa.clear();
-    
     simulador->placaKPlus.clear();
     delete simulador;
 }

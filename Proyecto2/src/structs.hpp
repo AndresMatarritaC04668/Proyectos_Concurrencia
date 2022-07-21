@@ -8,7 +8,6 @@
 using std::string; using std::vector;
 using std::ifstream; using std::fstream;
 
-using namespace std;
 /**
  @brief struct con datos de una simulacion
 */
