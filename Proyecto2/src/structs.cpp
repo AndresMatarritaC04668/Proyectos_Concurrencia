@@ -1,15 +1,16 @@
+//  Copyright 2022 Equipo Dinamita Universidad De Costa Rica
 #include "structs.hpp"
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <vector>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <vector>
 
 using std::string; using std::vector;
 using std::ifstream; using std::fstream;
@@ -17,16 +18,14 @@ using namespace std;
 
 simuladorPlacas_t* simuladorPlacas_Create( double deltaT,
 double disTermA, double altoH, double epsilon){
-    simuladorPlacas_t *simulador = (simuladorPlacas_t *)calloc(1, sizeof(simuladorPlacas_t));
-    if(simulador){
-        simulador->placa.reserve(50);
-        simulador->placa.resize(50);
-        simulador->placaKPlus.reserve(50);
-        simulador->placaKPlus.resize(50);
-        for (int i = 0; i < 50; i++) {
-            simulador->placa[i].reserve(50);
-            simulador->placaKPlus[i].reserve(50);
-        }
+    simuladorPlacas_t* simulador = new simuladorPlacas_t();
+    if (simulador) {
+        /*simulador->placa.resize(1);
+        simulador->placaKPlus.resize(1);
+        for (int i = 0; i < 1; i++) {
+            simulador->placa[i].resize(1);
+            simulador->placaKPlus[i].resize(1);
+        }*/
         simulador->epsilon = epsilon;
         cout<< simulador->epsilon<<"\n";
         simulador->altoH = altoH;
@@ -50,6 +49,7 @@ bool read_bin(std::string nombre_bin , simuladorPlacas_t * simuladorPlacas) {
         archivo_bin.read(reinterpret_cast<char*>(&filas), sizeof(filas));  //   
         // Se lee columnas
         archivo_bin.read(reinterpret_cast<char*>(&columnas), sizeof(columnas));
+
         simuladorPlacas->placa.resize(filas);
         simuladorPlacas->placaKPlus.resize(filas);
 
@@ -75,4 +75,18 @@ bool read_bin(std::string nombre_bin , simuladorPlacas_t * simuladorPlacas) {
     return true;
 }
 
-  
+void simuladorPlacas_destroy(simuladorPlacas* simulador){
+    simulador->epsilon = 0;
+    simulador->altoH = 0;
+    simulador->deltaT = 0;
+    simulador->disTermA = 0;
+    int fin = simulador->filas;
+    for(int index = 0; index < fin; index++){
+        simulador->placa[index].clear();
+        simulador->placaKPlus[index].clear();
+    }
+    simulador->placa.clear();
+    
+    simulador->placaKPlus.clear();
+    delete simulador;
+}

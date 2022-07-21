@@ -20,7 +20,7 @@ using std::setfill;
 using std::to_string;
 using std::fstream;
 
-void imprimir(simuladorPlacas_t  *  simuladorPlacas){
+void imprimir(simuladorPlacas_t*  simuladorPlacas){
     printf("\n");
     for (int64_t i = 0; i < simuladorPlacas->filas; i++) {
       for (int64_t j = 0; j < simuladorPlacas->columnas; j++) {
@@ -28,14 +28,12 @@ void imprimir(simuladorPlacas_t  *  simuladorPlacas){
        }
        printf("\n");
     }
-
 }
-
 
 int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos){
     int error = EXIT_SUCCESS ;
-    ifstream archivo;
-    archivo.open(nombreArchivo , ifstream::in);
+    ifstream archivo(nombreArchivo, fstream::in);
+    //archivo.open(nombreArchivo, ifstream::in);
     if(archivo.is_open()){
       vector<simuladorInfo_t>  vectorData;
       string linea ;
@@ -117,7 +115,7 @@ int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos){
     }
     archivo.close();
     
-    run(&vectorData );
+    run(&vectorData);
     for(int i = 0 ; i < vectorData.size(); i++){
         generar_Resultado(&vectorData[i]);
     }
@@ -217,25 +215,20 @@ void imprimir_laminas(string nombreLamina, simuladorPlacas * simuladorPlacas){
         
       }
       lamina.close();
-
     }
 }
- 
 
 
 void run(vector<simuladorInfo> * vectorData ){
     for (auto it = vectorData->begin(); it != vectorData->end(); ++it) {
         simuladorPlacas_t * simuladorPlacas = simuladorPlacas_Create(it->deltaT,
         it->disTermA, it->altoH, it->epsilon);  
-       if(read_bin( it->nombreLamina , simuladorPlacas)){
-          simulacion_HeatTransfer(simuladorPlacas);
-          it->estadok = simuladorPlacas->estadok;
-          imprimir_laminas(it->nombreLamina , simuladorPlacas);
-          simuladorPlacas->placa.clear();
-          simuladorPlacas->placaKPlus.clear();
-          free(simuladorPlacas);
-
-       }  
+        if(read_bin( it->nombreLamina , simuladorPlacas)){
+            simulacion_HeatTransfer(simuladorPlacas);
+            it->estadok = simuladorPlacas->estadok;
+            imprimir_laminas(it->nombreLamina, simuladorPlacas);    
+        }
+        simuladorPlacas_destroy(simuladorPlacas);
     }      
 }
 
@@ -257,8 +250,8 @@ void simulacion_HeatTransfer(simuladorPlacas_t* simulador) {
       ++simulador->estadok;
     }
 }
- 
-int verificar_diferencia(simuladorPlacas_t* simulador){
+
+int verificar_diferencia(simuladorPlacas_t* simulador) {
     int continuar = 0 ;
     for (int64_t i = 1; i < simulador->filas - 1; i++) {
       for (int64_t j = 1; j < simulador->columnas - 1; j++) {
@@ -269,10 +262,7 @@ int verificar_diferencia(simuladorPlacas_t* simulador){
         }
        }
     }
-
     return continuar;
-
-
 }
 
 

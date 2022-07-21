@@ -2,17 +2,15 @@
 #ifndef SIMULADORPLACAS_H_
 #define SIMULADORPLACAS_H_
 
+#include "structs.hpp"
+#include <string.h>
+#include <cmath>
 #include <iostream>
 #include <vector>
 #include <sstream>
 #include <fstream>
-#include <string.h>
-#include <cmath>
-#include "structs.hpp"
 using std::string;
 using std::ifstream;
-
- 
 
 int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos);
 

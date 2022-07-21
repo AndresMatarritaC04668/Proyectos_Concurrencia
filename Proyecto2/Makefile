@@ -26,7 +26,7 @@ ifeq "$(wildcard $(SRC_DIR) )" ""
 endif
 
 # Files
-DIRS=$(shell find $(SRC_DIR) -type d)
+DIRS=$(shell find -L $(SRC_DIR) -type d)
 APPNAME=$(shell basename $(shell pwd))
 HEADERC=$(wildcard $(DIRS:%=%/*.h))
 HEADERX=$(wildcard $(DIRS:%=%/*.hpp))
