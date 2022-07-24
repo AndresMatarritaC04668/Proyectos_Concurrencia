@@ -1,0 +1,45 @@
+procedure main(int argc, char* argv[]):
+    char* placa1 := ""
+    char* placa1 := ""
+    double epsilon := 0.0
+
+    if argv == 4 do 
+        placa1 := argv in position 1
+        placa2 := argv in position 2
+        epsilon := argv in position 3
+
+        return compararPlacas(placa1, placa2, epsilon)
+
+    end if
+    else do 
+        return failure
+    end else
+end procedure
+
+procedure compararPlacas(char* placa1, char* placa2, double epsilon):
+    ifstream archvivo1 := open placa1
+    ifstream archvivo2 := open placa2
+
+    filas_of_archivo1 := leer filas del archvivo1
+    filas_of_archivo2 := leer filas del archvivo2
+
+    columnas_of_archivo1 := leer columnas del archvivo1
+    columnas_of_archivo2 := leer columnas del archvivo2
+
+    int fila := 0
+    for fila to filas_of_archivo1 do 
+        int columna := 0.0
+        for columna to columnas_of_archivo1 do 
+            double celda1 := leer celda archivo1
+            double celda2 := leer celda archivo2
+
+            if valor absoluto celda1 - celda2 > epsilon do 
+                printf("Laminas diferentes")
+            end
+        end
+    end for
+    printf("Laminas son iguales")
+
+    close archivo1
+    close archivo2
+end procedure

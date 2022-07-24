@@ -34,3 +34,147 @@ procedure simuladorPlacas_sumarCruz(simuladorPlacas_t* simulador, double fila, d
     return resultado
 
 end procedure
+
+procedure imprimir(simuladorPlacas_t simulador):
+    int fila := 0
+    for fila to filas_of_simulador do
+        int columna := 0
+        for columna to columnas_of_simulador do
+            printf("double", placa_of_silumador in position fila, columna)
+        end for
+    end for
+end procedure
+
+procedure verificar_diferencia():
+    int continuar := 0
+    int i := 0
+    for i to filas_of_simulador do 
+        int j := 0
+        for j to columnas_of_simulador do 
+            if epsilon_of_simulador < 
+                valor_absoluto_of placa_of_silumador in position i, j - 
+                    placaKPlus_of_silumador in position i, j do 
+
+                continuar := 1
+                break        
+            end if
+        end for
+    end for
+end procedure
+
+procedure heatTransfer():
+    int continuar := 1
+    double resultado := 0.0
+    while (continuar == 1) do 
+        int i := 0
+        for i to filas_of_simulador do 
+        int j := 0
+            for j to columnas_of_simulador do 
+               resutado := simuladorPlacas_sumarCruz(simulador, i, j)
+               placaKPlus_of_silumador in position i, j := resultado
+            end for
+        end for
+        placa_of_silumador := swap placaKPlus_of_silumador
+        continuar := verificar_diferencia(simulador)
+        estado_of_simulador := estado_of_simulador + 1
+    end while
+end procedure
+
+procedure imprimir_laminas(char* nombreDeLamina, simuladorPlacas_t* simulador):
+    ofstream lamina := open nombreDeLamina
+    escribir las columnas en lamina
+    int i := 0
+    for i to filas_of_simulador do 
+    int j := 0
+        for j to columnas_of_simulador do 
+            escribri en lamina := placaKPlus_of_silumador in position i, j
+        end for
+    end for
+    close lamina
+end procedure
+
+procedure generar_resultado(simuladorInfo_t* simulador):
+    const int segundosEnAnho := 31104000
+    const int segundosEnMes := 2592000
+    const int segundosEnDia := 86400
+    const int segundosEnHora := 3600
+    const int segundosEnMinutos := 60
+
+    int temporal := 0
+    int segundos := estado_of_simulador * deltaT_of_simulador
+    char* resultado := ""
+    resultado := concatenar estado_of_simulador
+
+    temporal := segundos / segundosEnAnho
+    segundos := segundos - (temporal * segundosEnAnho)
+    resultado := concatenar temporal
+
+    temporal := segundos / segundosEnMes
+    segundos := segundos - (temporal * segundosEnMes)
+    resultado := concatenar temporal
+
+    temporal := segundos / segundosEnDia
+    segundos := segundos - (temporal * segundosEnDia)
+    resultado := concatenar temporal
+
+    temporal := segundos / segundosEnHora
+    segundos := segundos - (temporal * segundosEnHora)
+    resultado := concatenar temporal
+
+    temporal := segundos / segundosEnMinutos
+    segundos := segundos - (temporal * segundosEnMinutos)
+    resultado := concatenar temporal
+
+    resultado := segundos
+
+    resultado_of_simulado := resultado
+end procedure
+
+procedure imprimir_resultado(char* nombre_archivo, vector_of_simuladorInfo data):
+    fstream newFile := open nombre_archivo
+    char* output := ""
+
+    for data_first to data_last do
+        output := concatenar nombreDeLamina_of_data_actual
+        output := concatenar deltaT_of_data_actual
+        output := concatenar disTermA_of_data_actual
+        output := concatenar altoH_of_data_actual
+        output := concatenar epsilon_of_data_actual
+        output := concatenar resultado_of_data_actual
+    end for
+
+    newFile := concatenar output
+
+    close newFile
+
+end procedure
+
+procedure abrir_archivo(char* nombre_archivo, char* directorio, int numeroDeHilos):
+    ifstream archivo := open nombre_archivo
+    vector_of_simuladorInfo_t data
+
+    while archivo is not finished do 
+        simuladorInfo_t simuladorInfo;
+        int tipoInformacion := 0
+        palabra_actual := get linea del archivo en posicion especifica
+        if length of palabra_actual == 0 do 
+            tipoInformacion := 4
+        end if
+        switch(tipoInformacion) {
+            case 0:
+                nombreDeLamina_of_simulador := palabra_actual
+                break
+            case 1:
+                deltaT_of_simulador := palabra_actual
+                break
+            case 2:
+                disTermA_of_simulador := palabra_actual
+                break
+            case 3:
+                alto_of_simulador := palabra_actual
+                break
+        }
+    end while
+
+
+end procedure

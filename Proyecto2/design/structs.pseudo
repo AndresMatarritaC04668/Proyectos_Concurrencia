@@ -1,0 +1,68 @@
+
+struct informacion:
+    char* nombreDeLamina
+    double epsilon
+    double delta
+    double disTermA
+    int estado
+    char* resultado
+end struct
+
+struct placas:
+    double epsilon
+    double altura
+    double delta
+    double disTermA
+    int filas
+    int columnas
+    int estado
+    vector_of_doubles placa
+    vector_of_doubles placaKPlus
+end struct
+
+procedure create(double deltaT, double disTermA, double altoH, double epsilon):
+    simuladorPlacas* simulador = new simuladorPlacas();
+    
+    deltaT_of_simulador := deltaT_param
+    disTermA_of_simulador := disTermA_param
+    altoH_of_simulador := altoH_param
+    epsilon_of_simulador := epsilon_param
+
+    return simulador
+
+end procedure
+
+procedure destroy(simuladorPlacas simulador):
+    deltaT_of_simulador := deltaT_param
+    disTermA_of_simulador := disTermA_param
+    altoH_of_simulador := altoH_param
+    epsilon_of_simulador := epsilon_param
+
+    int filas := filas_of_simulador
+    int index := 0
+    for index to filas do
+        placa_of_silumador in position index := free
+        placaKPlus_of_silumador in position index := free
+    end for
+
+    delete simulador
+end procedure
+
+procedure read_binary_file(char* nombre_archivo, simuladorPlacas simulador):
+    int filas := cantidad filas en nombre_archivo
+    int columnas := cantidad columnas en nombre_archivo
+
+    size placa_of_silumador := filas
+    size placaKPlus_of_silumador := filas
+
+    int fila := 0
+    for fila to filas do
+        int columna := 0
+        for columna to columnas do
+            placa_of_silumador in position fila, columna := leer calor en nombre_archivo
+        end for
+    end for
+
+    copiar datos a una matriz temporal
+    close nombre_archivo
+end procedure

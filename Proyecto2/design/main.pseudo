@@ -1,0 +1,20 @@
+procedure main(int argc, char* argv[]):
+    char* nombre_archivo
+    char* directorio := ""
+    int numeroDeHilos := MAX_PROCESSOR
+    
+    if argc >= 2 do 
+        nombreArchivo := argv in position 1
+
+        if argc >= 3 do 
+            numeroDeHilos := argv in position 2
+        end if
+
+    end if
+    else do 
+        fprintf("Error: Debe agregar el nombre del archivo por parametro\n")
+        return failure
+    end else
+
+    return abrir_archivo(nombre_archivo, directorio, numeroDeHilos)
+end procedure
