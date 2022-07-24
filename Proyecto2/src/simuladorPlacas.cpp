@@ -8,6 +8,7 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <omp.h>
 using std::string;
 using std::stringstream;
 using std::vector;
@@ -31,8 +32,7 @@ void imprimir(simuladorPlacas_t*  simuladorPlacas) {
 }
 
 int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos) {
-    int error = EXIT_SUCCESS;
-    ifstream archivo(nombreArchivo, fstream::in);
+   ifstream archivo(nombreArchivo, fstream::in);
     // archivo.open(nombreArchivo, ifstream::in);
     if (archivo.is_open()) {
       vector<simuladorInfo_t>  vectorData;
@@ -113,8 +113,8 @@ int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos) {
         }
     }
     archivo.close();
-    run(&vectorData);
-    for (int i = 0 ; i < vectorData.size(); i++) {
+    run(&vectorData , numeroDeHilos);
+    for (int i = 0 ; i < (int) vectorData.size(); i++) {
         generar_Resultado(&vectorData[i]);
     }
     imprimir_Resultado(nombreArchivo, &vectorData);
@@ -185,6 +185,7 @@ void imprimir_laminas(string nombreLamina, simuladorPlacas * simuladorPlacas) {
   string tira_extra = string("-")+ to_string(simuladorPlacas->estadok);
   //  Despues del punto agregue(posicion)
   int64_t agregarApartir = nombreLamina.find_last_of(".");
+  //cout<<nombreLamina;
   string nuevoNombre = nombreLamina;
   nuevoNombre.insert(agregarApartir, tira_extra);
     ofstream lamina(nuevoNombre, fstream::out | fstream::binary);
@@ -208,8 +209,13 @@ void imprimir_laminas(string nombreLamina, simuladorPlacas * simuladorPlacas) {
     }
 }
 
-void run(vector<simuladorInfo> * vectorData) {
+void run(vector<simuladorInfo> * vectorData , int numeroDeHilos) {
+    int * scheduler = new int[numeroDeHilos];
+    #pragma omp parallel for num_threads(numeroDeHilos) \
+    default(none) shared(vectorData , scheduler , cout )  schedule(dynamic)
     for (auto it = vectorData->begin(); it != vectorData->end(); ++it) {
+   
+        cout<<"aqui";
         simuladorPlacas_t * simuladorPlacas = simuladorPlacas_Create(
                 it->deltaT, it->disTermA, it->altoH, it->epsilon);
         if (read_bin(it->nombreLamina, simuladorPlacas)) {
@@ -218,7 +224,11 @@ void run(vector<simuladorInfo> * vectorData) {
             imprimir_laminas(it->nombreLamina, simuladorPlacas);
         }
         simuladorPlacas_destroy(simuladorPlacas);
+      
+ 
     }
+  
+  delete scheduler;
 }
 
 void simulacion_HeatTransfer(simuladorPlacas_t* simulador) {

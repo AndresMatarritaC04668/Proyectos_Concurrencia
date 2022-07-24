@@ -4,7 +4,7 @@
 CC=cc
 XC=g++
 DEFS=-DWEBSERVER  # -DSIMULATION
-FLAGS=$(strip -Wall -Wextra -pthread $(DEFS))
+FLAGS=$(strip -Wall -Wextra -fopenmp $(DEFS))
 FLAGC=$(FLAGS) -std=gnu11
 FLAGX=$(FLAGS) -std=gnu++11
 LIBS=

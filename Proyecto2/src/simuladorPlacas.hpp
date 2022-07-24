@@ -30,7 +30,7 @@ void simuladorPlacas_simular(simuladorPlacas_t* simulador);
 
 void generar_Resultado(simuladorInfo_t * simuladorInfo);
 
-void run(vector<simuladorInfo> * vectorData);
+void run(vector<simuladorInfo> * vectorData , int numeroDeHilos);
 
 int verificar_diferencia(simuladorPlacas_t* simulador);
 

@@ -6,7 +6,7 @@
 #include "structs.hpp"
 
 int main(int argc, char* argv[]) {
-    std::cout << "bienvenido al programa de transferencia de calor de placas";
+    std::cout << "Bienvenido al programa de transferencia de calor de placas";
     //  nombre del archivo de prueba
     std::string nombreArchivo;
     std::string directorio = "";
@@ -18,17 +18,18 @@ int main(int argc, char* argv[]) {
             //    numeroDeHilos := argv[2]
             if (sscanf(argv[2], "%d", &numeroDeHilos) == 1) {
             } else {
-                std::cout << "La cantidad de hilos introducida no es valida";
+                std::cout << "La cantidad de hilos introducida no es valida\n";
                 return EXIT_FAILURE;
             }
         }
-        std::cout << "Se trabajara con " << numeroDeHilos << " hilos";
+        std::cout << "\n Se trabajara con " << numeroDeHilos << " hilos";
         //  creamos los objetos como el controladorDeArchivos
     } else {
        fprintf(stderr,
-            "Error: Debe agregar el nombre del archivo por parametro\n");
+            "\nError: Debe agregar el nombre del archivo por parametro\n");
             return EXIT_FAILURE;
     }
 
     error = abrir_archivo(nombreArchivo, directorio, numeroDeHilos);
+    return error;
 }

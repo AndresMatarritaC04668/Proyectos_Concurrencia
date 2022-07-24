@@ -21,7 +21,6 @@ double disTermA, double altoH, double epsilon) {
     simuladorPlacas_t* simulador = new simuladorPlacas_t();
     if (simulador) {
         simulador->epsilon = epsilon;
-        cout << simulador->epsilon << "\n";
         simulador->altoH = altoH;
         simulador->deltaT = deltaT;
         simulador->disTermA = disTermA;
