@@ -1,14 +1,14 @@
 //  Copyright 2022 Equipo Dinamita Universidad De Costa Rica
-#include "simuladorPlacas.hpp"
-#include <iostream>
-#include <vector>
 #include <iterator>
 #include <list>
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <iostream>
+#include <vector>
 #include <omp.h>
+#include "simuladorPlacas.hpp"
 using std::string;
 using std::stringstream;
 using std::vector;
@@ -21,18 +21,8 @@ using std::setfill;
 using std::to_string;
 using std::fstream;
 
-void imprimir(simuladorPlacas_t*  simuladorPlacas) {
-    printf("\n");
-    for (int64_t i = 0; i < simuladorPlacas->filas; i++) {
-      for (int64_t j = 0; j < simuladorPlacas->columnas; j++) {
-        printf("%f ", simuladorPlacas->placa[i][j]);
-       }
-       printf("\n");
-    }
-}
-
 int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos) {
-   ifstream archivo(nombreArchivo, fstream::in);
+    ifstream archivo(nombreArchivo, fstream::in);
     // archivo.open(nombreArchivo, ifstream::in);
     if (archivo.is_open()) {
       vector<simuladorInfo_t>  vectorData;
@@ -114,7 +104,7 @@ int abrir_archivo(string nombreArchivo, string directorio, int numeroDeHilos) {
     }
     archivo.close();
     run(&vectorData , numeroDeHilos);
-    for (int i = 0 ; i < (int) vectorData.size(); i++) {
+    for (int i = 0 ; i < static_cast<int>(vectorData.size()); i++) {
         generar_Resultado(&vectorData[i]);
     }
     imprimir_Resultado(nombreArchivo, &vectorData);
@@ -128,7 +118,14 @@ return 1;
 int imprimir_Resultado(string nombreArchivo,
                         vector<simuladorInfo>*  vectorData) {
     int error = EXIT_SUCCESS;
-
+    //  Borrar trozo "test"
+    if (nombreArchivo.size() == 22) {
+      nombreArchivo.erase(0, 11);
+      nombreArchivo = "output" + nombreArchivo;
+    } else if (nombreArchivo.size() == 23) {
+        nombreArchivo.erase(0, 12);
+        nombreArchivo = "output" + nombreArchivo;
+    }
     std::fstream newFile;
     std::stringstream output;
     for (auto itr = vectorData->begin(); itr != vectorData->end(); itr++) {
@@ -148,7 +145,6 @@ int imprimir_Resultado(string nombreArchivo,
         newFile << output.rdbuf();
         newFile.close();
     }
-    cout << nombreArchivo;
     return error;
 }
 
@@ -181,13 +177,19 @@ void generar_Resultado(simuladorInfo_t * simuladorInfo) {
 }
 
 void imprimir_laminas(string nombreLamina, simuladorPlacas * simuladorPlacas) {
+  //  Elimina  trozo "test" del nombre
+  if (nombreLamina.size() == 24) {
+    nombreLamina.erase(0, 11);
+  } else if (nombreLamina.size() == 25) {
+    nombreLamina.erase(0, 12);
+  }
   // archivo de reporte
   string tira_extra = string("-")+ to_string(simuladorPlacas->estadok);
   //  Despues del punto agregue(posicion)
   int64_t agregarApartir = nombreLamina.find_last_of(".");
-  //cout<<nombreLamina;
   string nuevoNombre = nombreLamina;
   nuevoNombre.insert(agregarApartir, tira_extra);
+  nuevoNombre = "output" + nuevoNombre;
     ofstream lamina(nuevoNombre, fstream::out | fstream::binary);
     if (!lamina) {
         cout << "No se puede abrir el binario." << endl;
@@ -210,12 +212,9 @@ void imprimir_laminas(string nombreLamina, simuladorPlacas * simuladorPlacas) {
 }
 
 void run(vector<simuladorInfo> * vectorData , int numeroDeHilos) {
-    int * scheduler = new int[numeroDeHilos];
     #pragma omp parallel for num_threads(numeroDeHilos) \
-    default(none) shared(vectorData , scheduler , cout )  schedule(dynamic)
+    default(none) shared(vectorData , cout)  schedule(dynamic)
     for (auto it = vectorData->begin(); it != vectorData->end(); ++it) {
-   
-        cout<<"aqui";
         simuladorPlacas_t * simuladorPlacas = simuladorPlacas_Create(
                 it->deltaT, it->disTermA, it->altoH, it->epsilon);
         if (read_bin(it->nombreLamina, simuladorPlacas)) {
@@ -224,11 +223,7 @@ void run(vector<simuladorInfo> * vectorData , int numeroDeHilos) {
             imprimir_laminas(it->nombreLamina, simuladorPlacas);
         }
         simuladorPlacas_destroy(simuladorPlacas);
-      
- 
     }
-  
-  delete scheduler;
 }
 
 void simulacion_HeatTransfer(simuladorPlacas_t* simulador) {
