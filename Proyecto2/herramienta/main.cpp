@@ -30,10 +30,10 @@ int main(int argc, char* argv[]) {
     try {
       epsilon = std::stod(epsilonString);
     } catch (...) {
-      fprintf(stderr, "ERROR: Invalid epsilon value\n");
+      fprintf(stderr, "ERROR: valor invalido de epsilon \n");
     }
   } else {
-    fprintf(stderr, "ERROR: could not get the file name\n");
+    fprintf(stderr, "ERROR: no se proporciono todos los argumentos\n");
     return EXIT_FAILURE;
   }
 
@@ -44,7 +44,7 @@ int compararPlacas(std::string placa1, std::string placa2, double epsilon) {
   std::ifstream archivoPlaca1(placa1, std::fstream::in | std::fstream::binary);
   std::ifstream archivoPlaca2(placa2, std::fstream::in | std::fstream::binary);
   if (!archivoPlaca1 && !archivoPlaca2) {
-    std::cout << "Could not open the binary file" << std::endl;
+    std::cout << "No se pudo abrir el archivo binario" << std::endl;
     return 0;
   } else {
     uint64_t filas1, filas2, columnas1, columnas2;
@@ -74,7 +74,7 @@ int compararPlacas(std::string placa1, std::string placa2, double epsilon) {
       std::cout << "Las laminas son iguales" << std::endl;
       return 1;
     } else {
-      std::cout << "Las laminas son diferentes" << std::endl;
+      std::cout << "Las laminas son de tamanio distinto" << std::endl;
       return 0;
     }
     archivoPlaca1.close();
