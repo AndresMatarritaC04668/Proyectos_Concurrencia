@@ -92,7 +92,7 @@ Para realizar las mediciones correspondientes y analizar los resultados, se deci
 
 Podemos ver que en la versión serial la eficiencia y SpeedUp resultan ser de 1, si se compara con la versión estática el SpeedUp es el doble que su antecesor por lo que termina el doble de rápido sus tareas, sin embargo, al utilizar 8 hilos la eficiencia de esta versión resulta ser algo pobre en comparación a los recursos invertidos. En el caso de la versión concurrente es posible ver que el SpeedUp vuelve a ser el doble que su versión anterior, 4 veces más que la versión serial, y su eficiencia también aumenta sin alcanzar niveles considerables.
 
-Para este gráfico se decidió utilizar 3 casos en vez de los 2 sugeridos en las instrucciones para dar un mejor panorama del rendimiento, y en el caso de la versión concurrente se eligió el mapeo dinámico ya que resultó la mejor opción.
+Para este gráfico se decidió utilizar 3 casos en vez de los 2 sugeridos en las instrucciones para dar un mejor panorama del rendimiento, y en el caso de la versión concurrente se eligió el mapeo dinámico ya que resultó la mejor opción. Si se desea ver las demas mediciones con otros mapeos, siga este link [Perf-Measure](https://git.ucr.ac.cr/JOSE.MATARRITAMIRANDA/proyectos/-/blob/main/Proyecto2/report/perf_measure-Proyecto02.ods)
 
 Es posible concluir que el uso de herramientas que permitan la concurrencia como lo es OpenMP, resultan ser algo de gran utilidad a la hora de incrementar el rendimiento general del programa, permitiendo que la solución a casos de prueba más extremos puedan ser resueltos sin invertir tanto tiempo.
 
