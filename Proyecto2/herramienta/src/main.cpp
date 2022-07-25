@@ -36,7 +36,6 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "ERROR: no se proporciono todos los argumentos\n");
     return EXIT_FAILURE;
   }
-
   return compararPlacas(placa1, placa2, epsilon);
 }
 
@@ -47,18 +46,19 @@ int compararPlacas(std::string placa1, std::string placa2, double epsilon) {
     std::cout << "No se pudo abrir el archivo binario" << std::endl;
     return 0;
   } else {
-    uint64_t filas1, filas2, columnas1, columnas2;
-    // Se lee filas
+    int64_t filas1;
+    int64_t filas2, columnas1, columnas2;
+    // Se lee el archivo 1
     archivoPlaca1.read(reinterpret_cast<char*>(&filas1), sizeof(filas1));
-    archivoPlaca2.read(reinterpret_cast<char*>(&filas2), sizeof(filas2));
-    // Se lee columnas
     archivoPlaca1.read(reinterpret_cast<char*>(&columnas1), sizeof(columnas1));
+    // Se lee el archivo 2
+    archivoPlaca2.read(reinterpret_cast<char*>(&filas2), sizeof(filas2));
     archivoPlaca2.read(reinterpret_cast<char*>(&columnas2), sizeof(columnas2));
     double valorCeldaPlaca1 = 0.0;
     double valorCeldaPlaca2 = 0.0;
     if ((filas1 == filas2) && (columnas1 == columnas2)) {
-      for (uint64_t fila = 0; fila < filas1; fila++) {
-        for (uint64_t columna = 0; columna < columnas1; columna++) {
+      for (int64_t fila = 0; fila < filas1; fila++) {
+        for (int64_t columna = 0; columna < columnas1; columna++) {
           archivoPlaca1.read(reinterpret_cast<char*>(&valorCeldaPlaca1),
                            sizeof(valorCeldaPlaca1));
           archivoPlaca2.read(reinterpret_cast<char*>(&valorCeldaPlaca2),

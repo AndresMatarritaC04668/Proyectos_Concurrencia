@@ -18,7 +18,7 @@ El reporte tiene las estadisticas resultantes luego de realizar la simulacion, c
 
 ## Design
 
-https://git.ucr.ac.cr/JOSE.MATARRITAMIRANDA/proyectos/-/tree/main/Proyecto2/design
+Los diagramas del design y la explicacion pueden ser encontrados en: 
 
 ## Build
 
@@ -29,6 +29,8 @@ Una vez en la ruta de directorio correcta se utiliza el comando del Makefile que
 En la terminal seria de la siguiente manera:
 
 ![make](https://git.ucr.ac.cr/JOSE.MATARRITAMIRANDA/proyectos/-/raw/main/Proyecto2/design/imgReadmePrincipal/make.png)
+
+Ademas para el correcto funcionamiento de este programa es importante la creacion de una carpeta con el nombre **output** en la direccion anteriormente mencionada, ya que aqui se almacena los archivos binarios de respuesta y el reporte tsv.
 
 ## Manual de Uso
 
@@ -59,6 +61,40 @@ El siguiente caso es el **job003**, se muestra primero el output esperado:
 Y el que muestra el programa es:
 
 ![output003](https://git.ucr.ac.cr/JOSE.MATARRITAMIRANDA/proyectos/-/raw/main/Proyecto2/design/imgReadmePrincipal/pruebaOutput003.png)
+
+### OpenMP
+En primer lugar se realizo una implementacion serial del programa en la cual se priorizo una solucion eficaz que una solucion rapida o alguna optimizacion, sin embargo al realizar pruebas es posible ver que casos como el contenido en el Job003 llegan a tardar varios minutos, por lo cual se decidio volver al programa algo concurrente utilizando OpenMP, aprovechando las ventajas en sencillez y gran manejo de paralelismo de datos que esta herramienta prevee. Para realizar la implementacion de la mejora concurrente fue necesario seguir el proceso de profilling y optimizacion.
+
+Para los primeros pasos se utilizo el codigo serial del proyecto con el caso **job003.txt**, el cual tuvo una duracion de **260.03 segundos**, acto seguido se utilizo la herramienta callgrind y kcachegrind para asi encontrar las zona del codigo donde mas se consumen recursos, el reporte del kcachegrind fue el siguiente:
+
+![Kcachegrind](https://git.ucr.ac.cr/GABRIEL.CHACON/concurrente22a-gabriel_chacon/-/raw/main/tareas/goldbach_optimization/report/kcachegrind.png)
+
+Podemos ver entonces que la seccion mas pesada del codigo es la relacionada a con el metodo Run, el cual contiene el metodo HeatTransfer que produce gran carga trabaja al realizar el metodo sumarCruz de manera constante y repetitiva, es importante destacar que este Run() se encarga de llamar a los metodos necesarios para calcular y simular el funcionamiento de una lamina .bin, por lo cual se considera oportuno la implementacion de openMP en esta seccion del codigo, para que cada hilo creado trabaje con una lamina por aparte, realizando las operaciones necesarias para alcanzar la estabilidad calorica, por esto mismo se usara el apartado schedule() para repartir las laminas de trabajo.  
+
+El rendimiento obtenido de esta implementacion utilizando un schedule estatico por bloque corresponde con:  
+
+**SpeedUp:** 2.10  
+**Eficiencia:** 0.27  
+
+El rendimiento obtenido de esta implementacion utilizando un schedule dinamico es el siguiente:  
+
+**SpeedUp:** 4.45  
+**Eficiencia:** 0.56  
+
+Es posible ver como la implementacion de OpenMP permite obtener un speedUP del doble a 4 veces mas rapido que la version serial del mismo codigo, siendo la version con mapeo dinamico la que proporciona un mayor rendimiento al programa, debido a su naturaleza de aprovechar las capacidades de tener varios CPUs de mejor manera.  
+
+### Analisis de rendimiento
+A la hora de discutir sobre cómo los resultados de la implementación concurrente del código mediante OpenMP y el rendimiento obtenido de esta es importante considerar las diversas ventajas que esta herramienta presenta, como lo puede ser su sencilla e intuitiva implementación, su manejo eficiente de hilos mediante diversos mapeos, por lo cual no debe resultar una sorpresa los resultados obtenidos y el incremento de eficiencia del programa. Tal como se mencionó anteriormente el método Run() resultaba ser una parte poco eficiente para el funcionamiento general del programa, debido a que este trabajaba una por una las diversas láminas de cada Job, y al ser cada una de estas trabajadas como un vector de vectores, una matriz, los datos, operaciones y asignaciones a realizar resultaban en tareas repetitivas que cargaban el sistema, por esto OpenMP, al ser muy útil para el manejo de grandes cantidades de datos, resultó en una mejora significativa.
+
+Para realizar las mediciones correspondientes y analizar los resultados, se decidió tomar el caso de Job 003.txt debido a que este presenta una combinación de placas pequeñas y grandes, las cuales producen que la carga de trabaja se encuentre dispersa a lo largo de todo el caso, en el gráfico siguiente es posible ver la diferencia en SpeedUp y Eficacia que el uso correcto de OpenMP puede producir:
+
+![grafico](https://git.ucr.ac.cr/JOSE.MATARRITAMIRANDA/proyectos/-/raw/main/Proyecto2/report/ComparacionSpeedUp-Eficiencia.png)
+
+Podemos ver que en la versión serial la eficiencia y SpeedUp resultan ser de 1, si se compara con la versión estática el SpeedUp es el doble que su antecesor por lo que termina el doble de rápido sus tareas, sin embargo, al utilizar 8 hilos la eficiencia de esta versión resulta ser algo pobre en comparación a los recursos invertidos. En el caso de la versión concurrente es posible ver que el SpeedUp vuelve a ser el doble que su versión anterior, 4 veces más que la versión serial, y su eficiencia también aumenta sin alcanzar niveles considerables.
+
+Para este gráfico se decidió utilizar 3 casos en vez de los 2 sugeridos en las instrucciones para dar un mejor panorama del rendimiento, y en el caso de la versión concurrente se eligió el mapeo dinámico ya que resultó la mejor opción.
+
+Es posible concluir que el uso de herramientas que permitan la concurrencia como lo es OpenMP, resultan ser algo de gran utilidad a la hora de incrementar el rendimiento general del programa, permitiendo que la solución a casos de prueba más extremos puedan ser resueltos sin invertir tanto tiempo.
 
 ## Creditos
 

@@ -1,4 +1,5 @@
-//  Copyright 2022 Equipo Dinamita Universidad De Costa Rica
+//  Copyright 2022 Equipo Dinamita Universidad De Costa Rica.
+#include <omp.h>
 #include <iterator>
 #include <list>
 #include <fstream>
@@ -7,7 +8,6 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
-#include <omp.h>
 #include "simuladorPlacas.hpp"
 using std::string;
 using std::stringstream;
@@ -194,9 +194,8 @@ void imprimir_laminas(string nombreLamina, simuladorPlacas * simuladorPlacas) {
     if (!lamina) {
         cout << "No se puede abrir el binario." << endl;
     } else {
-      lamina.write(reinterpret_cast<char*>(&nombreLamina),
-        sizeof(int));
-      // Se lee columnas
+      lamina.write(reinterpret_cast<char*>(&simuladorPlacas->filas),
+        sizeof(simuladorPlacas->filas));
       lamina.write(reinterpret_cast<char*>(&simuladorPlacas->columnas),
       sizeof(simuladorPlacas->columnas));
 
