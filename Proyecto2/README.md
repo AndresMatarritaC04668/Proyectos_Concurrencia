@@ -18,7 +18,7 @@ El reporte tiene las estadisticas resultantes luego de realizar la simulacion, c
 
 ## Design
 
-Los diagramas del design y la explicacion pueden ser encontrados en: 
+Los diagramas del design y la explicacion pueden ser encontrados en: [Design](https://git.ucr.ac.cr/JOSE.MATARRITAMIRANDA/proyectos/-/blob/main/Proyecto2/design/README.md)
 
 ## Build
 
@@ -67,7 +67,7 @@ En primer lugar se realizo una implementacion serial del programa en la cual se 
 
 Para los primeros pasos se utilizo el codigo serial del proyecto con el caso **job003.txt**, el cual tuvo una duracion de **260.03 segundos**, acto seguido se utilizo la herramienta callgrind y kcachegrind para asi encontrar las zona del codigo donde mas se consumen recursos, el reporte del kcachegrind fue el siguiente:
 
-![Kcachegrind](https://git.ucr.ac.cr/GABRIEL.CHACON/concurrente22a-gabriel_chacon/-/raw/main/tareas/goldbach_optimization/report/kcachegrind.png)
+![Kcachegrind](https://git.ucr.ac.cr/JOSE.MATARRITAMIRANDA/proyectos/-/raw/main/Proyecto2/report/KcachegrindProyecto.png)
 
 Podemos ver entonces que la seccion mas pesada del codigo es la relacionada a con el metodo Run, el cual contiene el metodo HeatTransfer que produce gran carga trabaja al realizar el metodo sumarCruz de manera constante y repetitiva, es importante destacar que este Run() se encarga de llamar a los metodos necesarios para calcular y simular el funcionamiento de una lamina .bin, por lo cual se considera oportuno la implementacion de openMP en esta seccion del codigo, para que cada hilo creado trabaje con una lamina por aparte, realizando las operaciones necesarias para alcanzar la estabilidad calorica, por esto mismo se usara el apartado schedule() para repartir las laminas de trabajo.  
 
